@@ -5,27 +5,18 @@
 	vertical-align:middle
 }
 
-.topRight{
-	float : right;
-	margin-right : 10px;
-	top : 5px;
-	position: relative;
-}
-
 .tableBG{
 	background-color: #333333;
 }
 
 .bg{
-	color: white;
-	background: url(images/finance-role.jpg) no-repeat center center fixed;
+	background: url(images/background.jpg) no-repeat center center fixed;
+	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
-	background-size: cover;
 	color:white;
 }
-#header{
-	 font-size: 200%;
-	 color: black;
+div, h{
+	color: #337ab7;
 }

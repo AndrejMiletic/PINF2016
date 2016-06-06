@@ -8,7 +8,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 			})
 			.when('/copyPricelist', {
 						controller: 'copyPricelistController',
-						templateUrl: 'partials/copyPricelist.html',
+						templateUrl: 'partials/copyPricelistPartial.html',
 					})
 			.when('/invoicing', {
 						controller: 'invoicingController',
