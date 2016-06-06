@@ -16,4 +16,83 @@ public class TableDTO {
 	public TableDTO(){
 		super();
 	}
+
+	public TableDTO(String tableName, Long id, ArrayList<TableFieldDTO> fields,
+			ArrayList<TableRowDTO> rows, boolean documentPattern,
+			String documentChildName, ArrayList<String> children,
+			ArrayList<String> parents) {
+		super();
+		this.tableName = tableName;
+		this.id = id;
+		this.fields = fields;
+		this.rows = rows;
+		this.documentPattern = documentPattern;
+		this.documentChildName = documentChildName;
+		this.children = children;
+		this.parents = parents;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public ArrayList<TableFieldDTO> getFields() {
+		return fields;
+	}
+
+	public void setFields(ArrayList<TableFieldDTO> fields) {
+		this.fields = fields;
+	}
+
+	public ArrayList<TableRowDTO> getRows() {
+		return rows;
+	}
+
+	public void setRows(ArrayList<TableRowDTO> rows) {
+		this.rows = rows;
+	}
+
+	public boolean isDocumentPattern() {
+		return documentPattern;
+	}
+
+	public void setDocumentPattern(boolean documentPattern) {
+		this.documentPattern = documentPattern;
+	}
+
+	public String getDocumentChildName() {
+		return documentChildName;
+	}
+
+	public void setDocumentChildName(String documentChildName) {
+		this.documentChildName = documentChildName;
+	}
+
+	public ArrayList<String> getChildren() {
+		return children;
+	}
+
+	public void setChildren(ArrayList<String> children) {
+		this.children = children;
+	}
+
+	public ArrayList<String> getParents() {
+		return parents;
+	}
+
+	public void setParents(ArrayList<String> parents) {
+		this.parents = parents;
+	}
 }
