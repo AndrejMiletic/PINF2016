@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 <meta charset="ISO-8859-1">
-<title>PINF/WS 2016</title>
+
+	<script type="text/javascript" src="jquery/jquery-2.1.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+	<script src="https://code.angularjs.org/1.2.9/angular-sanitize.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="stilovi.css">
+	<script src="app.js"></script>
+
+	<script src="constants/amendmentConstants.js"></script>
+<title>PINF-WS 2016</title>
 </head>
-<body>
-	Hello world.
+<body class="bg" ng-controller="appController">
+	<span>
+		<a href="#/tables" class="btn btn-primary"> Prikaz tabela</a>
+		<a href="#/copyPricelist" class="btn btn-primary"> Kopiranje cenovnika</a>
+		<a href="#/invoicing" class="btn btn-primary"> Fakturisanje</a>
+		<a href="#/invoiceExport" class="btn btn-primary"> Eksport faktura</a>
+	</span>
+	<div ng-view></div>
 </body>
 </html>
