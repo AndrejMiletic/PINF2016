@@ -8,6 +8,7 @@ public class TableRowDTO {
 
 	public TableRowDTO() {
 		super();
+		fields = new ArrayList<Object>();
 	}
 
 	public TableRowDTO(ArrayList<Object> fields) {

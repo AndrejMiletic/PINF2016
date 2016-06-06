@@ -1,6 +1,11 @@
-
-</br></br>
+</br>
+</br>
 <div>
-  <h1>Implementirati prikaz tabela...</h1>
+	<div class="form-group">
+		<label for="sel1">Tables:</label> <select style="width:auto;" class="form-control"
+			id="sel1">
+			<option ng-repeat="table in allTableNames" ng-click="setTable(table)">{{table}}</option>
+		</select>
+	</div>
 </div>
 

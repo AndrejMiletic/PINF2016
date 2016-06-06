@@ -15,6 +15,8 @@ public class TableDTO {
 	
 	public TableDTO(){
 		super();
+		fields = new ArrayList<TableFieldDTO>();
+		rows = new ArrayList<TableRowDTO>();
 	}
 
 	public TableDTO(String tableName, Long id, ArrayList<TableFieldDTO> fields,
