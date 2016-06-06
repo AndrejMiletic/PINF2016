@@ -29,7 +29,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
 	};
 	
     $scope.openDocument = function () {
-        alert("A");
+        tableService.getDocChild($scope.requestedTable.documentChildName).then(
+            function (response) {
+                $scope.documentChild = response.data;
+            },
+            function (response) {
+                alert("Neuspesno dobavljanje tabele");
+            }
+        );
     };
     
 }]);

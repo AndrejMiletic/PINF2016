@@ -11,4 +11,8 @@ app.service('tableService', function($http){
 	this.getTableByName = function(name) {
 		return $http.get(url + "/getByName/" + name);
 	}
+    
+    this.getDocChild = function(parentName, parentId){
+        return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
+    }
 });

@@ -1,26 +1,26 @@
 package com.app.DTO;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TableRowDTO {
 
-	private ArrayList<Object> fields;
+	private HashMap<String, Object> fields;
 
 	public TableRowDTO() {
 		super();
-		fields = new ArrayList<Object>();
+		fields = new HashMap<String, Object>();
 	}
 
-	public TableRowDTO(ArrayList<Object> fields) {
+	public TableRowDTO(HashMap<String, Object> fields) {
 		super();
 		this.fields = fields;
 	}
 
-	public ArrayList<Object> getFields() {
+	public HashMap<String, Object> getFields() {
 		return fields;
 	}
 
-	public void setFields(ArrayList<Object> fields) {
+	public void setFields(HashMap<String, Object> fields) {
 		this.fields = fields;
 	}
 }
