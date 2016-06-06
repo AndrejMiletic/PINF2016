@@ -1,0 +1,31 @@
+@CHARSET "ISO-8859-1";
+
+.centered{
+	text-align : center;
+	vertical-align:middle
+}
+
+.topRight{
+	float : right;
+	margin-right : 10px;
+	top : 5px;
+	position: relative;
+}
+
+.tableBG{
+	background-color: #333333;
+}
+
+.bg{
+	color: white;
+	background: url(images/finance-role.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	color:white;
+}
+#header{
+	 font-size: 200%;
+	 color: black;
+}
