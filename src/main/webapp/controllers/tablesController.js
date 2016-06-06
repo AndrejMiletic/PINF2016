@@ -1,11 +1,11 @@
-app.controller('tablesController', ['$scope', '$window', 'tableService', function($scope, $window, tableService){
+app.controller('tablesController', ['$scope', '$window', 'tableService', function ($scope, $window, tableService) {
 
-	function init(){
+	function init() {
 		tableService.getAll().then(
-			function(response){
+			function (response) {
 				$scope.allTableNames = response.data;
 			},
-			function(response){
+			function (response) {
 				alert("Greska");
 			}
 		);
@@ -13,9 +13,23 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
 
 	init();
 
-	$scope.setTable = function(table){
-		$scope.current = table;
-		alert(table);
-	}
+	$scope.showTable = function () {
+        if (!$scope.selectedTable) {
+            alert("Nije selektovano nista");
+        } else {
+            tableService.getTableByName($scope.selectedTable).then(
+                function (response) {
+                    $scope.requestedTable = response.data;
+                },
+                function (response) {
+                    alert("Neuspesno dobavljanje tabele");
+                }
+            );
+        }
+	};
 	
+    $scope.openDocument = function () {
+        alert("A");
+    };
+    
 }]);

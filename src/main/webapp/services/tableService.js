@@ -8,7 +8,7 @@ app.service('tableService', function($http){
 		return $http.post(url + "/login", user);
 	}
 
-	this.getUserByEmail = function(email) {
-		return $http.get(url + "/" + email + "/one");
+	this.getTableByName = function(name) {
+		return $http.get(url + "/getByName/" + name);
 	}
 });
