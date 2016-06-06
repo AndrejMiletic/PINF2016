@@ -16,13 +16,17 @@
 
 	<link rel="stylesheet" type="text/css" href="stilovi.css">
 	<script src="app.js"></script>
+	
+	<script src="controllers/copyPricelistController.js"></script>
+	<script src="controllers/invoiceExportController.js"></script>
+	<script src="controllers/invoicingController.js"></script>
+	<script src="controllers/tablesController.js"></script>
 
-	<script src="constants/amendmentConstants.js"></script>
 <title>PINF-WS 2016</title>
 </head>
-<body class="bg" ng-controller="appController">
+<body class="bg">
 	<span>
-		<a href="#/tables" class="btn btn-primary"> Prikaz tabela</a>
+		<a href="#/" class="btn btn-primary"> Prikaz tabela</a>
 		<a href="#/copyPricelist" class="btn btn-primary"> Kopiranje cenovnika</a>
 		<a href="#/invoicing" class="btn btn-primary"> Fakturisanje</a>
 		<a href="#/invoiceExport" class="btn btn-primary"> Eksport faktura</a>

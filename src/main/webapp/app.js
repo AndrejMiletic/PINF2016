@@ -2,10 +2,6 @@ var app = angular.module('app', ['ngRoute']);
 
 app.config(['$routeProvider', function ($routeProvider) {
 	$routeProvider
-			.when('/', {
-						controller: 'tablesController',
-						templateUrl: 'partials/tablesPartial.html',
-			})
 			.when('/tables', {
 						controller: 'tablesController',
 						templateUrl: 'partials/tablesPartial.html',
