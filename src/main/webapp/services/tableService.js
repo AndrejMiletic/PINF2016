@@ -3,7 +3,9 @@ app.service('tableService', function($http){
 	this.getAll = function(user){
 		return $http.get(url + "/getAll");
 	}
-	
+	this.getAllPricelistTables = function(){
+		return $http.get(url + "/getAllPricelistTables");
+	}
 	this.login = function(user){
 		return $http.post(url + "/login", user);
 	}

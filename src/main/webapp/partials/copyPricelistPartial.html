@@ -1,3 +1,9 @@
 <div class="col-sm-6" >
 	<h1>Kopiranje cenovnika</h1>
+	</br></br>
+	<select ng-model="selectedTable" class="form-control" ng-change="showTable()" required>
+	  <option ng-repeat="table in pricelistTables" >
+		   {{table.name}}
+	  </option>
+	</select>
 </div>
