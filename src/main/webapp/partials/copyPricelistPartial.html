@@ -1,9 +1,26 @@
-<div class="col-sm-6" >
-	<h1>Kopiranje cenovnika</h1>
+<div>
+	<h1>&nbsp;Kopiranje cenovnika</h1>
+</div>
 	</br></br>
-	<select ng-model="selectedTable" class="form-control" ng-change="showTable()" required>
-	  <option ng-repeat="table in pricelistTables" >
-		   {{table.name}}
-	  </option>
+<div class="col-sm-2">
+	<label>Izbor cenovnika:</label>
+	<select ng-model="selectedPricelist" class="form-control" ng-change="openDocument()" required>
+		<option data-hidden="true" ng-repeat="obj in requestedTable.rows" >
+			{{obj.fields.naziv}}
+		</option>
 	</select>
+	<div ng-if="selectedPricelist">
+		  <table class="table table-hover">
+				<thead>
+				  <tr>
+					<th ng-repeat="field in documentChild.fields">{{field.name}}</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-click="openDocument()" ng-repeat="row in documentChild.rows">
+					<td ng-repeat="data in row.fields track by $index">{{data}}</td>
+				  </tr>
+				</tbody>
+		  </table> 
+	</div>
 </div>

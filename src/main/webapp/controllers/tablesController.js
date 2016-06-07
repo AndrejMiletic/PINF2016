@@ -10,7 +10,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
 				alert("Greska");
 			}
 		);
-	}
+	};
 
 	init();
 

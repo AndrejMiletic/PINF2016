@@ -122,10 +122,63 @@ public class TableController {
 		rows2.add(row21);
 		rows2.add(row22);
 		rows2.add(row23);
+		
+		ArrayList<TableFieldDTO> fieldsPriceList = new ArrayList<TableFieldDTO>();
+		fieldsPriceList.add(new TableFieldDTO("id", false, false, null));
+		fieldsPriceList.add(new TableFieldDTO("naziv", false, false, null));
+		fieldsPriceList.add(new TableFieldDTO("datum primene", false, false, null));
+		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece"));
+
+		ArrayList<TableRowDTO> rows1Pricelist = new ArrayList<TableRowDTO>();
+		TableRowDTO row1Pricelist = new TableRowDTO();
+		row1Pricelist.getFields().put("id", 1);
+		row1Pricelist.getFields().put("naziv", "Cenovnik 1");
+		row1Pricelist.getFields().put("datum primene", "05.08.2015.");
+		row1Pricelist.getFields().put("preduzece", "Preduzece 1");
+		TableRowDTO row2Pricelist = new TableRowDTO();
+		row2Pricelist.getFields().put("id", 2);
+		row2Pricelist.getFields().put("naziv", "Cenovnik 2");
+		row2Pricelist.getFields().put("datum primene", "12.12.2015.");
+		row2Pricelist.getFields().put("preduzece", "Preduzece 2");
+		TableRowDTO row3Pricelist = new TableRowDTO();
+		row3Pricelist.getFields().put("id", 3);
+		row3Pricelist.getFields().put("naziv", "Cenovnik 3");
+		row3Pricelist.getFields().put("datum primene", "12.10.2015.");
+		row3Pricelist.getFields().put("preduzece", "Preduzece 3");
+		rows1Pricelist.add(row1Pricelist);
+		rows1Pricelist.add(row2Pricelist);
+		rows1Pricelist.add(row3Pricelist);
+
+		ArrayList<TableFieldDTO> fieldsPriceListItem = new ArrayList<TableFieldDTO>();
+		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null));
+		fieldsPriceListItem.add(new TableFieldDTO("parentID", false, true, "Cenovnik"));
+		fieldsPriceListItem.add(new TableFieldDTO("jecinicna cena", false, false, null));
+
+		ArrayList<TableRowDTO> rows1PricelistItem = new ArrayList<TableRowDTO>();
+		TableRowDTO row1PricelistItem = new TableRowDTO();
+		row1PricelistItem.getFields().put("id", 1);
+		row1PricelistItem.getFields().put("parentId", 1);
+		row1PricelistItem.getFields().put("vrednost", "50");
+		TableRowDTO row2PricelistItem = new TableRowDTO();
+		row2PricelistItem.getFields().put("id", 2);
+		row2PricelistItem.getFields().put("parentId", 1);
+		row2PricelistItem.getFields().put("vrednost", "100");
+		TableRowDTO row3PricelistItem = new TableRowDTO();
+		row3PricelistItem.getFields().put("id", 3);
+		row3PricelistItem.getFields().put("parentId", 2);
+		row3PricelistItem.getFields().put("vrednost", "150");
+		rows1PricelistItem.add(row1PricelistItem);
+		rows1PricelistItem.add(row2PricelistItem);
+		rows1PricelistItem.add(row3PricelistItem);
 
 		tables.add(new TableDTO("Faktura", fields1, rows1, true,
 				"Stavka fakture", null, null));
 		tables.add(new TableDTO("Stavka fakture", fields2, rows2, true, null,
+				null, null));
+		
+		tables.add(new TableDTO("Cenovnik", fieldsPriceList, rows1Pricelist, true,
+				"Stavka cenovnika", null, null));
+		tables.add(new TableDTO("Stavka cenovnika", fieldsPriceListItem, rows1PricelistItem, true, null,
 				null, null));
 		return tables;
 	}
