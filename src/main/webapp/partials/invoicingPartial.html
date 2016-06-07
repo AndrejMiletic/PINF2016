@@ -1,1 +1,31 @@
-<h3>Pretraga</h3>
+<div class="centered col-sm-12">
+	
+	<h3>Generisanje fakture na osnovu narudzbenice</h3>
+	<br/><br/>
+	<div>
+		<label>Narudzbenica:</label><br/><br/>
+		<select ng-model="selectedOrderForm" id="orderFormName"
+				class="form-control" 
+				style="width: 300px; position: relative; margin-left: auto; margin-right: auto;" required>
+				<option ng-repeat="name in allOrderForms">{{name}}</option>
+		</select>
+		<br/>		
+		<button type="button" class="btn btn-primary" ng-click="showOrderForm()">Prikazi fakturu</button>
+	</div>
+</div>
+<div ng-if="showTable" class="centered col-sm-12")>
+	<table id="orderFormTable" class="table table-hover">
+		<thead>
+			<tr>
+				<th ng-repeat="field in orderForm.fields">{{field.name}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in orderForm.rows">
+				<th ng-repeat="data in row.fields">{{data}}</th>
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" class="btn btn-primary" ng-click="createOrderForm()">Kreiraj fakturu</button>
+</div>
+

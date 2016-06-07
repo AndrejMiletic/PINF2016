@@ -1,11 +1,38 @@
 </br>
 </br>
 <div>
-	<div class="form-group">
-		<label for="sel1">Tables:</label> <select style="width:auto;" class="form-control"
-			id="sel1">
-			<option ng-repeat="table in allTableNames" ng-click="setTable(table)">{{table}}</option>
-		</select>
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="sel1">Tabele:</label> <select style="width: auto;"
+				class="form-control" ng-model="selectedTable" id="sel1">
+				<option ng-repeat="table in allTableNames">{{table}}</option>
+			</select>
+		</div>
+		<button type="button" class="btn btn-primary" ng-click="showTable()">Prikazi tabelu</button>
 	</div>
 </div>
+ <table class="table table-hover">
+    <thead>
+      <tr>
+        <th ng-repeat="field in requestedTable.fields">{{field.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-click="openDocument()" ng-repeat="row in requestedTable.rows">
+        <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+      </tr>
+    </tbody>
+  </table>
 
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th ng-repeat="field in documentChild.fields">{{field.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-click="openDocument()" ng-repeat="row in documentChild.rows">
+        <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+      </tr>
+    </tbody>
+  </table>  
