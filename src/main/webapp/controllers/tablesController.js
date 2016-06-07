@@ -17,6 +17,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
         if (!$scope.selectedTable) {
             alert("Nije selektovano nista");
         } else {
+            $scope.documentChild = {};
             tableService.getTableByName($scope.selectedTable).then(
                 function (response) {
                     $scope.requestedTable = response.data;
@@ -28,15 +29,17 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
         }
 	};
 	
-    $scope.openDocument = function () {
-        tableService.getDocChild($scope.requestedTable.documentChildName).then(
-            function (response) {
-                $scope.documentChild = response.data;
-            },
-            function (response) {
-                alert("Neuspesno dobavljanje tabele");
-            }
-        );
+    $scope.openDocument = function (id) {
+        if ($scope.requestedTable.documentChildName){
+            tableService.getDocChild($scope.requestedTable.tableName, id).then(
+                function (response) {
+                    $scope.documentChild = response.data;
+                },
+                function (response) {
+                    alert("Neuspesno dobavljanje tabele");
+                }
+            );
+        }
     };
     
 }]);

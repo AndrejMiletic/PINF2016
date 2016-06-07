@@ -60,10 +60,14 @@ public class TableController {
 				break;
 			}
 		}
-	/*	for (int i=0; i < requestedTable.getRows().size(); i++){
-			if (requestedTable.getRows().get(i).g
-		}*/
-		return null;
+		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
+		for (int i=0; i < requestedTable.getRows().size(); i++){
+			if (((Integer)requestedTable.getRows().get(i).getFields().get("parentId")) == id.longValue()){
+				rows.add(requestedTable.getRows().get(i));
+			}
+		}
+		requestedTable.setRows(rows);
+		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -114,7 +118,7 @@ public class TableController {
 		TableRowDTO row22 = new TableRowDTO();
 		row22.getFields().put("id", 2);
 		row22.getFields().put("parentId", 1);
-		row22.getFields().put("vrednost", "Stavka 2 od f2");
+		row22.getFields().put("vrednost", "Stavka 2 od f1");
 		TableRowDTO row23 = new TableRowDTO();
 		row23.getFields().put("id", 3);
 		row23.getFields().put("parentId", 2);
