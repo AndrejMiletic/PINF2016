@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-click="openDocument()" ng-repeat="row in requestedTable.rows">
+      <tr ng-click="openDocument(row.fields.id)" ng-repeat="row in requestedTable.rows">
         <td ng-repeat="data in row.fields track by $index">{{data}}</td>
       </tr>
     </tbody>
@@ -31,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-click="openDocument()" ng-repeat="row in documentChild.rows">
+      <tr ng-repeat="row in documentChild.rows">
         <td ng-repeat="data in row.fields track by $index">{{data}}</td>
       </tr>
     </tbody>
