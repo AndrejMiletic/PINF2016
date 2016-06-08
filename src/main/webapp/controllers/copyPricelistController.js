@@ -20,10 +20,13 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 			 for (var index in $scope.requestedTable.rows) {
 
 				 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
+					 
+						 $scope.selectedData = $scope.requestedTable.rows[index];
+					 	 document.getElementById('input').value = $scope.selectedData.fields.datum_primene;
+					 
 						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
 							function (response) {
 								$scope.documentChild = response.data;
-								$scope.documentChildCopy = response.data;
 							},
 							function (response) {
 								alert("Neuspesno dobavljanje tabele");
@@ -55,8 +58,9 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 					    }
 				 if(isValid){
 					var newPrice = document.getElementById($scope.documentChild.rows[index].fields.id).value.trim();
-					var oldPrice = $scope.documentChild.rows[index].fields.vrednost;
-					$scope.documentChild.rows[index].fields.vrednost = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields.vrednost*newPrice/100);
+					var oldPrice = $scope.documentChild.rows[index].fields.jedinicna_cena;
+					$scope.parentId = $scope.documentChild.rows[index].fields.parentId;
+					$scope.documentChild.rows[index].fields.jedinicna_cena = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields.jedinicna_cena*newPrice/100);
 					document.getElementById($scope.documentChild.rows[index].fields.id).value = null;
 				 }else{
 					 alert("Unesite broj!");
@@ -67,7 +71,43 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		}	
 	}
 	$scope.copyPricelist = function(){
-		
+		var pricelist = {
+			parent :  $scope.selectedData,
+			child : $scope.documentChild.rows
+		}
+		console.log( $scope.selectedData);
+		console.log( $scope.documentChild.rows);
+		tableService.addPricelist(pricelist);
+	};
+	$scope.showForm = function(){
+	 	tableService.getTableByName("Katalog").then(
+			function (response) {
+				$scope.catalog = response.data;
+            },
+			function (response) {
+				alert("Greska");
+			}
+		);
+		$scope.form = true;
 	}
+	$scope.addArticle = function(){
+		var item;
+		for (var index in $scope.catalog.rows) {
+			 
+			 if($scope.catalog.rows[index].fields.naziv_artikla == $scope.selectedArticle){
+				 item = {
+					 fields:[{
+					 id : "",
+					 parentId : $scope.parentId,
+					 id_artikla : $scope.catalog.rows[index].fields.id_artikla,
+					 jedinicna_cena : $scope.catalog.rows[index].fields.jedinicna_cena
+				 }]
+				 }
+			 }
+		}
+		
+		$scope.documentChild.rows.push(item);
+		console.log($scope.documentChild);
+	};
 
 }]);

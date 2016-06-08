@@ -23,4 +23,13 @@ public class TableRowDTO {
 	public void setFields(HashMap<String, Object> fields) {
 		this.fields = fields;
 	}
+	@Override
+	public String toString() {
+		String retVal = "";
+		// TODO Auto-generated method stub
+		for (String key : fields.keySet()) {
+			retVal += key + " : "+ fields.get(key)+"\n"; 
+		}
+		return retVal;
+	}
 }

@@ -11,4 +11,7 @@ app.service('tableService', function($http){
     this.getDocChild = function(parentName, parentId){
         return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
     }
+	this.addPricelist = function(pricelist){
+        return $http.post(url + "/addPricelist", pricelist);
+    }
 });
