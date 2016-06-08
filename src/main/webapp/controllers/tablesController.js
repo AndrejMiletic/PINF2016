@@ -22,6 +22,12 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
             tableService.getTableByName($scope.selectedTable).then(
                 function (response) {
                     $scope.requestedTable = response.data;
+                    $scope.fieldNames = [];
+                    var temp = response.data.rows[0].fields
+                    angular.forEach(temp, function(key, value){
+                    	$scope.fieldNames.push(value);
+                    })
+                    console.log($scope.fieldNames);
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");
