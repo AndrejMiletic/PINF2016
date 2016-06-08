@@ -1,4 +1,4 @@
-<div class="centered col-sm-12">
+<div class="centered">
 	
 	<h3>Generisanje fakture na osnovu narudzbenice</h3>
 	<br/><br/>
@@ -7,25 +7,53 @@
 		<select ng-model="selectedOrderForm" id="orderFormName"
 				class="form-control" 
 				style="width: 300px; position: relative; margin-left: auto; margin-right: auto;" required>
-				<option ng-repeat="name in allOrderForms">{{name}}</option>
+				<option ng-repeat="selectedOrderForm in allOrderForms">{{selectedOrderForm}}</option>
 		</select>
-		<br/>		
-		<button type="button" class="btn btn-primary" ng-click="showOrderForm()">Prikazi fakturu</button>
+		<br/>	
+		
+		<button type="button" class="btn btn-primary" ng-click="showOrderForm()">Prikazi fakturu</button><br/><br/><br/>
 	</div>
 </div>
-<div ng-if="showTable" class="centered col-sm-12")>
-	<table id="orderFormTable" class="table table-hover">
+<div ng-if="showTable" class="centered col-sm-12" >
+	<table id="invoiceTable" class="table table-hover">
 		<thead>
 			<tr>
-				<th ng-repeat="field in orderForm.fields">{{field.name}}</th>
+				<th ng-repeat="field in invoice.fields">{{field.name}}</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="row in orderForm.rows">
-				<th ng-repeat="data in row.fields">{{data}}</th>
+			<tr ng-repeat="row in invoice.rows">
+				<td ng-repeat="data in row.fields">{{data}}</td>
 			</tr>
 		</tbody>
 	</table>
-	<button type="button" class="btn btn-primary" ng-click="createOrderForm()">Kreiraj fakturu</button>
+	<table id="invoiceItemTable" class="table table-hover">
+		<thead>
+			<tr>
+				<th ng-repeat="field in invoiceItems.fields">{{field.name}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in invoiceItems.rows">
+				<td ng-repeat="data in row.fields">{{data}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr>
+	<div style="float:right; text-align: left;">
+		<label style="width:170px;">Ukupan iznos: </label><label>{{ukupanIznos}}</label><br/>
+		<label style="width:170px;">Ukupan rabat: </label><label>{{ukupanRabat}}</label><br/>
+		<label>_____________________________</label><br/>
+		<label style="width:170px;">Ukupano sa rabatom: </label><label>{{cenaSaRabatom}}</label><br/>
+		<label style="width:170px;">Ukupan PDV: </label><label>{{ukupanPDV}}</label><br/>
+		<label>_____________________________</label><br/>
+		<label style="width:170px;">Ukupno za naplatu: </label><label>{{ukupnoZaNaplatu}}</label><br/>
+	</div>
+	
+	<div style="margin-top: 200px; text-align: left;" >
+		<label>Dodaj dodatne napomene:</label>
+		<input required type = "text" ng-model = "additionalNotes" class="form-control"/><br/><br/>
+	</div>
+	<button type="button" class="btn btn-primary" ng-click="addInvoice(additionalNotes)">Kreiraj fakturu</button>
 </div>
 

@@ -2,16 +2,16 @@ app.service('invoiceService',function($http){
 	
 	var url="/table";
 	
-	this.getAllOrderForms=function(){
-		return $http.get(url+"/getAll");
+	this.getTableRows=function(tableName){
+		return $http.get(url+"/getTableRows/"+tableName);
 	}
 	
-	this.getByName=function(name){
-		return $http.get(url+"/getByName/"+name);
+	this.getByName=function(tableName){
+		return $http.get(url+"/getTable/"+tableName);
 	}
 	
-	this.addOrderForm=function(orderForm){
-		return $http.post(url+"/add", orderForm);
+	this.addTableRow=function(tableName, rows){
+		return $http.post(url+"/addRow/"+tableName,rows);
 	}
 	
 });
