@@ -1,38 +1,93 @@
 </br>
 </br>
-<div>
-	<div class="form-inline">
-		<div class="form-group">
-			<label for="sel1">Tabele:</label> <select style="width: auto;"
-				class="form-control" ng-model="selectedTable" id="sel1">
-				<option ng-repeat="table in allTableNames">{{table}}</option>
-			</select>
+<div class="col-sm-1"></div>
+<div class="col-sm-10">
+	<div>
+		<div class="form-inline">
+			<div class="form-group">
+				<label for="sel1">Tabele:</label> <select style="width: auto;"
+					class="form-control" ng-model="selectedTable" id="sel1">
+					<option ng-repeat="table in allTableNames">{{table}}</option>
+				</select>
+			</div>
+			<button type="button" class="btn btn-primary" ng-click="showTable()">Prikazi tabelu</button>
 		</div>
-		<button type="button" class="btn btn-primary" ng-click="showTable()">Prikazi tabelu</button>
+	</div>
+	<br/><br/>
+	<div ng-if="requestedTable">
+		<button ng-click="generateCreateForm()" class="btn btn-success centered">
+			<span class="glyphicon glyphicon-plus"></span> Dodaj novi red
+		</button>
+		<table class="table table-hover table-bordered">
+		  <thead>
+		    <tr>
+		      <th class="centered" ng-repeat="field in fieldNames">{{field}}</th>
+					<th class="centered">Operacije</th>
+		    </tr>
+		  </thead>
+		  <tbody class="centered">
+		    <tr ng-click="openDocument(row.fields.id)" ng-repeat="row in requestedTable.rows track by $index">
+		      <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+					<td>
+						<button ng-click="generateEditForm($index, row, $event)" class="btn btn-warning">
+	          	<span class="glyphicon glyphicon-edit"></span> Uredi
+						</button>
+						<button ng-click="deleteRow($index, row, $event)" class="btn btn-danger">
+	          	<span class="glyphicon glyphicon-trash"></span> Obriši
+						</button>
+					</td>
+		    </tr>
+		  </tbody>
+		</table>
+		<br/><br/>
+
+		<div ng-if="requestedTable.documentPattern && requestedTable.documentChildName && documentChild">
+			<button ng-click="generateCreateSubForm()" class="btn btn-success centered" ng-if="documentChild.fields.length">
+				<span class="glyphicon glyphicon-plus"></span> Dodaj novu stavku
+			</button>
+			<table class="table table-hover table-bordered">
+			  <thead>
+			    <tr>
+			      <th class="centered" ng-repeat="field in documentChild.fields">{{field.name}}</th>
+						<th class="centered" ng-if="documentChild.fields.length">Operacije</th>
+			    </tr>
+			  </thead>
+			  <tbody class="centered">
+			    <tr ng-repeat="row in documentChild.rows">
+			      <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+						<td ng-if="documentChild.fields.length">
+							<button ng-click="generateEditSubForm($index, row, $event)" class="btn btn-warning">
+		          	<span class="glyphicon glyphicon-edit"></span> Uredi
+							</button>
+							<button ng-click="deleteSubRow($index, row, $event)" class="btn btn-danger">
+		          	<span class="glyphicon glyphicon-trash"></span> Obriši
+							</button>
+						</td>
+			    </tr>
+			  </tbody>
+			</table>
+		</div>
+
+		<br/><br/>
+		<div ng-if="currentRow" class="centered">
+			<h2> {{formText}} </h2><br/>
+			<div ng-repeat="field in currentTable.fields" ng-if="field.name!=='id' || operation!=='create' && operation!=='sub_create'">
+				<label>{{field.name}}</label>
+				<br/>
+				<input type = "text" ng-readonly="field.name==='id' || field.fk"
+					ng-model="currentRow.fields[field.name]" class="form-control"
+					placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>
+				<button ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
+					<span class="glyphicon glyphicon-option-horizontal"></span>
+				</button>
+				<br/><br/>
+			</div>
+			<button ng-click="submitForm()" class="btn btn-success">
+				<span class="glyphicon glyphicon-ok"></span> {{formText}}
+			</button>
+			<button ng-click="closeForm()" class="btn btn-danger">
+				<span class="glyphicon glyphicon-remove"></span> Poništi
+			</button>
+		</div>
 	</div>
 </div>
- <table class="table table-hover">
-    <thead>
-      <tr>
-        <th ng-repeat="field in fieldNames">{{field}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-click="openDocument(row.fields.id)" ng-repeat="row in requestedTable.rows">
-        <td ng-repeat="data in row.fields track by $index">{{data}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-<table class="table table-hover">
-    <thead>
-      <tr>
-        <th ng-repeat="field in documentChild.fields">{{field.name}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="row in documentChild.rows">
-        <td ng-repeat="data in row.fields track by $index">{{data}}</td>
-      </tr>
-    </tbody>
-  </table>  

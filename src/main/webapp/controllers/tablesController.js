@@ -1,5 +1,5 @@
 
-app.controller('tablesController', ['$scope', '$window', 'tableService', function ($scope, $window, tableService) {
+app.controller('tablesController', ['$scope', '$window', 'tableService', 'appConstants', function ($scope, $window, tableService, appConstants) {
 
 	function init() {
 		tableService.getAll().then(
@@ -34,7 +34,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
             );
         }
 	};
-	
+
     $scope.openDocument = function (id) {
         if ($scope.requestedTable.documentChildName){
             tableService.getDocChild($scope.requestedTable.tableName, id).then(
@@ -47,5 +47,120 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
             );
         }
     };
-    
+
+		$scope.deleteRow = function(index, row, event) {
+			event.stopPropagation();
+			tableService.delete($scope.documentChild.tableName, row.fields.id).then(
+				function(response) {
+						$scope.documentChild = undefined;
+						$scope.requestedTable.rows.splice(index, 1);
+				},
+				function(response) {
+					alert("Neuspešno brisanje reda");
+				}
+			);
+		}
+
+		$scope.deleteSubRow = function(index, row, event) {
+			event.stopPropagation();
+			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
+				function(response) {
+						$scope.documentChild.rows.splice(index, 1);
+				},
+				function(response) {
+					alert("Neuspešno brisanje stavke");
+				}
+			);
+		}
+
+		$scope.generateEditForm = function(index, row, event) {
+			event.stopPropagation();
+			$scope.currentIndex = index;
+			$scope.currentRow = angular.copy(row);
+			$scope.formText = "Uredi";
+			$scope.operation = appConstants.operations.EDIT;
+			$scope.currentTable = angular.copy($scope.requestedTable);
+		}
+
+		$scope.generateCreateForm = function() {
+			$scope.currentRow = {};
+			$scope.formText = "Dodaj";
+			$scope.operation = appConstants.operations.CREATE;
+			$scope.currentTable = angular.copy($scope.requestedTable);
+		}
+
+		$scope.generateEditSubForm = function(index, row, event) {
+			event.stopPropagation();
+			$scope.currentIndex = index;
+			$scope.currentRow = angular.copy(row);
+			$scope.formText = "Uredi stavku";
+			$scope.operation = appConstants.operations.SUB_EDIT;
+			$scope.currentTable = angular.copy($scope.documentChild);
+		}
+
+		$scope.generateCreateSubForm = function() {
+			$scope.currentRow = {};
+			$scope.formText = "Dodaj stavku";
+			$scope.operation = appConstants.operations.SUB_CREATE;
+			$scope.currentTable = angular.copy($scope.documentChild);
+		}
+
+		$scope.submitForm = function() {
+			var row =  angular.copy($scope.currentRow);
+
+			if(tableService.isValid($scope.currentTable, row)) {
+				if($scope.operation === appConstants.operations.CREATE) {
+					tableService.create($scope.requestedTable.tableName, row).then(
+						function(response) {
+							$scope.requestedTable.rows.push(row);
+							$scope.currentRow = undefined;
+						}, function() {
+							alert("Neuspešno dodavanje reda u tabelu.");
+						}
+					);
+				} else
+				if($scope.operation === appConstants.operations.EDIT) {
+					tableService.edit($scope.requestedTable.tableName, row).then(
+						function(response) {
+							$scope.requestedTable.rows[$scope.currentIndex] = row;
+							$scope.currentRow = undefined;
+						}, function() {
+							alert("Neuspešno uređivanje reda u tabeli.");
+						}
+					);
+				} else
+				if($scope.operation === appConstants.operations.SUB_EDIT) {
+					tableService.edit($scope.documentChild.tableName, row).then(
+						function(response) {
+							$scope.documentChild.rows[$scope.currentIndex] = row;
+							$scope.currentRow = undefined;
+						}, function() {
+							alert("Neuspešno uređivanje stavke u tabeli.");
+						}
+					);
+				} else
+				if($scope.operation === appConstants.operations.SUB_CREATE) {
+					tableService.create($scope.documentChild.tableName, row).then(
+						function(response) {
+							$scope.documentChild.rows.push(row);
+							$scope.currentRow = undefined;
+						}, function() {
+							alert("Neuspešno dodavanje stavke.");
+						}
+					);
+				}
+			} else {
+				alert("Forma nije validna!");
+			}
+		}
+
+		$scope.closeForm = function() {
+				$scope.currentRow = undefined;
+		}
+
+		$scope.foreignKey = function(field) {
+			alert("Preuzeti FK vrednost za polje ispisano u konzoli!");
+			console.log(field);
+			$scope.currentRow.fields[field.name] = "Neka nova vrednost dobijena mehanizmom";
+		}
 }]);

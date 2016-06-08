@@ -30,17 +30,17 @@ public class TableController {
 	}
 	
 	@RequestMapping(value="/getByName/{name}", method=RequestMethod.GET)
-	 	public ResponseEntity<TableDTO> getByName(@PathVariable String name)
-	 	{	
-	 		ArrayList<TableDTO> tables = getMockData();
-	 		TableDTO requestedTable = null;
-	 		for (TableDTO table : tables){
-	 			if (table.getTableName().equals(name)){
-	 				requestedTable = table;
-	 			}
-	 		}
-	 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	 	}
+ 	public ResponseEntity<TableDTO> getByName(@PathVariable String name)
+ 	{	
+ 		ArrayList<TableDTO> tables = getMockData();
+ 		TableDTO requestedTable = null;
+ 		for (TableDTO table : tables){
+ 			if (table.getTableName().equals(name)){
+ 				requestedTable = table;
+ 			}
+ 		}
+ 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+ 	}
 	
 	@RequestMapping(value="/getDocChild/{parentName}/{parentId}", method=RequestMethod.GET)
 	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentName, @PathVariable String parentId){
@@ -75,6 +75,32 @@ public class TableController {
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/addRow",method=RequestMethod.POST)
+	public ResponseEntity<Object> addRow(@RequestBody TableRowDTO row){
+		printRow(row, "Create");		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/editRow",method=RequestMethod.PATCH)
+	public ResponseEntity<Object> editRow(@RequestBody TableRowDTO row){		
+		printRow(row, "Edit");		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/{tableName}/{rowId}",method=RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteRow(@PathVariable String tableName, @PathVariable String rowId){		
+		System.out.println("Deleting from table " + tableName + " with ID " + rowId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	private void printRow(TableRowDTO row, String operation) {
+		System.out.println("Operacija: " + operation + "\nTabela: " + row.getTableName() + "\n");
+		for (String key : row.getFields().keySet()) {
+			System.out.println("\t" + key + " : " + row.getFields().get(key));
+		}
+		System.out.println("---------------------");
+	}
 
 	private ArrayList<TableDTO> getMockData() {
 		ArrayList<TableDTO> tables = new ArrayList<TableDTO>();
@@ -107,7 +133,7 @@ public class TableController {
 
 		ArrayList<TableFieldDTO> fields2 = new ArrayList<TableFieldDTO>();
 		fields2.add(new TableFieldDTO("id", false, false, null, "number"));
-		fields2.add(new TableFieldDTO("parentID", false, true, "Faktura", "number"));
+		fields2.add(new TableFieldDTO("parentId", false, true, "Faktura", "number"));
 		fields2.add(new TableFieldDTO("vrednost", false, false, null, "text"));
 
 		ArrayList<TableRowDTO> rows2 = new ArrayList<TableRowDTO>();
@@ -155,7 +181,7 @@ public class TableController {
 
 		ArrayList<TableFieldDTO> fieldsPriceListItem = new ArrayList<TableFieldDTO>();
 		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null, "number"));
-		fieldsPriceListItem.add(new TableFieldDTO("parentID", false, true, "Cenovnik", "number"));
+		fieldsPriceListItem.add(new TableFieldDTO("parentId", false, true, "Cenovnik", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
 
 		ArrayList<TableRowDTO> rows1PricelistItem = new ArrayList<TableRowDTO>();
