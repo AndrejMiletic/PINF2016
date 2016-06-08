@@ -80,10 +80,10 @@ public class TableController {
 		ArrayList<TableDTO> tables = new ArrayList<TableDTO>();
 
 		ArrayList<TableFieldDTO> fields1 = new ArrayList<TableFieldDTO>();
-		fields1.add(new TableFieldDTO("id", false, false, null));
-		fields1.add(new TableFieldDTO("naziv", false, false, null));
-		fields1.add(new TableFieldDTO("tip", false, false, null));
-		fields1.add(new TableFieldDTO("godina", false, true, "Poslovna godina"));
+		fields1.add(new TableFieldDTO("id", false, false, null, "number"));
+		fields1.add(new TableFieldDTO("naziv", false, false, null, "text"));
+		fields1.add(new TableFieldDTO("tip", false, false, null, "text"));
+		fields1.add(new TableFieldDTO("godina", false, true, "Poslovna godina", "date"));
 
 		ArrayList<TableRowDTO> rows1 = new ArrayList<TableRowDTO>();
 		TableRowDTO row11 = new TableRowDTO();
@@ -106,9 +106,9 @@ public class TableController {
 		rows1.add(row13);
 
 		ArrayList<TableFieldDTO> fields2 = new ArrayList<TableFieldDTO>();
-		fields2.add(new TableFieldDTO("id", false, false, null));
-		fields2.add(new TableFieldDTO("parentID", false, true, "Faktura"));
-		fields2.add(new TableFieldDTO("vrednost", false, false, null));
+		fields2.add(new TableFieldDTO("id", false, false, null, "number"));
+		fields2.add(new TableFieldDTO("parentID", false, true, "Faktura", "number"));
+		fields2.add(new TableFieldDTO("vrednost", false, false, null, "text"));
 
 		ArrayList<TableRowDTO> rows2 = new ArrayList<TableRowDTO>();
 		TableRowDTO row21 = new TableRowDTO();
@@ -128,10 +128,10 @@ public class TableController {
 		rows2.add(row23);
 		
 		ArrayList<TableFieldDTO> fieldsPriceList = new ArrayList<TableFieldDTO>();
-		fieldsPriceList.add(new TableFieldDTO("id", false, false, null));
-		fieldsPriceList.add(new TableFieldDTO("naziv", false, false, null));
-		fieldsPriceList.add(new TableFieldDTO("datum primene", false, false, null));
-		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece"));
+		fieldsPriceList.add(new TableFieldDTO("id", false, false, null, "number"));
+		fieldsPriceList.add(new TableFieldDTO("naziv", false, false, null, "text"));
+		fieldsPriceList.add(new TableFieldDTO("datum primene", false, false, null, "date"));
+		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece", "text"));
 
 		ArrayList<TableRowDTO> rows1Pricelist = new ArrayList<TableRowDTO>();
 		TableRowDTO row1Pricelist = new TableRowDTO();
@@ -154,9 +154,9 @@ public class TableController {
 		rows1Pricelist.add(row3Pricelist);
 
 		ArrayList<TableFieldDTO> fieldsPriceListItem = new ArrayList<TableFieldDTO>();
-		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null));
-		fieldsPriceListItem.add(new TableFieldDTO("parentID", false, true, "Cenovnik"));
-		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null));
+		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null, "number"));
+		fieldsPriceListItem.add(new TableFieldDTO("parentID", false, true, "Cenovnik", "number"));
+		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
 
 		ArrayList<TableRowDTO> rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
@@ -176,8 +176,8 @@ public class TableController {
 		rows1PricelistItem.add(row3PricelistItem);
 		
 		ArrayList<TableFieldDTO> fieldsCompany = new ArrayList<TableFieldDTO>();
-		fieldsCompany.add(new TableFieldDTO("id", false, false, null));
-		fieldsCompany.add(new TableFieldDTO("naziv", false, false, null));
+		fieldsCompany.add(new TableFieldDTO("id", false, false, null, "number"));
+		fieldsCompany.add(new TableFieldDTO("naziv", false, false, null, "text"));
 
 		ArrayList<TableRowDTO> rows1Company = new ArrayList<TableRowDTO>();
 		TableRowDTO row1Company = new TableRowDTO();

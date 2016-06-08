@@ -27,7 +27,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', functio
                     angular.forEach(temp, function(key, value){
                     	$scope.fieldNames.push(value);
                     })
-                    console.log($scope.fieldNames);
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");

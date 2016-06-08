@@ -6,13 +6,15 @@ public class TableFieldDTO {
 	private boolean nullable;
 	private boolean fk;
 	private String fkTableName;
+	private String type;
 	
 	public TableFieldDTO() {
 		super();
 	}
 	public TableFieldDTO(String name, boolean nullable, boolean fk,
-			String fkTableName) {
+			String fkTableName, String type) {
 		super();
+		this.type = type;
 		this.name = name;
 		this.nullable = nullable;
 		this.fk = fk;
@@ -41,5 +43,11 @@ public class TableFieldDTO {
 	}
 	public void setFkTableName(String fkTableName) {
 		this.fkTableName = fkTableName;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }
