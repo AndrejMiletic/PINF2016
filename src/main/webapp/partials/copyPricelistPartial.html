@@ -2,25 +2,40 @@
 	<h1>&nbsp;Kopiranje cenovnika</h1>
 </div>
 	</br></br>
-<div class="col-sm-2">
-	<label>Izbor cenovnika:</label>
-	<select ng-model="selectedPricelist" class="form-control" ng-change="openDocument()" required>
-		<option data-hidden="true" ng-repeat="obj in requestedTable.rows" >
-			{{obj.fields.naziv}}
-		</option>
-	</select>
-	<div ng-if="selectedPricelist">
-		  <table class="table table-hover">
-				<thead>
-				  <tr>
-					<th ng-repeat="field in documentChild.fields">{{field.name}}</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr ng-click="openDocument()" ng-repeat="row in documentChild.rows">
-					<td ng-repeat="data in row.fields track by $index">{{data}}</td>
-				  </tr>
-				</tbody>
-		  </table> 
+
+<div class="form-inline">
+	<div class="form-group">&nbsp;
+		<label>Izbor cenovnika:</label>
+		<select ng-model="selectedPricelist" class="form-control" required>
+			<option data-hidden="true" ng-repeat="obj in requestedTable.rows track by $index" >
+				{{obj.fields.naziv}}
+			</option>
+		</select>
 	</div>
+	<button ng-click="openDocument()"type="button" class="btn btn-primary">Prikazi stavke cenovnika</button>
 </div>
+</br>
+<div ng-if="documentChild">
+	<table class="table table-hover">
+		<thead>
+		  <tr>
+			<th ng-repeat="field in documentChild.fields">{{field.name}}</th>
+			<th>Izmena cene</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <tr ng-repeat="row in documentChild.rows">
+			<td ng-repeat="data in row.fields track by $index">{{data}}</td>		  
+			<td>				
+				<div class="row-fluid form-inline" style="overflow: hidden;">
+				   <input type="text" id="{{row.fields.id}}" />
+					<button ng-click="apply(row.fields)">Potvrda</button>
+				</div>
+			</td>
+		  </tr>
+		</tbody>
+	</table>
+	<button ng-click="copyPricelist()" type="button" class="btn btn-primary">Kopiraj cenovnik</button>
+</div>
+
+

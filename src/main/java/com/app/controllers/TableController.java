@@ -28,20 +28,20 @@ public class TableController {
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
-
-	@RequestMapping(value = "/getByName/{name}", method = RequestMethod.GET)
-	public ResponseEntity<TableDTO> getByName(@PathVariable String name) {
-		ArrayList<TableDTO> tables = getMockData();
-		TableDTO requestedTable = null;
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(name)) {
-				requestedTable = table;
-				break;
-			}
-		}
-		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	}
-
+	
+	@RequestMapping(value="/getByName/{name}", method=RequestMethod.GET)
+	 	public ResponseEntity<TableDTO> getByName(@PathVariable String name)
+	 	{	
+	 		ArrayList<TableDTO> tables = getMockData();
+	 		TableDTO requestedTable = null;
+	 		for (TableDTO table : tables){
+	 			if (table.getTableName().equals(name)){
+	 				requestedTable = table;
+	 			}
+	 		}
+	 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+	 	}
+	
 	@RequestMapping(value="/getDocChild/{parentName}/{parentId}", method=RequestMethod.GET)
 	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentName, @PathVariable String parentId){
 		Long id = Long.valueOf(parentId);
@@ -148,7 +148,7 @@ public class TableController {
 		row3Pricelist.getFields().put("id", 3);
 		row3Pricelist.getFields().put("naziv", "Cenovnik 3");
 		row3Pricelist.getFields().put("datum primene", "12.10.2015.");
-		row3Pricelist.getFields().put("preduzece", "Preduzece 3");
+		row3Pricelist.getFields().put("preduzece", "Preduzece 2");
 		rows1Pricelist.add(row1Pricelist);
 		rows1Pricelist.add(row2Pricelist);
 		rows1Pricelist.add(row3Pricelist);
@@ -156,7 +156,7 @@ public class TableController {
 		ArrayList<TableFieldDTO> fieldsPriceListItem = new ArrayList<TableFieldDTO>();
 		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null));
 		fieldsPriceListItem.add(new TableFieldDTO("parentID", false, true, "Cenovnik"));
-		fieldsPriceListItem.add(new TableFieldDTO("jecinicna cena", false, false, null));
+		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null));
 
 		ArrayList<TableRowDTO> rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
@@ -174,6 +174,20 @@ public class TableController {
 		rows1PricelistItem.add(row1PricelistItem);
 		rows1PricelistItem.add(row2PricelistItem);
 		rows1PricelistItem.add(row3PricelistItem);
+		
+		ArrayList<TableFieldDTO> fieldsCompany = new ArrayList<TableFieldDTO>();
+		fieldsCompany.add(new TableFieldDTO("id", false, false, null));
+		fieldsCompany.add(new TableFieldDTO("naziv", false, false, null));
+
+		ArrayList<TableRowDTO> rows1Company = new ArrayList<TableRowDTO>();
+		TableRowDTO row1Company = new TableRowDTO();
+		row1Company.getFields().put("id", 1);
+		row1Company.getFields().put("naziv", "Preduzece 1");
+		TableRowDTO row2Company = new TableRowDTO();
+		row2Company.getFields().put("id", 2);
+		row2Company.getFields().put("naziv", "Preduzece 2");
+		rows1Company.add(row1Company);
+		rows1Company.add(row2Company);
 
 		tables.add(new TableDTO("Faktura", fields1, rows1, true,
 				"Stavka fakture", null, null));
@@ -184,6 +198,8 @@ public class TableController {
 				"Stavka cenovnika", null, null));
 		tables.add(new TableDTO("Stavka cenovnika", fieldsPriceListItem, rows1PricelistItem, true, null,
 				null, null));
+		tables.add(new TableDTO("Preduzece", fieldsCompany, rows1Company, false,
+				null, null, null));
 		return tables;
 	}
 }
