@@ -15,21 +15,26 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 	
 	 $scope.openDocument = function () {
 		 
-		 for (var index in $scope.requestedTable.rows) {
-			 
-			 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
-				     tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
-						function (response) {
-							$scope.documentChild = response.data;
-							$scope.documentChildCopy = response.data;
-						},
-						function (response) {
-							alert("Neuspesno dobavljanje tabele");
-						}
-					);
-			 }
-			
-		}
+		 if($scope.selectedPricelist){
+		 
+			 for (var index in $scope.requestedTable.rows) {
+
+				 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
+						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
+							function (response) {
+								$scope.documentChild = response.data;
+								$scope.documentChildCopy = response.data;
+							},
+							function (response) {
+								alert("Neuspesno dobavljanje tabele");
+							}
+						);
+				 }
+
+			}
+		 }else{
+			 alert("Izaberite cenovnik iz liste!");
+		 }
 		 
     };
 	
