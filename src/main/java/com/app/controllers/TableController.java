@@ -69,11 +69,40 @@ public class TableController {
 		requestedTable.setRows(rows);
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
+
+
+	@RequestMapping(value="/addRow/{tableName}",method=RequestMethod.POST)
+	public ResponseEntity<ArrayList<TableRowDTO>> addRow(@RequestBody ArrayList<TableRowDTO> rows,@PathVariable String tableName){
+		return new ResponseEntity<>(rows,HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/getTableRows/{tableName}",method=RequestMethod.GET)
+	public ResponseEntity<ArrayList<String>> getTableRows(@PathVariable String tableName){
+		ArrayList<TableDTO> tables = getData();
+		ArrayList<String> names = new ArrayList<String>();
+		for (TableDTO table : tables) {
+			if (table.getTableName().equals(tableName) && !names.contains(table.getTableName())){
+				for(TableRowDTO row:table.getRows()){
+					names.add(row.getFields().get("id").toString());
+				}
+				break;
+			}
+		}
+		return new ResponseEntity<>(names, HttpStatus.OK);
+	}
 	
-	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public ResponseEntity<Object> addTable(@RequestBody TableDTO table){
-		
-		return new ResponseEntity<>(HttpStatus.OK);
+	//ista kao getByName, samo mockovani podaci drugaciji
+	@RequestMapping(value="/getTable/{tableName}",method=RequestMethod.GET)
+	public ResponseEntity<TableDTO> getTableByName(@PathVariable String tableName){
+		ArrayList<TableDTO> tables = getData();
+		TableDTO requestedTable =new TableDTO();
+		for (TableDTO table : tables) {
+			if (table.getTableName().equals(tableName)) {
+				requestedTable = table;
+				break;
+			}
+		}
+		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
 
 	private ArrayList<TableDTO> getMockData() {
@@ -202,4 +231,174 @@ public class TableController {
 				null, null, null));
 		return tables;
 	}
+
+
+	private ArrayList<TableDTO> getData() {
+		ArrayList<TableDTO> tables = new ArrayList<TableDTO>();
+
+		//-----------------FAKTURA-------------------------------
+		
+		ArrayList<TableFieldDTO> invoiceFields= new ArrayList<TableFieldDTO>();
+		invoiceFields.add(new TableFieldDTO("id", false, false, null, "number"));
+		invoiceFields.add(new TableFieldDTO("narudzba", false, true, "Narudzba","number"));
+		invoiceFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
+		invoiceFields.add(new TableFieldDTO("broj_fakture", false, false, null,"number"));
+		invoiceFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("datum_valute", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("datum_obracuna", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
+		invoiceFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("status_fakture", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("dodatne_napomene", false, false, null,"text"));
+		invoiceFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
+		
+		ArrayList<TableRowDTO> invoiceRows= new ArrayList<TableRowDTO>();
+		TableRowDTO invoiceValues= new TableRowDTO();
+		invoiceValues.getFields().put("id", 1);
+		invoiceValues.getFields().put("narudzba", 1);
+		invoiceValues.getFields().put("godina", 2016);
+		invoiceValues.getFields().put("broj_fakture", 1564);
+		invoiceValues.getFields().put("datum_narucivanja", "7.6.2016.");
+		invoiceValues.getFields().put("datum_valute", "7.6.2016.");
+		invoiceValues.getFields().put("datum_obracuna", "7.6.2016.");
+		invoiceValues.getFields().put("partner", "Partner 2");
+		invoiceValues.getFields().put("adresa_isporuke", "Adr 1");
+		invoiceValues.getFields().put("tekuci_racun", "rac");
+		invoiceValues.getFields().put("poziv_na_broj", "85468596548526");
+		invoiceValues.getFields().put("status_fakture", "U_procesu");
+		invoiceValues.getFields().put("dodatne_napomene", "Napomena 1");
+		invoiceValues.getFields().put("ukupno", 13563.90);
+		invoiceRows.add(invoiceValues);
+
+		//--------------STAVKA FAKTURE-------------------------
+		
+		ArrayList<TableFieldDTO> invoiceItemFields= new ArrayList<TableFieldDTO>();
+		invoiceItemFields.add(new TableFieldDTO("id", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("faktura", false, true, "Faktura","number"));
+		invoiceItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null,"text"));
+		invoiceItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null,"text"));
+		invoiceItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null,"text"));
+		invoiceItemFields.add(new TableFieldDTO("kolicina", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("rabat", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("pdv", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("cena_pdv", false, false, null,"number"));
+		invoiceItemFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
+
+		ArrayList<TableRowDTO> invoiceItemRows = new ArrayList<TableRowDTO>();
+		TableRowDTO invoiceItemValues= new TableRowDTO();
+		invoiceItemValues.getFields().put("id", 1);
+		invoiceItemValues.getFields().put("faktura", 1);
+		invoiceItemValues.getFields().put("naziv_artikla", "Sunoko secer");
+		invoiceItemValues.getFields().put("sifra_artikla", "8652659365486");
+		invoiceItemValues.getFields().put("jedinica_mere", "kom");
+		invoiceItemValues.getFields().put("kolicina", 20);
+		invoiceItemValues.getFields().put("jedinicna_cena", 70.00);
+		invoiceItemValues.getFields().put("rabat", 6);
+		invoiceItemValues.getFields().put("pdv", 20);
+		invoiceItemValues.getFields().put("cena_pdv", 84.00);
+		invoiceItemValues.getFields().put("ukupno", 1680.00);
+		invoiceItemRows.add(invoiceItemValues);
+		
+		//---------------NARUDZBA-------------------------------------
+		
+		ArrayList<TableFieldDTO> orderFormFields = new ArrayList<TableFieldDTO>();
+		orderFormFields.add(new TableFieldDTO("id", false, false, null,"number"));
+		orderFormFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
+		orderFormFields.add(new TableFieldDTO("broj_narudzbe", false, false, null,"number"));
+		orderFormFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("rok_isporuke", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
+		orderFormFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("status_narudzbe", false, false, null,"text"));
+		orderFormFields.add(new TableFieldDTO("status_fakture", false, false, null,"text"));
+		
+		ArrayList<TableRowDTO> orderFormRows = new ArrayList<TableRowDTO>();
+		TableRowDTO orderFormValues= new TableRowDTO();
+		orderFormValues.getFields().put("id", 1);
+		orderFormValues.getFields().put("godina", 2016);
+		orderFormValues.getFields().put("broj_narudzbe", 1564);
+		orderFormValues.getFields().put("datum_narucivanja", "5.6.2016.");
+		orderFormValues.getFields().put("rok_isporuke", "12.6.2016");
+		orderFormValues.getFields().put("partner", "Partner 1");
+		orderFormValues.getFields().put("adresa_isporuke", "Adr1");
+		orderFormValues.getFields().put("tekuci_racun", "rac");
+		orderFormValues.getFields().put("poziv_na_broj", "8546357859624");
+		orderFormValues.getFields().put("status_narudzbe", "U_procesu");
+		orderFormValues.getFields().put("status_fakture", "U_procesu");
+		orderFormRows.add(orderFormValues);
+
+		//---------------STAVKA NARUDZBE-------------------------
+		
+		ArrayList<TableFieldDTO> orderFormItemFields= new ArrayList<TableFieldDTO>();
+		orderFormItemFields.add(new TableFieldDTO("id", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("narudzba", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null,"text"));
+		orderFormItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null,"text"));
+		orderFormItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null,"text"));
+		orderFormItemFields.add(new TableFieldDTO("kolicina", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("rabat", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("pdv", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("cena_pdv", false, false, null,"number"));
+		orderFormItemFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
+
+		ArrayList<TableRowDTO> orderFormItemRows = new ArrayList<TableRowDTO>();
+		TableRowDTO orderFormItemValues= new TableRowDTO();
+		orderFormItemValues.getFields().put("id", 1);
+		orderFormItemValues.getFields().put("narudzba", 1);
+		orderFormItemValues.getFields().put("naziv_artikla", "Sunoko secer");
+		orderFormItemValues.getFields().put("sifra_artikla", "8652659365486");
+		orderFormItemValues.getFields().put("jedinica_mere", "kom");
+		orderFormItemValues.getFields().put("kolicina", 30);
+		orderFormItemValues.getFields().put("jedinicna_cena", 70.00);
+		orderFormItemValues.getFields().put("rabat", 6);
+		orderFormItemValues.getFields().put("pdv", 20);
+		orderFormItemValues.getFields().put("cena_pdv", 84.00);
+		orderFormItemValues.getFields().put("ukupno", 2520.00);
+		orderFormItemRows.add(orderFormItemValues);
+		
+		TableRowDTO orderFormItemValues2= new TableRowDTO();
+		orderFormItemValues2.getFields().put("id", 2);
+		orderFormItemValues2.getFields().put("narudzba", 1);
+		orderFormItemValues2.getFields().put("naziv_artikla", "Grand kafa 200g");
+		orderFormItemValues2.getFields().put("sifra_artikla", "8652659365895");
+		orderFormItemValues2.getFields().put("jedinica_mere", "kom");
+		orderFormItemValues2.getFields().put("kolicina", 30);
+		orderFormItemValues2.getFields().put("jedinicna_cena", 180.00);
+		orderFormItemValues2.getFields().put("rabat", 6);
+		orderFormItemValues2.getFields().put("pdv", 20);
+		orderFormItemValues2.getFields().put("cena_pdv", 216.00);
+		orderFormItemValues2.getFields().put("ukupno", 6480.00);
+		orderFormItemRows.add(orderFormItemValues2);
+		
+		TableRowDTO orderFormItemValues3= new TableRowDTO();
+		orderFormItemValues3.getFields().put("id", 3);
+		orderFormItemValues3.getFields().put("narudzba", 1);
+		orderFormItemValues3.getFields().put("naziv_artikla", "Grand kafa 100g");
+		orderFormItemValues3.getFields().put("sifra_artikla", "8652659365894");
+		orderFormItemValues3.getFields().put("jedinica_mere", "kom");
+		orderFormItemValues3.getFields().put("kolicina", 20);
+		orderFormItemValues3.getFields().put("jedinicna_cena", 86.00);
+		orderFormItemValues3.getFields().put("rabat", 6);
+		orderFormItemValues3.getFields().put("pdv", 20);
+		orderFormItemValues3.getFields().put("cena_pdv", 103.20);
+		orderFormItemValues3.getFields().put("ukupno", 2064.00);
+		orderFormItemRows.add(orderFormItemValues3);
+		
+		tables.add(new TableDTO("Narudzba", orderFormFields, orderFormRows, true,
+				"Stavka_narudzbe", null, null));
+		tables.add(new TableDTO("Faktura", invoiceFields, invoiceRows, true,
+				"Stavka_fakture", null, null));
+		tables.add(new TableDTO("Stavka_fakture", invoiceItemFields, invoiceItemRows, true,
+				null, null, null));
+		tables.add(new TableDTO("Stavka_narudzbe", orderFormItemFields, orderFormItemRows, true,
+				null, null, null));
+		return tables;
+	}
+	
 }
