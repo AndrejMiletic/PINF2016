@@ -131,24 +131,24 @@ public class TableController {
 		fieldsPriceList.add(new TableFieldDTO("id", false, false, null, "number"));
 		fieldsPriceList.add(new TableFieldDTO("naziv", false, false, null, "text"));
 		fieldsPriceList.add(new TableFieldDTO("datum primene", false, false, null, "date"));
-		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece", "text"));
+		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece", "number"));
 
 		ArrayList<TableRowDTO> rows1Pricelist = new ArrayList<TableRowDTO>();
 		TableRowDTO row1Pricelist = new TableRowDTO();
 		row1Pricelist.getFields().put("id", 1);
 		row1Pricelist.getFields().put("naziv", "Cenovnik 1");
 		row1Pricelist.getFields().put("datum primene", "05.08.2015.");
-		row1Pricelist.getFields().put("preduzece", "Preduzece 1");
+		row1Pricelist.getFields().put("preduzece", "1");
 		TableRowDTO row2Pricelist = new TableRowDTO();
 		row2Pricelist.getFields().put("id", 2);
 		row2Pricelist.getFields().put("naziv", "Cenovnik 2");
 		row2Pricelist.getFields().put("datum primene", "12.12.2015.");
-		row2Pricelist.getFields().put("preduzece", "Preduzece 2");
+		row2Pricelist.getFields().put("preduzece", "2");
 		TableRowDTO row3Pricelist = new TableRowDTO();
 		row3Pricelist.getFields().put("id", 3);
 		row3Pricelist.getFields().put("naziv", "Cenovnik 3");
 		row3Pricelist.getFields().put("datum primene", "12.10.2015.");
-		row3Pricelist.getFields().put("preduzece", "Preduzece 2");
+		row3Pricelist.getFields().put("preduzece", "2");
 		rows1Pricelist.add(row1Pricelist);
 		rows1Pricelist.add(row2Pricelist);
 		rows1Pricelist.add(row3Pricelist);
