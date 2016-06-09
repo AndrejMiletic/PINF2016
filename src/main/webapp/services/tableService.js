@@ -31,7 +31,17 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.delete = function(tableName, id) {
 		return $http.delete(url + "/" + tableName + "/" + id);
 	}
-
+	
+	this.addPricelist = function(pricelist){
+        return $http.post(url + "/addPricelist", pricelist);
+    }
+	this.addTableRow = function(row){
+        return $http.post(url + "/addTableRow", row);
+    }
+	this.deleteTableRow = function(row){
+        return $http.post(url + "/deleteTableRow", row);
+    }
+	
 	this.isValid = function(table, row) {
 		var currentValue;
 		var isValid = true;
