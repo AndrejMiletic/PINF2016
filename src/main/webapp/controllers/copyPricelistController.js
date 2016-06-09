@@ -27,6 +27,8 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
 							function (response) {
 								$scope.documentChild = response.data;
+								$scope.parentID = $scope.documentChild.rows[0].fields.parentId;
+								$scope.date =  $scope.selectedData.fields.datum_primene;
 							},
 							function (response) {
 								alert("Neuspesno dobavljanje tabele");
@@ -59,7 +61,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				 if(isValid){
 					var newPrice = document.getElementById($scope.documentChild.rows[index].fields.id).value.trim();
 					var oldPrice = $scope.documentChild.rows[index].fields.jedinicna_cena;
-					$scope.parentId = $scope.documentChild.rows[index].fields.parentId;
+					
 					$scope.documentChild.rows[index].fields.jedinicna_cena = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields.jedinicna_cena*newPrice/100);
 					document.getElementById($scope.documentChild.rows[index].fields.id).value = null;
 				 }else{
@@ -71,13 +73,31 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		}	
 	}
 	$scope.copyPricelist = function(){
+		if($scope.date === document.getElementById('input').value.trim()){
+			alert("Mora se promeniti bar datum.");
+		}else{
 		var pricelist = {
 			parent :  $scope.selectedData,
 			child : $scope.documentChild.rows
 		}
-		console.log( $scope.selectedData);
-		console.log( $scope.documentChild.rows);
-		tableService.addPricelist(pricelist);
+		
+		tableService.addPricelist(pricelist).then(
+				function (response) {
+					 tableService.getTableByName("Cenovnik").then(
+						function (response) {
+							alert("Uspešno kopiran cenovnik");
+							$scope.requestedTable = response.data;
+						},
+						function (response) {
+							alert("Greska");
+						}
+					);
+				},
+				function (response) {
+					alert("Greska");
+				}
+			);
+		}
 	};
 	$scope.showForm = function(){
 	 	tableService.getTableByName("Katalog").then(
@@ -91,23 +111,47 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		$scope.form = true;
 	}
 	$scope.addArticle = function(){
-		var item;
+		
+		
 		for (var index in $scope.catalog.rows) {
-			 
-			 if($scope.catalog.rows[index].fields.naziv_artikla == $scope.selectedArticle){
-				 item = {
-					 fields:[{
-					 id : "",
-					 parentId : $scope.parentId,
-					 id_artikla : $scope.catalog.rows[index].fields.id_artikla,
-					 jedinicna_cena : $scope.catalog.rows[index].fields.jedinicna_cena
-				 }]
-				 }
+			 var row = {};
+			 if($scope.catalog.rows[index].fields.naziv_artikla == $scope.selectedArticle.trim()){
+				 for (var index1 in $scope.documentChild.rows) {
+					 if($scope.documentChild.rows[index1].fields.id_artikla == $scope.catalog.rows[index].fields.id_artikla){
+						 alert("Artikal vec postoji!");
+						 return;
+					 }
+				}
+				
+					var fields = {
+						"id" : "",
+						parentId : $scope.parentID,
+						id_artikla : $scope.catalog.rows[index].fields.id_artikla,
+						jedinicna_cena : $scope.catalog.rows[index].fields.jedinicna_cena
+					}
+				row.fields = fields;
+				 
+				tableService.addTableRow(row).then(
+					function (response) {
+						$scope.openDocument();
+					},
+					function (response) {
+						alert("Greska");
+					}
+				);
 			 }
 		}
-		
-		$scope.documentChild.rows.push(item);
-		console.log($scope.documentChild);
 	};
+	$scope.delete = function (index){
+		
+			tableService.deleteTableRow($scope.documentChild.rows[index]).then(
+					function (response) {
+						$scope.openDocument();
+					},
+					function (response) {
+						alert("Greska");
+					}
+				);
+	}
 
 }]);

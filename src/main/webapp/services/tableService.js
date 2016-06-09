@@ -14,4 +14,10 @@ app.service('tableService', function($http){
 	this.addPricelist = function(pricelist){
         return $http.post(url + "/addPricelist", pricelist);
     }
+	this.addTableRow = function(row){
+        return $http.post(url + "/addTableRow", row);
+    }
+	this.deleteTableRow = function(row){
+        return $http.post(url + "/deleteTableRow", row);
+    }
 });

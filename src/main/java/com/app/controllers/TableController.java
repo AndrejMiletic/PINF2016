@@ -2,6 +2,7 @@ package com.app.controllers;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ public class TableController {
 
 	private ArrayList<TableRowDTO> rows1Pricelist;
 	private ArrayList<TableRowDTO> rows1PricelistItem;
+	private ArrayList<TableRowDTO> addedRowsPricelistItem = new ArrayList<TableRowDTO>();
+	private ArrayList<TableRowDTO> addedRowsPricelist = new ArrayList<TableRowDTO>();
+	private ArrayList<TableRowDTO> deleteRowsPricelist = new ArrayList<TableRowDTO>();
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<String>> getAllUsers() {
@@ -32,6 +36,13 @@ public class TableController {
 				names.add(table.getTableName());
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/getPricelistItems", method = RequestMethod.GET)
+	public ResponseEntity<ArrayList<TableRowDTO>> getPricelistItems() {
+		ArrayList<TableRowDTO> data = rows1PricelistItem;
+
+		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
 	private ArrayList<Integer> getIntegerArray(ArrayList<String> stringArray) {
@@ -58,11 +69,42 @@ public class TableController {
 
 		pricelist.getParent().getFields().put("naziv", "Cenovnik " + (max + 1));
 		pricelist.getParent().getFields().put("id", (max + 1));
-		rows1Pricelist.add(pricelist.getParent());
+		
+		addedRowsPricelist.add(pricelist.getParent());
 		for (TableRowDTO row : pricelist.getChild()) {
-			rows1PricelistItem.add(row);
+			row.getFields().put("parentId", (max+1));
+			addedRowsPricelistItem.add(row);
 		}
-		System.out.println(pricelist.getParent());
+		System.out.println("Podaci o cenovniku: \n\n" + pricelist.getParent());
+		System.out.println("Stavke cenovnika: \n");
+		for (TableRowDTO row : pricelist.getChild()) {
+			System.out.println(row);
+		}
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/addTableRow", method = RequestMethod.POST)
+	public ResponseEntity<Object> addTableRow(@RequestBody TableRowDTO row) {
+
+		ArrayList<String> ids = new ArrayList<String>();
+		for (TableRowDTO roww : rows1PricelistItem) {
+			ids.add(roww.getFields().get("id").toString());
+		}
+		ArrayList<Integer> resultList = getIntegerArray(ids);
+		int max = Collections.max(resultList);
+
+		row.getFields().put("id", (max + 1));
+
+		addedRowsPricelistItem.add(row);
+		System.out.println(row);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/deleteTableRow", method = RequestMethod.POST)
+	public ResponseEntity<Object> deleteTableRow(@RequestBody TableRowDTO row) {
+
+		deleteRowsPricelist.add(row);
+		System.out.println(row);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
@@ -112,18 +154,19 @@ public class TableController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/addRow/{tableName}",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<TableRowDTO>> addRow(@RequestBody ArrayList<TableRowDTO> rows,@PathVariable String tableName){
-		return new ResponseEntity<>(rows,HttpStatus.OK);
+	@RequestMapping(value = "/addRow/{tableName}", method = RequestMethod.POST)
+	public ResponseEntity<ArrayList<TableRowDTO>> addRow(@RequestBody ArrayList<TableRowDTO> rows,
+			@PathVariable String tableName) {
+		return new ResponseEntity<>(rows, HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/getTableRows/{tableName}",method=RequestMethod.GET)
-	public ResponseEntity<ArrayList<String>> getTableRows(@PathVariable String tableName){
+	@RequestMapping(value = "/getTableRows/{tableName}", method = RequestMethod.GET)
+	public ResponseEntity<ArrayList<String>> getTableRows(@PathVariable String tableName) {
 		ArrayList<TableDTO> tables = getData();
 		ArrayList<String> names = new ArrayList<String>();
 		for (TableDTO table : tables) {
-			if (table.getTableName().equals(tableName) && !names.contains(table.getTableName())){
-				for(TableRowDTO row:table.getRows()){
+			if (table.getTableName().equals(tableName) && !names.contains(table.getTableName())) {
+				for (TableRowDTO row : table.getRows()) {
 					names.add(row.getFields().get("id").toString());
 				}
 				break;
@@ -131,12 +174,12 @@ public class TableController {
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
-	
-	//ista kao getByName, samo mockovani podaci drugaciji
-	@RequestMapping(value="/getTable/{tableName}",method=RequestMethod.GET)
-	public ResponseEntity<TableDTO> getTableByName(@PathVariable String tableName){
+
+	// ista kao getByName, samo mockovani podaci drugaciji
+	@RequestMapping(value = "/getTable/{tableName}", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getTableByName(@PathVariable String tableName) {
 		ArrayList<TableDTO> tables = getData();
-		TableDTO requestedTable =new TableDTO();
+		TableDTO requestedTable = new TableDTO();
 		for (TableDTO table : tables) {
 			if (table.getTableName().equals(tableName)) {
 				requestedTable = table;
@@ -227,27 +270,49 @@ public class TableController {
 		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null, "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("parentId", false, true, "Cenovnik", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("id_artikla", false, true, "Katalog", "number"));
-		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));		
+		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, true, "Katalog", "number"));
 
 		rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
 		row1PricelistItem.getFields().put("id", 1);
-		row1PricelistItem.getFields().put("parentId", 1);		
+		row1PricelistItem.getFields().put("parentId", 1);
 		row1PricelistItem.getFields().put("id_artikla", "1");
 		row1PricelistItem.getFields().put("jedinicna_cena", "50");
 		TableRowDTO row2PricelistItem = new TableRowDTO();
 		row2PricelistItem.getFields().put("id", 2);
-		row2PricelistItem.getFields().put("parentId", 1);	
+		row2PricelistItem.getFields().put("parentId", 1);
 		row2PricelistItem.getFields().put("id_artikla", "2");
 		row2PricelistItem.getFields().put("jedinicna_cena", "100");
 		TableRowDTO row3PricelistItem = new TableRowDTO();
 		row3PricelistItem.getFields().put("id", 3);
-		row3PricelistItem.getFields().put("parentId", 2);		
+		row3PricelistItem.getFields().put("parentId", 2);
 		row3PricelistItem.getFields().put("id_artikla", "3");
 		row3PricelistItem.getFields().put("jedinicna_cena", "150");
 		rows1PricelistItem.add(row1PricelistItem);
 		rows1PricelistItem.add(row2PricelistItem);
 		rows1PricelistItem.add(row3PricelistItem);
+		/*
+		 * int ind = -1; if(deleteRowsPricelist.size() == 1){ for (int i = 0; i
+		 * < rows1PricelistItem.size(); i++) {
+		 * if(rows1PricelistItem.get(i).getFields().get("id").equals(
+		 * deleteRowsPricelist.get(0).getFields().get("id"))){ ind = i; } } }
+		 * if(ind!=-1){ rows1PricelistItem.remove(ind); } if
+		 * (addedRowsPricelistItem.size() != 0) { for (TableRowDTO row :
+		 * addedRowsPricelistItem) { rows1PricelistItem.add(row); } }
+		 * 
+		 * if (addedRowsPricelist.size() != 0) { for (TableRowDTO row :
+		 * addedRowsPricelist) { rows1Pricelist.add(row); } }
+		 */
+		if (addedRowsPricelist.size() != 0) {
+			for (TableRowDTO row : addedRowsPricelist) {
+				rows1Pricelist.add(row);
+			}
+		}
+		if (addedRowsPricelistItem.size() != 0) {
+			for (TableRowDTO row : addedRowsPricelistItem) {
+				rows1PricelistItem.add(row);
+			}
+		}
 
 		ArrayList<TableFieldDTO> fieldsCompany = new ArrayList<TableFieldDTO>();
 		fieldsCompany.add(new TableFieldDTO("id", false, false, null, "number"));
@@ -262,28 +327,44 @@ public class TableController {
 		row2Company.getFields().put("naziv", "Preduzece 2");
 		rows1Company.add(row1Company);
 		rows1Company.add(row2Company);
-		
+
 		ArrayList<TableFieldDTO> catalogFields = new ArrayList<TableFieldDTO>();
 		catalogFields.add(new TableFieldDTO("id_artikla", false, false, null, "number"));
 		catalogFields.add(new TableFieldDTO("sifra_artikla", false, false, null, "number"));
 		catalogFields.add(new TableFieldDTO("naziv_artikla", false, false, null, "text"));
+		catalogFields.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
 
 		ArrayList<TableRowDTO> rows1Catalog = new ArrayList<TableRowDTO>();
 		TableRowDTO row1Catalog = new TableRowDTO();
 		row1Catalog.getFields().put("id_artikla", 1);
 		row1Catalog.getFields().put("sifra_artikla", "121");
-		row1Catalog.getFields().put("naziv_artikla", "Cokolada");
+		row1Catalog.getFields().put("naziv_artikla", "Artikal 1");
+		row1Catalog.getFields().put("jedinicna_cena", "90");
 		TableRowDTO row2Catalog = new TableRowDTO();
 		row2Catalog.getFields().put("id_artikla", 2);
 		row2Catalog.getFields().put("sifra_artikla", "122");
-		row2Catalog.getFields().put("naziv_artikla", "Meso");
+		row2Catalog.getFields().put("naziv_artikla", "Artikal 2");
+		row2Catalog.getFields().put("jedinicna_cena", "320");
+		TableRowDTO row4Catalog = new TableRowDTO();
+		row4Catalog.getFields().put("id_artikla", 3);
+		row4Catalog.getFields().put("sifra_artikla", "124");
+		row4Catalog.getFields().put("naziv_artikla", "Artikal 4");
+		row4Catalog.getFields().put("jedinicna_cena", "400");
+		TableRowDTO row5Catalog = new TableRowDTO();
+		row5Catalog.getFields().put("id_artikla", 5);
+		row5Catalog.getFields().put("sifra_artikla", "125");
+		row5Catalog.getFields().put("naziv_artikla", "Artikal 5");
+		row5Catalog.getFields().put("jedinicna_cena", "180");
 		TableRowDTO row3Catalog = new TableRowDTO();
 		row3Catalog.getFields().put("id_artikla", 3);
 		row3Catalog.getFields().put("sifra_artikla", "123");
-		row3Catalog.getFields().put("naziv_artikla", "Mleko");
+		row3Catalog.getFields().put("naziv_artikla", "Artikal 3");
+		row3Catalog.getFields().put("jedinicna_cena", "80");
 		rows1Catalog.add(row1Catalog);
 		rows1Catalog.add(row2Catalog);
 		rows1Catalog.add(row3Catalog);
+		rows1Catalog.add(row4Catalog);
+		rows1Catalog.add(row5Catalog);
 
 		tables.add(new TableDTO("Faktura", fields1, rows1, true, "Stavka fakture", null, null));
 		tables.add(new TableDTO("Stavka fakture", fields2, rows2, true, null, null, null));
@@ -295,30 +376,29 @@ public class TableController {
 		return tables;
 	}
 
-
 	private ArrayList<TableDTO> getData() {
 		ArrayList<TableDTO> tables = new ArrayList<TableDTO>();
 
-		//-----------------FAKTURA-------------------------------
-		
-		ArrayList<TableFieldDTO> invoiceFields= new ArrayList<TableFieldDTO>();
+		// -----------------FAKTURA-------------------------------
+
+		ArrayList<TableFieldDTO> invoiceFields = new ArrayList<TableFieldDTO>();
 		invoiceFields.add(new TableFieldDTO("id", false, false, null, "number"));
-		invoiceFields.add(new TableFieldDTO("narudzba", false, true, "Narudzba","number"));
-		invoiceFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
-		invoiceFields.add(new TableFieldDTO("broj_fakture", false, false, null,"number"));
-		invoiceFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("datum_valute", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("datum_obracuna", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
-		invoiceFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("status_fakture", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("dodatne_napomene", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
-		
-		ArrayList<TableRowDTO> invoiceRows= new ArrayList<TableRowDTO>();
-		TableRowDTO invoiceValues= new TableRowDTO();
+		invoiceFields.add(new TableFieldDTO("narudzba", false, true, "Narudzba", "number"));
+		invoiceFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina", "number"));
+		invoiceFields.add(new TableFieldDTO("broj_fakture", false, false, null, "number"));
+		invoiceFields.add(new TableFieldDTO("datum_narucivanja", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("datum_valute", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("datum_obracuna", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner", "text"));
+		invoiceFields.add(new TableFieldDTO("adresa_isporuke", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("tekuci_racuna", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("poziv_na_broj", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("status_fakture", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("dodatne_napomene", false, false, null, "text"));
+		invoiceFields.add(new TableFieldDTO("ukupno", false, false, null, "number"));
+
+		ArrayList<TableRowDTO> invoiceRows = new ArrayList<TableRowDTO>();
+		TableRowDTO invoiceValues = new TableRowDTO();
 		invoiceValues.getFields().put("id", 1);
 		invoiceValues.getFields().put("narudzba", 1);
 		invoiceValues.getFields().put("godina", 2016);
@@ -335,23 +415,23 @@ public class TableController {
 		invoiceValues.getFields().put("ukupno", 13563.90);
 		invoiceRows.add(invoiceValues);
 
-		//--------------STAVKA FAKTURE-------------------------
-		
-		ArrayList<TableFieldDTO> invoiceItemFields= new ArrayList<TableFieldDTO>();
-		invoiceItemFields.add(new TableFieldDTO("id", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("faktura", false, true, "Faktura","number"));
-		invoiceItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null,"text"));
-		invoiceItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null,"text"));
-		invoiceItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null,"text"));
-		invoiceItemFields.add(new TableFieldDTO("kolicina", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("rabat", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("pdv", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("cena_pdv", false, false, null,"number"));
-		invoiceItemFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
+		// --------------STAVKA FAKTURE-------------------------
+
+		ArrayList<TableFieldDTO> invoiceItemFields = new ArrayList<TableFieldDTO>();
+		invoiceItemFields.add(new TableFieldDTO("id", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("faktura", false, true, "Faktura", "number"));
+		invoiceItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null, "text"));
+		invoiceItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null, "text"));
+		invoiceItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null, "text"));
+		invoiceItemFields.add(new TableFieldDTO("kolicina", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("rabat", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("pdv", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("cena_pdv", false, false, null, "number"));
+		invoiceItemFields.add(new TableFieldDTO("ukupno", false, false, null, "number"));
 
 		ArrayList<TableRowDTO> invoiceItemRows = new ArrayList<TableRowDTO>();
-		TableRowDTO invoiceItemValues= new TableRowDTO();
+		TableRowDTO invoiceItemValues = new TableRowDTO();
 		invoiceItemValues.getFields().put("id", 1);
 		invoiceItemValues.getFields().put("faktura", 1);
 		invoiceItemValues.getFields().put("naziv_artikla", "Sunoko secer");
@@ -364,24 +444,24 @@ public class TableController {
 		invoiceItemValues.getFields().put("cena_pdv", 84.00);
 		invoiceItemValues.getFields().put("ukupno", 1680.00);
 		invoiceItemRows.add(invoiceItemValues);
-		
-		//---------------NARUDZBA-------------------------------------
-		
+
+		// ---------------NARUDZBA-------------------------------------
+
 		ArrayList<TableFieldDTO> orderFormFields = new ArrayList<TableFieldDTO>();
-		orderFormFields.add(new TableFieldDTO("id", false, false, null,"number"));
-		orderFormFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
-		orderFormFields.add(new TableFieldDTO("broj_narudzbe", false, false, null,"number"));
-		orderFormFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("rok_isporuke", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
-		orderFormFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("status_narudzbe", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("status_fakture", false, false, null,"text"));
-		
+		orderFormFields.add(new TableFieldDTO("id", false, false, null, "number"));
+		orderFormFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina", "number"));
+		orderFormFields.add(new TableFieldDTO("broj_narudzbe", false, false, null, "number"));
+		orderFormFields.add(new TableFieldDTO("datum_narucivanja", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("rok_isporuke", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner", "text"));
+		orderFormFields.add(new TableFieldDTO("adresa_isporuke", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("tekuci_racuna", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("poziv_na_broj", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("status_narudzbe", false, false, null, "text"));
+		orderFormFields.add(new TableFieldDTO("status_fakture", false, false, null, "text"));
+
 		ArrayList<TableRowDTO> orderFormRows = new ArrayList<TableRowDTO>();
-		TableRowDTO orderFormValues= new TableRowDTO();
+		TableRowDTO orderFormValues = new TableRowDTO();
 		orderFormValues.getFields().put("id", 1);
 		orderFormValues.getFields().put("godina", 2016);
 		orderFormValues.getFields().put("broj_narudzbe", 1564);
@@ -395,23 +475,23 @@ public class TableController {
 		orderFormValues.getFields().put("status_fakture", "U_procesu");
 		orderFormRows.add(orderFormValues);
 
-		//---------------STAVKA NARUDZBE-------------------------
-		
-		ArrayList<TableFieldDTO> orderFormItemFields= new ArrayList<TableFieldDTO>();
-		orderFormItemFields.add(new TableFieldDTO("id", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("narudzba", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null,"text"));
-		orderFormItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null,"text"));
-		orderFormItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null,"text"));
-		orderFormItemFields.add(new TableFieldDTO("kolicina", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("rabat", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("pdv", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("cena_pdv", false, false, null,"number"));
-		orderFormItemFields.add(new TableFieldDTO("ukupno", false, false, null,"number"));
+		// ---------------STAVKA NARUDZBE-------------------------
+
+		ArrayList<TableFieldDTO> orderFormItemFields = new ArrayList<TableFieldDTO>();
+		orderFormItemFields.add(new TableFieldDTO("id", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("narudzba", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("naziv_artikla", false, false, null, "text"));
+		orderFormItemFields.add(new TableFieldDTO("sifra_artikla", false, false, null, "text"));
+		orderFormItemFields.add(new TableFieldDTO("jedinica_mere", false, false, null, "text"));
+		orderFormItemFields.add(new TableFieldDTO("kolicina", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("rabat", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("pdv", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("cena_pdv", false, false, null, "number"));
+		orderFormItemFields.add(new TableFieldDTO("ukupno", false, false, null, "number"));
 
 		ArrayList<TableRowDTO> orderFormItemRows = new ArrayList<TableRowDTO>();
-		TableRowDTO orderFormItemValues= new TableRowDTO();
+		TableRowDTO orderFormItemValues = new TableRowDTO();
 		orderFormItemValues.getFields().put("id", 1);
 		orderFormItemValues.getFields().put("narudzba", 1);
 		orderFormItemValues.getFields().put("naziv_artikla", "Sunoko secer");
@@ -424,8 +504,8 @@ public class TableController {
 		orderFormItemValues.getFields().put("cena_pdv", 84.00);
 		orderFormItemValues.getFields().put("ukupno", 2520.00);
 		orderFormItemRows.add(orderFormItemValues);
-		
-		TableRowDTO orderFormItemValues2= new TableRowDTO();
+
+		TableRowDTO orderFormItemValues2 = new TableRowDTO();
 		orderFormItemValues2.getFields().put("id", 2);
 		orderFormItemValues2.getFields().put("narudzba", 1);
 		orderFormItemValues2.getFields().put("naziv_artikla", "Grand kafa 200g");
@@ -438,8 +518,8 @@ public class TableController {
 		orderFormItemValues2.getFields().put("cena_pdv", 216.00);
 		orderFormItemValues2.getFields().put("ukupno", 6480.00);
 		orderFormItemRows.add(orderFormItemValues2);
-		
-		TableRowDTO orderFormItemValues3= new TableRowDTO();
+
+		TableRowDTO orderFormItemValues3 = new TableRowDTO();
 		orderFormItemValues3.getFields().put("id", 3);
 		orderFormItemValues3.getFields().put("narudzba", 1);
 		orderFormItemValues3.getFields().put("naziv_artikla", "Grand kafa 100g");
@@ -452,16 +532,12 @@ public class TableController {
 		orderFormItemValues3.getFields().put("cena_pdv", 103.20);
 		orderFormItemValues3.getFields().put("ukupno", 2064.00);
 		orderFormItemRows.add(orderFormItemValues3);
-		
-		tables.add(new TableDTO("Narudzba", orderFormFields, orderFormRows, true,
-				"Stavka_narudzbe", null, null));
-		tables.add(new TableDTO("Faktura", invoiceFields, invoiceRows, true,
-				"Stavka_fakture", null, null));
-		tables.add(new TableDTO("Stavka_fakture", invoiceItemFields, invoiceItemRows, true,
-				null, null, null));
-		tables.add(new TableDTO("Stavka_narudzbe", orderFormItemFields, orderFormItemRows, true,
-				null, null, null));
+
+		tables.add(new TableDTO("Narudzba", orderFormFields, orderFormRows, true, "Stavka_narudzbe", null, null));
+		tables.add(new TableDTO("Faktura", invoiceFields, invoiceRows, true, "Stavka_fakture", null, null));
+		tables.add(new TableDTO("Stavka_fakture", invoiceItemFields, invoiceItemRows, true, null, null, null));
+		tables.add(new TableDTO("Stavka_narudzbe", orderFormItemFields, orderFormItemRows, true, null, null, null));
 		return tables;
 	}
-	
+
 }

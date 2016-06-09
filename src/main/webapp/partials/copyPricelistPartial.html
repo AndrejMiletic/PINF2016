@@ -28,11 +28,12 @@
 		<thead>
 		  <tr>
 			<th ng-repeat="field in documentChild.fields track by $index">{{field.name}}</th>
-			<th>Izmena cene</th>
+			<th>Operacija izmene cene</th>
+		    <th>Operacija brisanja</th>
 		  </tr>
 		</thead>
 		<tbody>
-		  <tr ng-repeat="row in documentChild.rows">
+		  <tr ng-repeat="(dataIndex,row) in documentChild.rows">
 			<td ng-repeat="data in row.fields track by $index">{{data}}</td>		  
 			<td>				
 				<div class="row-fluid form-inline" style="overflow: hidden;">
@@ -40,6 +41,9 @@
 					<button ng-click="apply(row.fields)">Potvrda</button>
 				</div>
 			</td>
+		    <td>
+				<button ng-click="delete(dataIndex)">Obriši</button>
+		    </td>
 		  </tr>
 		</tbody>
 	</table>
@@ -50,7 +54,7 @@
 	<div class="form-inline">
 	<div class="form-group">&nbsp;
 		<label>Izbor artikla:</label>
-		<select ng-model="selectedArticle" class="form-control" required>
+		<select ng-model="$parent.selectedArticle" class="form-control" required>
 			<option data-hidden="true" ng-repeat="obj in catalog.rows track by $index" >
 				{{obj.fields.naziv_artikla}}
 			</option>
