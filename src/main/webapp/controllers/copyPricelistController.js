@@ -76,27 +76,29 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		if($scope.date === document.getElementById('input').value.trim()){
 			alert("Mora se promeniti bar datum.");
 		}else{
-		var pricelist = {
-			parent :  $scope.selectedData,
-			child : $scope.documentChild.rows
-		}
-		
-		tableService.addPricelist(pricelist).then(
-				function (response) {
-					 tableService.getTableByName("Cenovnik").then(
+			if($scope.isDate(document.getElementById('input').value.trim())){
+				var pricelist = {
+					parent :  $scope.selectedData,
+					child : $scope.documentChild.rows
+				}
+
+				tableService.addPricelist(pricelist).then(
 						function (response) {
-							alert("Uspešno kopiran cenovnik");
-							$scope.requestedTable = response.data;
+							 tableService.getTableByName("Cenovnik").then(
+								function (response) {
+									alert("Uspešno kopiran cenovnik");
+									$scope.requestedTable = response.data;
+								},
+								function (response) {
+									alert("Greska");
+								}
+							);
 						},
 						function (response) {
 							alert("Greska");
 						}
 					);
-				},
-				function (response) {
-					alert("Greska");
-				}
-			);
+			}
 		}
 	};
 	$scope.showForm = function(){
@@ -152,6 +154,40 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 						alert("Greska");
 					}
 				);
+	}
+	$scope.isDate = function(dateStr) {
+
+    var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+    var matchArray = dateStr.match(datePat); // is the format ok?
+
+    if (matchArray == null) {
+        alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
+        return false;
+    }
+
+    month = matchArray[1]; // p@rse date into variables
+    day = matchArray[3];
+    year = matchArray[5];
+
+    if (month < 1 || month > 12) { // check month range
+        return false;
+    }
+
+    if (day < 1 || day > 31) {
+        return false;
+    }
+
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+        return false;
+    }
+
+    if (month == 2) { // check for february 29th
+        var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+        if (day > 29 || (day == 29 && !isleap)) {
+            return false;
+        }
+    }
+    return true; // date is valid
 	}
 
 }]);
