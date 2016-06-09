@@ -149,6 +149,30 @@ public class TableController {
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
+		Long id = Long.valueOf(parentId);
+		ArrayList<TableDTO> tables = getMockData();
+		TableDTO requestedTable = null;
+		
+		for (TableDTO table : tables) {
+			if (table.getTableName().equals(childName)) {
+				requestedTable = table;
+				break;
+			}
+		}
+		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
+		for (int i=0; i < requestedTable.getRows().size(); i++){
+			if (((Integer)requestedTable.getRows().get(i).
+					getFields().
+					get(parentName.toLowerCase())) == id.longValue()){
+				rows.add(requestedTable.getRows().get(i));
+			}
+		}
+		requestedTable.setRows(rows);
+		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<Object> addTable(@RequestBody TableDTO table) {
 
@@ -240,12 +264,12 @@ public class TableController {
 		ArrayList<TableFieldDTO> invoiceFields= new ArrayList<TableFieldDTO>();
 		invoiceFields.add(new TableFieldDTO("id", false, false, null, "number"));
 		invoiceFields.add(new TableFieldDTO("narudzba", false, true, "Narudzba","number"));
-		invoiceFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
+		invoiceFields.add(new TableFieldDTO("godina", false, false, null,"number"));
 		invoiceFields.add(new TableFieldDTO("broj_fakture", false, false, null,"number"));
 		invoiceFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
 		invoiceFields.add(new TableFieldDTO("datum_valute", false, false, null,"text"));
 		invoiceFields.add(new TableFieldDTO("datum_obracuna", false, false, null,"text"));
-		invoiceFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
+		invoiceFields.add(new TableFieldDTO("poslovni partner", false, true, "Poslovni partner", "number"));
 		invoiceFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
 		invoiceFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
 		invoiceFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
@@ -262,7 +286,7 @@ public class TableController {
 		invoiceValues.getFields().put("datum_narucivanja", "7.6.2016.");
 		invoiceValues.getFields().put("datum_valute", "7.6.2016.");
 		invoiceValues.getFields().put("datum_obracuna", "7.6.2016.");
-		invoiceValues.getFields().put("partner", "Partner 2");
+		invoiceValues.getFields().put("poslovni partner", 2);
 		invoiceValues.getFields().put("adresa_isporuke", "Adr 1");
 		invoiceValues.getFields().put("tekuci_racun", "rac");
 		invoiceValues.getFields().put("poziv_na_broj", "85468596548526");
@@ -315,15 +339,31 @@ public class TableController {
 		invoiceItemValues2.getFields().put("ukupno", 1680.00);
 		invoiceItemRows.add(invoiceItemValues2);
 		
+		//---------------POSLOVNI PARTNER----------------------------
+		
+		ArrayList<TableFieldDTO> pPartnerFields = new ArrayList<TableFieldDTO>();
+		pPartnerFields.add(new TableFieldDTO("id", false, false, null,"number"));
+		pPartnerFields.add(new TableFieldDTO("naziv", false, false, null,"text"));
+		
+		ArrayList<TableRowDTO> pParnterRows = new ArrayList<TableRowDTO>();
+		TableRowDTO pParnterValues= new TableRowDTO();
+		pParnterValues.getFields().put("id", 1);
+		pParnterValues.getFields().put("naziv", "Partner 1");
+		TableRowDTO pParnterValues2= new TableRowDTO();
+		pParnterValues2.getFields().put("id", 2);
+		pParnterValues2.getFields().put("naziv", "Partner 2");
+		pParnterRows.add(pParnterValues);
+		pParnterRows.add(pParnterValues2);
+		
 		//---------------NARUDZBA-------------------------------------
 		
 		ArrayList<TableFieldDTO> orderFormFields = new ArrayList<TableFieldDTO>();
 		orderFormFields.add(new TableFieldDTO("id", false, false, null,"number"));
-		orderFormFields.add(new TableFieldDTO("godina", false, true, "Poslovna godina","number"));
+		orderFormFields.add(new TableFieldDTO("godina", false, false, null,"number"));
 		orderFormFields.add(new TableFieldDTO("broj_narudzbe", false, false, null,"number"));
 		orderFormFields.add(new TableFieldDTO("datum_narucivanja", false, false, null,"text"));
 		orderFormFields.add(new TableFieldDTO("rok_isporuke", false, false, null,"text"));
-		orderFormFields.add(new TableFieldDTO("partner", false, true, "Poslovni partner","text"));
+		orderFormFields.add(new TableFieldDTO("poslovni partner", false, true, "Poslovni partner", "number"));
 		orderFormFields.add(new TableFieldDTO("adresa_isporuke", false, false, null,"text"));
 		orderFormFields.add(new TableFieldDTO("tekuci_racuna", false, false, null,"text"));
 		orderFormFields.add(new TableFieldDTO("poziv_na_broj", false, false, null,"text"));
@@ -337,7 +377,7 @@ public class TableController {
 		orderFormValues.getFields().put("broj_narudzbe", 1564);
 		orderFormValues.getFields().put("datum_narucivanja", "5.6.2016.");
 		orderFormValues.getFields().put("rok_isporuke", "12.6.2016");
-		orderFormValues.getFields().put("partner", "Partner 1");
+		orderFormValues.getFields().put("poslovni partner", 1);
 		orderFormValues.getFields().put("adresa_isporuke", "Adr1");
 		orderFormValues.getFields().put("tekuci_racun", "rac");
 		orderFormValues.getFields().put("poziv_na_broj", "8546357859624");
@@ -403,10 +443,20 @@ public class TableController {
 		orderFormItemValues3.getFields().put("ukupno", 2064.00);
 		orderFormItemRows.add(orderFormItemValues3);
 		
+		ArrayList<String> narudzbaParents = new ArrayList<String>();
+		narudzbaParents.add("Poslovni parner");
+		ArrayList<String> fakturaParents = new ArrayList<String>();
+		fakturaParents.add("Poslovni parner");
+		ArrayList<String> pPartnerChildren = new ArrayList<String>();
+		pPartnerChildren.add("Faktura");
+		pPartnerChildren.add("Narudzba");
+		
+		tables.add(new TableDTO("Poslovni partner", pPartnerFields, pParnterRows, false,
+				null, pPartnerChildren, null));
 		tables.add(new TableDTO("Narudzba", orderFormFields, orderFormRows, true,
-				"Stavka_narudzbe", null, null));
+				"Stavka_narudzbe", null, narudzbaParents));
 		tables.add(new TableDTO("Faktura", invoiceFields, invoiceRows, true,
-				"Stavka_fakture", null, null));
+				"Stavka_fakture", null, fakturaParents));
 		tables.add(new TableDTO("Stavka_fakture", invoiceItemFields, invoiceItemRows, true,
 				null, null, null));
 		tables.add(new TableDTO("Stavka_narudzbe", orderFormItemFields, orderFormItemRows, true,
@@ -423,17 +473,17 @@ public class TableController {
 		row1Pricelist.getFields().put("id", 1);
 		row1Pricelist.getFields().put("naziv", "Cenovnik 1");
 		row1Pricelist.getFields().put("datum_primene", "06/02/2016");
-		row1Pricelist.getFields().put("preduzece", "1");
+		row1Pricelist.getFields().put("preduzece", 1);
 		TableRowDTO row2Pricelist = new TableRowDTO();
 		row2Pricelist.getFields().put("id", 2);
 		row2Pricelist.getFields().put("naziv", "Cenovnik 2");
 		row2Pricelist.getFields().put("datum_primene", "05/03/2015");
-		row2Pricelist.getFields().put("preduzece", "2");
+		row2Pricelist.getFields().put("preduzece", 2);
 		TableRowDTO row3Pricelist = new TableRowDTO();
 		row3Pricelist.getFields().put("id", 3);
 		row3Pricelist.getFields().put("naziv", "Cenovnik 3");
 		row3Pricelist.getFields().put("datum_primene", "12/12/2015");
-		row3Pricelist.getFields().put("preduzece", "2");
+		row3Pricelist.getFields().put("preduzece", 2);
 		rows1Pricelist.add(row1Pricelist);
 		rows1Pricelist.add(row2Pricelist);
 		rows1Pricelist.add(row3Pricelist);
@@ -559,9 +609,13 @@ public class TableController {
 		rows1Catalog.add(row4Catalog);
 		rows1Catalog.add(row5Catalog);
 
-		tables.add(new TableDTO("Cenovnik", fieldsPriceList, rows1Pricelist, true, "Stavka cenovnika", null, null));
+		ArrayList<String> cenovnikParents = new ArrayList<String>();
+		cenovnikParents.add("Preduzece");
+		ArrayList<String> preduzeceChildren = new ArrayList<String>();
+		preduzeceChildren.add("Cenovnik");
+		tables.add(new TableDTO("Cenovnik", fieldsPriceList, rows1Pricelist, true, "Stavka cenovnika", null, cenovnikParents));
 		tables.add(new TableDTO("Stavka cenovnika", fieldsPriceListItem, rows1PricelistItem, true, null, null, null));
-		tables.add(new TableDTO("Preduzece", fieldsCompany, rows1Company, false, null, null, null));
+		tables.add(new TableDTO("Preduzece", fieldsCompany, rows1Company, false, null, preduzeceChildren, null));
 		tables.add(new TableDTO("Katalog", catalogFields, rows1Catalog, false, null, null, null));
 		return tables;
 	}
