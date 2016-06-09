@@ -20,6 +20,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
             alert("Nije selektovano nista");
         } else {
             $scope.documentChild = {};
+            $scope.filteredNextTable = undefined;
             $scope.showNextSelect = false;
             tableService.getTableByName($scope.selectedTable).then(
                 function (response) {
