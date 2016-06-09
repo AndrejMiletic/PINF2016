@@ -198,11 +198,15 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.downloadKIF = function() {
-			tableService.generateKIF($scope.dateFrom, $scope.dateTo).then(
-				function(response) {
-					$scope.genericDownload("kif.pdf");
-				}
-			);
+			if(tableService.isKIFFormValid($scope.dateFrom, $scope.dateTo)) {
+				tableService.generateKIF($scope.dateFrom, $scope.dateTo).then(
+					function(response) {
+						$scope.genericDownload("kif.pdf");
+					}
+				);
+			} else {
+				alert("Forma nije validna");
+			}
 		}
 
 		$scope.genericDownload = function(fileName) {

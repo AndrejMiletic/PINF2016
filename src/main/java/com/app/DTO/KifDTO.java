@@ -1,23 +1,25 @@
 package com.app.DTO;
 
+import java.util.Date;
+
 public class KifDTO {
 
-	private String dateFrom;
-	private String dateTo;
+	private Date dateFrom;
+	private Date dateTo;
 	
 	public KifDTO() {
 	}
 	
-	public String getDateFrom() {
+	public Date getDateFrom() {
 		return dateFrom;
 	}
-	public void setDateFrom(String dateFrom) {
+	public void setDateFrom(Date dateFrom) {
 		this.dateFrom = dateFrom;
 	}
-	public String getDateTo() {
+	public Date getDateTo() {
 		return dateTo;
 	}
-	public void setDateTo(String dateTo) {
+	public void setDateTo(Date dateTo) {
 		this.dateTo = dateTo;
 	}
 }
