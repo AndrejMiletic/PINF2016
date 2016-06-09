@@ -37,7 +37,6 @@ public class TableController {
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
-
 	@RequestMapping(value = "/getPricelistItems", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<TableRowDTO>> getPricelistItems() {
 		ArrayList<TableRowDTO> data = rows1PricelistItem;
@@ -122,6 +121,7 @@ public class TableController {
 
 	@RequestMapping(value = "/getDocChild/{parentName}/{parentId}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentName, @PathVariable String parentId) {
+
 		Long id = Long.valueOf(parentId);
 		ArrayList<TableDTO> tables = getMockData();
 		TableDTO requestedTable = null;
@@ -187,6 +187,32 @@ public class TableController {
 			}
 		}
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/addRow",method=RequestMethod.POST)
+	public ResponseEntity<Object> addRow(@RequestBody TableRowDTO row){
+		printRow(row, "Create");		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/editRow",method=RequestMethod.PATCH)
+	public ResponseEntity<Object> editRow(@RequestBody TableRowDTO row){		
+		printRow(row, "Edit");		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/{tableName}/{rowId}",method=RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteRow(@PathVariable String tableName, @PathVariable String rowId){		
+		System.out.println("Deleting from table " + tableName + " with ID " + rowId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	private void printRow(TableRowDTO row, String operation) {
+		System.out.println("Operacija: " + operation + "\nTabela: " + row.getTableName() + "\n");
+		for (String key : row.getFields().keySet()) {
+			System.out.println("\t" + key + " : " + row.getFields().get(key));
+		}
+		System.out.println("---------------------");
 	}
 
 	private ArrayList<TableDTO> getMockData() {
@@ -271,6 +297,7 @@ public class TableController {
 		fieldsPriceListItem.add(new TableFieldDTO("parentId", false, true, "Cenovnik", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("id_artikla", false, true, "Katalog", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, true, "Katalog", "number"));
+
 
 		rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
