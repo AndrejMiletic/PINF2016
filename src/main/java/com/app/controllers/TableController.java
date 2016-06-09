@@ -33,7 +33,8 @@ public class TableController {
 		ArrayList<TableDTO> tables = getMockData();
 		ArrayList<String> names = new ArrayList<String>();
 		for (TableDTO table : tables) {
-			if (!names.contains(table.getTableName()))
+			if (!names.contains(table.getTableName()) && ((table.isDocumentPattern() && !(table.getDocumentChildName() == null))
+					|| (!table.isDocumentPattern())))
 				names.add(table.getTableName());
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
@@ -397,7 +398,7 @@ public class TableController {
 		ArrayList<TableFieldDTO> fieldsPriceList = new ArrayList<TableFieldDTO>();
 		fieldsPriceList.add(new TableFieldDTO("id", false, false, null, "number"));
 		fieldsPriceList.add(new TableFieldDTO("naziv", false, false, null, "text"));
-		fieldsPriceList.add(new TableFieldDTO("datum_primene", false, false, null, "date"));
+		fieldsPriceList.add(new TableFieldDTO("datum_primene", false, false, null, "text"));
 		fieldsPriceList.add(new TableFieldDTO("preduzece", false, true, "Preduzece", "number"));
 
 		rows1Pricelist = new ArrayList<TableRowDTO>();
@@ -424,9 +425,6 @@ public class TableController {
 		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null, "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("cenovnik", false, true, "Cenovnik", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
-		fieldsPriceListItem.add(new TableFieldDTO("id_artikla", false, true, "Katalog", "number"));
-		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, true, "Katalog", "number"));
-
 
 		rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
@@ -440,7 +438,7 @@ public class TableController {
 		TableRowDTO row3PricelistItem = new TableRowDTO();
 		row3PricelistItem.getFields().put("id", 3);
 		row3PricelistItem.getFields().put("cenovnik", 2);
-		row1PricelistItem.getFields().put("jedinicna_cena", "50");
+		row3PricelistItem.getFields().put("jedinicna_cena", "50");
 		rows1PricelistItem.add(row1PricelistItem);
 		rows1PricelistItem.add(row2PricelistItem);
 		rows1PricelistItem.add(row3PricelistItem);
