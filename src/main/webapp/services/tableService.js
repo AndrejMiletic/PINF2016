@@ -19,7 +19,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return $http.post(url + "/addRow", payload);
 	}
-
+	
 	this.edit = function(parent, entity) {
 		var payload = {
 			tableName: parent,

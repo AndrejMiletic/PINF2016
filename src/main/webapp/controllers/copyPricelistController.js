@@ -14,16 +14,17 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 	init();
 	
 	 $scope.openDocument = function () {
+		
 		 
 		 if($scope.selectedPricelist){
 		 
 			 for (var index in $scope.requestedTable.rows) {
 
 				 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
-					 
+					 		
 						 $scope.selectedData = $scope.requestedTable.rows[index];
 					 	 document.getElementById('input').value = $scope.selectedData.fields.datum_primene;
-					 
+					 	 
 						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
 							function (response) {
 								$scope.documentChild = response.data;
@@ -118,7 +119,9 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		for (var index in $scope.catalog.rows) {
 			 var row = {};
 			 if($scope.catalog.rows[index].fields.naziv_artikla == $scope.selectedArticle.trim()){
+			
 				 for (var index1 in $scope.documentChild.rows) {
+					
 					 if($scope.documentChild.rows[index1].fields.id_artikla == $scope.catalog.rows[index].fields.id_artikla){
 						 alert("Artikal vec postoji!");
 						 return;
@@ -135,7 +138,6 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				 
 				tableService.addTableRow(row).then(
 					function (response) {
-						$scope.openDocument();
 					},
 					function (response) {
 						alert("Greska");
@@ -148,7 +150,6 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		
 			tableService.deleteTableRow($scope.documentChild.rows[index]).then(
 					function (response) {
-						$scope.openDocument();
 					},
 					function (response) {
 						alert("Greska");

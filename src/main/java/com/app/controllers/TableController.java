@@ -450,9 +450,6 @@ public class TableController {
 		 * if(ind!=-1){ rows1PricelistItem.remove(ind); } if
 		 * (addedRowsPricelistItem.size() != 0) { for (TableRowDTO row :
 		 * addedRowsPricelistItem) { rows1PricelistItem.add(row); } }
-		 * 
-		 * if (addedRowsPricelist.size() != 0) { for (TableRowDTO row :
-		 * addedRowsPricelist) { rows1Pricelist.add(row); } }
 		 */
 		if (addedRowsPricelist.size() != 0) {
 			for (TableRowDTO row : addedRowsPricelist) {
