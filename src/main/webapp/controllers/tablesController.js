@@ -111,7 +111,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.submitForm = function() {
-			$scope.currentRow.fields.id = 100;
+
+			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE){
+					$scope.currentRow.fields.id = 100;
+			}
+
 			var row =  angular.copy($scope.currentRow);
 
 			if(tableService.isValid($scope.currentTable, row)) {
