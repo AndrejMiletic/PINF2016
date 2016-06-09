@@ -51,9 +51,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.deleteRow = function(index, row, event) {
 			event.stopPropagation();
-			tableService.delete($scope.documentChild.tableName, row.fields.id).then(
+			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
 				function(response) {
 						$scope.documentChild = undefined;
+						$scope.currentRow = undefined;
 						$scope.requestedTable.rows.splice(index, 1);
 				},
 				function(response) {
@@ -64,9 +65,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.deleteSubRow = function(index, row, event) {
 			event.stopPropagation();
-			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
+			tableService.delete($scope.documentChild.tableName, row.fields.id).then(
 				function(response) {
-						$scope.documentChild.rows.splice(index, 1);
+					$scope.currentRow = undefined;
+					$scope.documentChild.rows.splice(index, 1);
 				},
 				function(response) {
 					alert("Neuspešno brisanje stavke");
@@ -109,7 +111,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.submitForm = function() {
-			$scope.currentRow.fields.id = 100;
+
+			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE){
+					$scope.currentRow.fields.id = 100;
+			}
+
 			var row =  angular.copy($scope.currentRow);
 
 			if(tableService.isValid($scope.currentTable, row)) {

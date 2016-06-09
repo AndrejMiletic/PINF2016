@@ -48,6 +48,17 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.post(url + "/generateKIF", payload);
 	}
 
+	
+	this.addPricelist = function(pricelist){
+        return $http.post(url + "/addPricelist", pricelist);
+    }
+	this.addTableRow = function(row){
+        return $http.post(url + "/addTableRow", row);
+    }
+	this.deleteTableRow = function(row){
+        return $http.post(url + "/deleteTableRow", row);
+    }
+	
 	this.isValid = function(table, row) {
 		var currentValue;
 		var isValid = true;
