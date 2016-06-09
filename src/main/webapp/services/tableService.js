@@ -12,7 +12,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
       return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
   }
 
-	this.create = function(parent, entity) {		
+	this.create = function(parent, entity) {
 		var payload = {
 			tableName: parent,
 			fields: entity
@@ -30,6 +30,22 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 
 	this.delete = function(tableName, id) {
 		return $http.delete(url + "/" + tableName + "/" + id);
+	}
+
+	this.generatePDF = function(id) {
+		return $http.get(url + "/generatePDF/" + id);
+	}
+
+	this.generateXML = function(id) {
+		return $http.get(url + "/generateXML/" + id);
+	}
+
+	this.generateKIF = function(dateFrom, dateTo) {
+		var payload = {
+			from : dateFrom,
+			to : dateTo
+		}
+		return $http.post(url + "/generateKIF", payload);
 	}
 
 	this.isValid = function(table, row) {

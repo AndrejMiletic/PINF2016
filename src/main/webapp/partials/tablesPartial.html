@@ -35,6 +35,10 @@
 						<button ng-click="deleteRow($index, row, $event)" class="btn btn-danger">
 	          	<span class="glyphicon glyphicon-trash"></span> Obriši
 						</button>
+						<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
+          		<span class="glyphicon glyphicon-save"></span> PDF</button>
+        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
+          		<span class="glyphicon glyphicon-save"></span> XML</button>
 					</td>
 		    </tr>
 		  </tbody>
