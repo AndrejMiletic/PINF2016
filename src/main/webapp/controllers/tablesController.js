@@ -15,6 +15,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	init();
 
 	$scope.showTable = function () {
+		$scope.currentRow = undefined;
         if (!$scope.selectedTable) {
             alert("Nije selektovano nista");
         } else {
@@ -75,6 +76,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.generateEditForm = function(index, row, event) {
 			event.stopPropagation();
+			$scope.currentRow = {fields:{}};
 			$scope.currentIndex = index;
 			$scope.currentRow = angular.copy(row);
 			$scope.formText = "Uredi";
@@ -83,7 +85,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateCreateForm = function() {
-			$scope.currentRow = {};
+			$scope.currentRow = {fields:{}};
 			$scope.formText = "Dodaj";
 			$scope.operation = appConstants.operations.CREATE;
 			$scope.currentTable = angular.copy($scope.requestedTable);
@@ -91,6 +93,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.generateEditSubForm = function(index, row, event) {
 			event.stopPropagation();
+			$scope.currentRow = {fields:{}};
 			$scope.currentIndex = index;
 			$scope.currentRow = angular.copy(row);
 			$scope.formText = "Uredi stavku";
@@ -99,13 +102,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateCreateSubForm = function() {
-			$scope.currentRow = {};
+			$scope.currentRow = {fields:{}};
 			$scope.formText = "Dodaj stavku";
 			$scope.operation = appConstants.operations.SUB_CREATE;
 			$scope.currentTable = angular.copy($scope.documentChild);
 		}
 
 		$scope.submitForm = function() {
+			$scope.currentRow.fields.id = 100;
 			var row =  angular.copy($scope.currentRow);
 
 			if(tableService.isValid($scope.currentTable, row)) {
@@ -114,6 +118,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						function(response) {
 							$scope.requestedTable.rows.push(row);
 							$scope.currentRow = undefined;
+							if($scope.operation === appConstants.operations.CREATE) {
+								//$scope.showTable();
+							}else if($scope.operation === appConstants.operations.SUB_CREATE) {
+								//$scope.openDocument();
+							}
 						}, function() {
 							alert("Neuspešno dodavanje reda u tabelu.");
 						}
@@ -161,6 +170,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.foreignKey = function(field) {
 			alert("Preuzeti FK vrednost za polje ispisano u konzoli!");
 			console.log(field);
-			$scope.currentRow.fields[field.name] = "Neka nova vrednost dobijena mehanizmom";
+			$scope.currentRow.fields[field.name] = "10-10-2015";
 		}
 }]);

@@ -12,7 +12,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
       return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
   }
 
-	this.create = function(parent, entity) {
+	this.create = function(parent, entity) {		
 		var payload = {
 			tableName: parent,
 			fields: entity
@@ -42,37 +42,37 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		{
 			angular.forEach(table.fields, function(field, key) {
 				currentValue = row.fields[field.name];
+				if(field.name!=="id") {
 
-
-				if(!field.nullable) {
-					if(!currentValue) {
-						isValid = false;
-					}
-				}
-
-				if(field.type === appConstants.types.NUMBER) {
-					if(!currentValue) {
-						isValid = false;
-					} else
-					if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
-						isValid = false;
-					}
-				} else
-				if(field.type === appConstants.types.DATE) {
-					if(!currentValue) {
-						isValid = false;
-					} else
-					if(!isDate(currentValue)) {
-						isValid =  false;
-					}
-				} else
-				if(field.type === appConstants.types.TEXT ) {
-					if(!currentValue) {
-						isValid = false;
-					} else {
-						currentValue = currentValue.trim();
-						if(currentValue.length === 0) {
+					if(!field.nullable) {
+						if(!currentValue) {
 							isValid = false;
+						}
+					}
+					if(field.type === appConstants.types.NUMBER) {
+						if(!currentValue) {
+							isValid = false;
+						} else
+						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
+							isValid = false;
+						}
+					} else
+					if(field.type === appConstants.types.DATE) {
+						if(!currentValue) {
+							isValid = false;
+						} else
+						if(!isDate(currentValue)) {
+							isValid =  false;
+						}
+					} else
+					if(field.type === appConstants.types.TEXT ) {
+						if(!currentValue) {
+							isValid = false;
+						} else {
+							currentValue = currentValue.trim();
+							if(currentValue.length === 0) {
+								isValid = false;
+							}
 						}
 					}
 				}

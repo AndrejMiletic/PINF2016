@@ -21,13 +21,13 @@
 		<table class="table table-hover table-bordered">
 		  <thead>
 		    <tr>
-		      <th class="centered" ng-repeat="field in fieldNames">{{field}}</th>
+		      <th class="centered" ng-repeat="field in requestedTable.fields">{{field.name}}</th>
 					<th class="centered">Operacije</th>
 		    </tr>
 		  </thead>
 		  <tbody class="centered">
 		    <tr ng-click="openDocument(row.fields.id)" ng-repeat="row in requestedTable.rows track by $index">
-		      <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+		      <td ng-repeat="data in row.fields track by $index">{{row.fields[requestedTable.fields[$index].name]}}</td>
 					<td>
 						<button ng-click="generateEditForm($index, row, $event)" class="btn btn-warning">
 	          	<span class="glyphicon glyphicon-edit"></span> Uredi
@@ -54,7 +54,7 @@
 			  </thead>
 			  <tbody class="centered">
 			    <tr ng-repeat="row in documentChild.rows">
-			      <td ng-repeat="data in row.fields track by $index">{{data}}</td>
+			      <td ng-repeat="data in row.fields track by $index">{{row.fields[documentChild.fields[$index].name]}}</td>
 						<td ng-if="documentChild.fields.length">
 							<button ng-click="generateEditSubForm($index, row, $event)" class="btn btn-warning">
 		          	<span class="glyphicon glyphicon-edit"></span> Uredi
