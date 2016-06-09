@@ -14,9 +14,9 @@ app.config(['$routeProvider', function ($routeProvider) {
 						controller: 'invoicingController',
 						templateUrl: 'partials/invoicingPartial.html',
 					})
-			.when('/invoiceExport', {
-						controller: 'invoiceController',
-						templateUrl: 'partials/invoicePartial.html',
+			.when('/KIF', {
+						controller: 'tablesController',
+						templateUrl: 'partials/KIFPartial.html',
 					})
 	    .otherwise({
 	        redirectTo: '/tables'

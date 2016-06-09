@@ -12,7 +12,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
       return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
   }
 
-	this.create = function(parent, entity) {		
+	this.create = function(parent, entity) {
 		var payload = {
 			tableName: parent,
 			fields: entity
@@ -31,17 +31,33 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.delete = function(tableName, id) {
 		return $http.delete(url + "/" + tableName + "/" + id);
 	}
-	
+
+	this.generatePDF = function(id) {
+		return $http.get(url + "/generatePDF/" + id);
+	}
+
+	this.generateXML = function(id) {
+		return $http.get(url + "/generateXML/" + id);
+	}
+
+	this.generateKIF = function(dateFrom, dateTo) {
+		var payload = {
+			dateFrom : new Date(dateFrom),
+			dateTo : new Date(dateTo)
+		}
+		return $http.post(url + "/generateKIF", payload);
+	}
+
 	this.addPricelist = function(pricelist){
-        return $http.post(url + "/addPricelist", pricelist);
-    }
+      return $http.post(url + "/addPricelist", pricelist);
+  }
 	this.addTableRow = function(row){
-        return $http.post(url + "/addTableRow", row);
-    }
+      return $http.post(url + "/addTableRow", row);
+  }
 	this.deleteTableRow = function(row){
-        return $http.post(url + "/deleteTableRow", row);
-    }
-	
+      return $http.post(url + "/deleteTableRow", row);
+  }
+
 	this.isValid = function(table, row) {
 		var currentValue;
 		var isValid = true;
@@ -91,13 +107,25 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return isValid;
 	}
 
+	this.isKIFFormValid = function(dateFrom, dateTo) {
+		var d1, d2;
+		if(dateFrom && dateTo && isDate(dateFrom) && isDate(dateTo)) {
+			d1= new Date(dateFrom);
+			d2= new Date(dateTo);
+			if(d1 < d2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	isDate = function(dateStr) {
 
     var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
     var matchArray = dateStr.match(datePat); // is the format ok?
 
     if (matchArray == null) {
-        alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
+        //alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
         return false;
     }
 

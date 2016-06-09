@@ -1,9 +1,7 @@
 package com.app.controllers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Collections;
-import java.util.Iterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.DTO.KifDTO;
 import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableFieldDTO;
@@ -215,6 +214,24 @@ public class TableController {
 			System.out.println("\t" + key + " : " + row.getFields().get(key));
 		}
 		System.out.println("---------------------");
+	}
+	
+	@RequestMapping(path="/generatePDF/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> generatePDF(@PathVariable String id){
+		System.out.println("Generisanje PDF-a za fakturu sa ID " + id);
+		return new ResponseEntity<Object>(HttpStatus.OK);		
+	}
+	
+	@RequestMapping(path="/generateXML/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> generateXML(@PathVariable String id){
+		System.out.println("Generisanje XML-a za fakturu sa ID " + id);
+		return new ResponseEntity<Object>(HttpStatus.OK);		
+	}
+	
+	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
+	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
+		System.out.println("KIF od " + info.getDateFrom() + " do " + info.getDateTo());
+		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 	private ArrayList<TableDTO> getMockData() {

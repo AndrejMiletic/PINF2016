@@ -178,4 +178,46 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			console.log(field);
 			$scope.currentRow.fields[field.name] = "10-10-2015";
 		}
+
+		$scope.downloadPDF = function(row, $event) {
+			$event.stopPropagation();
+			tableService.generatePDF(row.fields.id).then(
+				function(response) {
+					$scope.genericDownload("faktura.pdf");
+				}
+			);
+		}
+
+		$scope.downloadXML = function(row, $event) {
+			$event.stopPropagation();
+			tableService.generateXML(row.fields.id).then(
+				function(response) {
+					$scope.genericDownload("faktura.xml");
+				}
+			);
+		}
+
+		$scope.downloadKIF = function() {
+			if(tableService.isKIFFormValid($scope.dateFrom, $scope.dateTo)) {
+				tableService.generateKIF($scope.dateFrom, $scope.dateTo).then(
+					function(response) {
+						$scope.genericDownload("kif.pdf");
+					}
+				);
+			} else {
+				alert("Forma nije validna");
+			}
+		}
+
+		$scope.genericDownload = function(fileName) {
+		var name = "", path = "downloads/" + fileName;
+
+		if(fileName) {
+			name = fileName;
+		}
+		var downloadLink = angular.element('<a></a>');
+		downloadLink.attr('href', path);
+		downloadLink.attr('download', name);
+		downloadLink[0].click();
+	}
 }]);
