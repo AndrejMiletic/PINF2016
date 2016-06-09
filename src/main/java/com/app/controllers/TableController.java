@@ -72,7 +72,7 @@ public class TableController {
 		
 		addedRowsPricelist.add(pricelist.getParent());
 		for (TableRowDTO row : pricelist.getChild()) {
-			row.getFields().put("parentId", (max+1));
+			row.getFields().put("cenovnik", (max+1));
 			addedRowsPricelistItem.add(row);
 		}
 		System.out.println("Podaci o cenovniku: \n\n" + pricelist.getParent());
@@ -442,23 +442,45 @@ public class TableController {
 		fieldsPriceListItem.add(new TableFieldDTO("id", false, false, null, "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("cenovnik", false, true, "Cenovnik", "number"));
 		fieldsPriceListItem.add(new TableFieldDTO("jedinicna_cena", false, false, null, "number"));
+		fieldsPriceListItem.add(new TableFieldDTO("naziv_artikla", false, false, "Katalog", "text"));
 
 		rows1PricelistItem = new ArrayList<TableRowDTO>();
 		TableRowDTO row1PricelistItem = new TableRowDTO();
 		row1PricelistItem.getFields().put("id", 1);
 		row1PricelistItem.getFields().put("cenovnik", 1);
 		row1PricelistItem.getFields().put("jedinicna_cena", "50");
+		row1PricelistItem.getFields().put("naziv_artikla", "Artikal 1");
 		TableRowDTO row2PricelistItem = new TableRowDTO();
 		row2PricelistItem.getFields().put("id", 2);
 		row2PricelistItem.getFields().put("cenovnik", 1);
 		row2PricelistItem.getFields().put("jedinicna_cena", "100");
+		row2PricelistItem.getFields().put("naziv_artikla", "Artikal 2");
 		TableRowDTO row3PricelistItem = new TableRowDTO();
 		row3PricelistItem.getFields().put("id", 3);
 		row3PricelistItem.getFields().put("cenovnik", 2);
 		row3PricelistItem.getFields().put("jedinicna_cena", "50");
+		row3PricelistItem.getFields().put("naziv_artikla", "Artikal 3");
+		TableRowDTO row4PricelistItem = new TableRowDTO();
+		row4PricelistItem.getFields().put("id", 4);
+		row4PricelistItem.getFields().put("cenovnik", 3);
+		row4PricelistItem.getFields().put("jedinicna_cena", "200");
+		row4PricelistItem.getFields().put("naziv_artikla", "Artikal 4");
+		TableRowDTO row5PricelistItem = new TableRowDTO();
+		row5PricelistItem.getFields().put("id", 5);
+		row5PricelistItem.getFields().put("cenovnik", 1);
+		row5PricelistItem.getFields().put("jedinicna_cena", "250");
+		row5PricelistItem.getFields().put("naziv_artikla", "Artikal 5");
+		TableRowDTO row6PricelistItem = new TableRowDTO();
+		row6PricelistItem.getFields().put("id", 6);
+		row6PricelistItem.getFields().put("cenovnik", 1);
+		row6PricelistItem.getFields().put("jedinicna_cena", "99");
+		row6PricelistItem.getFields().put("naziv_artikla", "Artikal 6");
 		rows1PricelistItem.add(row1PricelistItem);
 		rows1PricelistItem.add(row2PricelistItem);
 		rows1PricelistItem.add(row3PricelistItem);
+		rows1PricelistItem.add(row4PricelistItem);
+		rows1PricelistItem.add(row5PricelistItem);
+		rows1PricelistItem.add(row6PricelistItem);
 		/*
 		 * int ind = -1; if(deleteRowsPricelist.size() == 1){ for (int i = 0; i
 		 * < rows1PricelistItem.size(); i++) {

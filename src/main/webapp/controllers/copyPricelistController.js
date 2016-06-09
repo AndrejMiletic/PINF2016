@@ -9,6 +9,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				alert("Greska");
 			}
 		);
+			$scope.modelArray = [];
 	}
 
 	init();
@@ -23,13 +24,14 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
 					 		
 						 $scope.selectedData = $scope.requestedTable.rows[index];
-					 	 document.getElementById('input').value = $scope.selectedData.fields.datum_primene;
 					 	 
 						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
 							function (response) {
 								$scope.documentChild = response.data;
-								$scope.parentID = $scope.documentChild.rows[0].fields.parentId;
-								$scope.date =  $scope.selectedData.fields.datum_primene;
+								if($scope.documentChild.rows.length != 0){
+										$scope.parentID = $scope.documentChild.rows[0].fields.cenovnik;
+										$scope.date =  $scope.selectedData.fields.datum_primene;
+								}
 							},
 							function (response) {
 								alert("Neuspesno dobavljanje tabele");
@@ -45,7 +47,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
     };
 	
 	$scope.apply = function(row){
-		
+	
 		var isValid;		
 	    var number = /^[0-9.-]+$/;
 		
@@ -53,18 +55,18 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 			 
 			 if($scope.documentChild.rows[index].fields == row){
 				
-				  if( document.getElementById($scope.documentChild.rows[index].fields.id).value.trim().match(number)) 
+				  if($scope.modelArray[index].match(number)) 
 				  {  
 					 isValid = true;  
 				  } else{
 					 isValid = false;
 					    }
 				 if(isValid){
-					var newPrice = document.getElementById($scope.documentChild.rows[index].fields.id).value.trim();
+					var newPrice = $scope.modelArray[index];
 					var oldPrice = $scope.documentChild.rows[index].fields.jedinicna_cena;
 					
 					$scope.documentChild.rows[index].fields.jedinicna_cena = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields.jedinicna_cena*newPrice/100);
-					document.getElementById($scope.documentChild.rows[index].fields.id).value = null;
+					$scope.modelArray[index] = 0;
 				 }else{
 					 alert("Unesite broj!");
 					 return;
@@ -74,10 +76,11 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		}	
 	}
 	$scope.copyPricelist = function(){
-		if($scope.date === document.getElementById('input').value.trim()){
-			alert("Mora se promeniti bar datum.");
+		
+		if($scope.selectedData.fields.datum_primene == $scope.date){
+			alert("Promeni datum primene cenovnika.");
 		}else{
-			if($scope.isDate(document.getElementById('input').value.trim())){
+			if(tableService.isValidPricelistDate($scope.selectedData.fields.datum_primene)){
 				var pricelist = {
 					parent :  $scope.selectedData,
 					child : $scope.documentChild.rows
@@ -102,17 +105,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 			}
 		}
 	};
-	$scope.showForm = function(){
-	 	tableService.getTableByName("Katalog").then(
-			function (response) {
-				$scope.catalog = response.data;
-            },
-			function (response) {
-				alert("Greska");
-			}
-		);
-		$scope.form = true;
-	}
+	
 	$scope.addArticle = function(){
 		
 		
@@ -130,7 +123,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				
 					var fields = {
 						"id" : "",
-						parentId : $scope.parentID,
+						cenovnik : $scope.parentID,
 						id_artikla : $scope.catalog.rows[index].fields.id_artikla,
 						jedinicna_cena : $scope.catalog.rows[index].fields.jedinicna_cena
 					}
@@ -155,40 +148,6 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 						alert("Greska");
 					}
 				);
-	}
-	$scope.isDate = function(dateStr) {
-
-    var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
-    var matchArray = dateStr.match(datePat); // is the format ok?
-
-    if (matchArray == null) {
-        alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
-        return false;
-    }
-
-    month = matchArray[1]; // p@rse date into variables
-    day = matchArray[3];
-    year = matchArray[5];
-
-    if (month < 1 || month > 12) { // check month range
-        return false;
-    }
-
-    if (day < 1 || day > 31) {
-        return false;
-    }
-
-    if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
-        return false;
-    }
-
-    if (month == 2) { // check for february 29th
-        var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
-        if (day > 29 || (day == 29 && !isleap)) {
-            return false;
-        }
-    }
-    return true; // date is valid
 	}
 
 }]);

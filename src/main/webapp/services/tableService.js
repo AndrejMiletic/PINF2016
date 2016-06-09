@@ -119,6 +119,19 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return false;
 	}
 
+	this.isValidPricelistDate = function(date){
+		console.log(date);
+		if(date){
+			if(isDate(date)){
+				return true;
+			}else{
+				alert("Unesite datum u formatu mm/dd/yyyy.");
+				return false;
+			}
+			
+		}
+	};
+	
 	isDate = function(dateStr) {
 
     var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
@@ -153,4 +166,5 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
     }
     return true; // date is valid
 	}
+	
 }]);
