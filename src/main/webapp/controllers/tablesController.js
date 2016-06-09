@@ -248,10 +248,54 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.foreignKey = function(field) {
-			alert("Preuzeti FK vrednost za polje ispisano u konzoli!");
-			console.log(field);
-			$scope.currentRow.fields[field.name] = "10-10-2015";
+            $scope.documentChild = {};
+            tableService.getTableByName(field.fkTableName).then(
+                function (response) {
+                	$scope.foreignTable = response.data;
+			        if($scope.foreignTable){
+						$scope.foreignKeyClicked=true;
+						$scope.foreignTableName=field.fkTableName;
+						$scope.foreignKeyField=field;	
+		            	
+		            }else{
+		            	alert("Ne postoji nijedna tabela.");
+		            }
+                },
+                function (response) {
+                    alert("Neuspesno dobavljanje tabele");
+                }
+            );
+	}
+	
+	$scope.openDocumentForeignKey=function(id){
+		$scope.selectedForeignKey=id;
+        if ($scope.foreignTable){
+            tableService.getDocChild($scope.foreignTable.tableName, id).then(
+                function (response) {
+                    $scope.documentForeignChild = response.data;
+                },
+                function (response) {
+                    alert("Neuspesno dobavljanje tabele");
+                }
+            );
+        }
+	}
+	
+	$scope.addForeignKey=function(){
+		if($scope.selectedForeignKey){
+			$scope.currentRow.fields[$scope.foreignKeyField.name]=$scope.selectedForeignKey;
+			$scope.foreignKeyClicked=false;
+			$scope.selectedForeignKey=null;
+		}else{
+			alert("Niste izabrali tabelu.");
 		}
+		
+	}
+	
+	$scope.closeForeignKeyForm=function(){
+		$scope.foreignKeyClicked=false;
+		$scope.selectedForeignKey=null;
+	}
 
 		$scope.downloadPDF = function(row, $event) {
 			$event.stopPropagation();

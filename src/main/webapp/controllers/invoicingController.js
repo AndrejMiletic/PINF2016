@@ -1,4 +1,4 @@
-app.controller('invoicingController',['$scope','invoiceService',function($scope,invoiceService){
+app.controller('invoicingController',['$scope','tableService',function($scope, tableService){
 	
 	function init(){
 		var today = new Date();
@@ -7,7 +7,7 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 		var yyyy = today.getFullYear();
 		$scope.currentDate=dd+"."+mm+"."+yyyy+".";
 		
-		invoiceService.getTableRows("Narudzba").then(
+		tableService.getTableRows("Narudzba").then(
 			function(response){
 				$scope.allOrderForms=response.data;
 			}
@@ -20,11 +20,11 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 	$scope.showOrderForm=function(){
 		if($scope.selectedOrderForm){
 			$scope.showTable=true;
-			invoiceService.getByName('Narudzba').then(
+			tableService.getTableByName('Narudzba').then(
 				function(response) {
 					$scope.orderForm= response.data;
 					$scope.createInvoice();
-					invoiceService.getByName('Stavka_narudzbe').then(
+					tableService.getTableByName('Stavka_narudzbe').then(
 						function(response){
 							$scope.orderFormItems=response.data;
 							$scope.createInvoiceItems();
@@ -43,7 +43,7 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 	}
 	
 	$scope.createInvoice=function(){
-		invoiceService.getByName('Faktura').then(
+		tableService.getTableByName('Faktura').then(
 			function(response) {
 				$scope.invoice= response.data;
 				var fields = {};
@@ -80,7 +80,7 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 	}
 	
 	$scope.createInvoiceItems=function(){
-		invoiceService.getByName('Stavka_fakture').then(
+		tableService.getTableByName('Stavka_fakture').then(
 			function(response) {
 				$scope.ukupanIznos=0;
 				$scope.ukupanRabat=0;
@@ -143,7 +143,7 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 	$scope.addInvoice=function(additionalNotes){
 		if($scope.invoice){
 			$scope.invoice.rows[0].fields.dodatne_napomene=additionalNotes ? additionalNotes : "";
-			invoiceService.addTableRow($scope.invoice.tableName,$scope.invoice.rows).then(
+			tableService.addTableRow($scope.invoice.tableName,$scope.invoice.rows).then(
 				function(response){
 					$scope.addInvoiceItems();
 					console.log(response.data);
@@ -157,7 +157,7 @@ app.controller('invoicingController',['$scope','invoiceService',function($scope,
 	
 	$scope.addInvoiceItems=function(){
 		if($scope.invoiceItems){
-			invoiceService.addTableRow($scope.invoiceItems.tableName,$scope.invoiceItems.rows).then(
+			tableService.addTableRow($scope.invoiceItems.tableName,$scope.invoiceItems.rows).then(
 				function(response){
 					console.log(response.data);
 					alert("Uspesno kreirana faktura i stavke fakture.");
