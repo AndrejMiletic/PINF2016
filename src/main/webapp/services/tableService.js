@@ -8,10 +8,14 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/getByName/" + name);
 	}
 
-  this.getDocChild = function(parentName, parentId){
-      return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
-  }
+    this.getDocChild = function(parentName, parentId){
+        return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
+    }
 
+  	this.getByNameFiltered = function(parentTable, childTable, parentId){
+  		return $http.get(url + "/filterNextTable/" + childTable + "/" + parentTable + "/" + parentId);
+  	}
+  
 	this.create = function(parent, entity) {
 		var payload = {
 			tableName: parent,
@@ -125,7 +129,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
     var matchArray = dateStr.match(datePat); // is the format ok?
 
     if (matchArray == null) {
-        //alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
+        // alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
         return false;
     }
 

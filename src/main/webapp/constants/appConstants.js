@@ -1,5 +1,7 @@
 app.service('appConstants', function(){
 	this.operations = {
+	NEXT_EDIT : "next_edit",
+	NEXT_CREATE : "next_create",
     EDIT : "edit",
     CREATE : "create",
     SUB_EDIT: "sub_edit",
