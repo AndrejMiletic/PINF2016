@@ -377,7 +377,7 @@ public class TableController {
 		orderFormValues2.getFields().put("broj_narudzbe", 1565);
 		orderFormValues2.getFields().put("datum_narucivanja", "5.6.2016.");
 		orderFormValues2.getFields().put("rok_isporuke", "12.6.2016");
-		orderFormValues2.getFields().put("partner", "Partner 1");
+		orderFormValues2.getFields().put("poslovni partner", 1);
 		orderFormValues2.getFields().put("adresa_isporuke", "Adr1");
 		orderFormValues2.getFields().put("tekuci_racun", "rac");
 		orderFormValues2.getFields().put("poziv_na_broj", "8546357859624");
@@ -459,9 +459,9 @@ public class TableController {
 		
 		
 		ArrayList<String> narudzbaParents = new ArrayList<String>();
-		narudzbaParents.add("Poslovni parner");
+		narudzbaParents.add("Poslovni partner");
 		ArrayList<String> fakturaParents = new ArrayList<String>();
-		fakturaParents.add("Poslovni parner");
+		fakturaParents.add("Poslovni partner");
 		ArrayList<String> pPartnerChildren = new ArrayList<String>();
 		pPartnerChildren.add("Faktura");
 		pPartnerChildren.add("Narudzba");
