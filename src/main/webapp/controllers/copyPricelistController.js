@@ -53,7 +53,7 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 		
 		for (var index in $scope.documentChild.rows) {
 			 
-			 if($scope.documentChild.rows[index].fields == row){
+			 if($scope.documentChild.rows[index].fields == row && $scope.modelArray[index]){
 				
 				  if($scope.modelArray[index].match(number)) 
 				  {  
@@ -105,49 +105,5 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 			}
 		}
 	};
-	
-	$scope.addArticle = function(){
-		
-		
-		for (var index in $scope.catalog.rows) {
-			 var row = {};
-			 if($scope.catalog.rows[index].fields.naziv_artikla == $scope.selectedArticle.trim()){
-			
-				 for (var index1 in $scope.documentChild.rows) {
-					
-					 if($scope.documentChild.rows[index1].fields.id_artikla == $scope.catalog.rows[index].fields.id_artikla){
-						 alert("Artikal vec postoji!");
-						 return;
-					 }
-				}
-				
-					var fields = {
-						"id" : "",
-						cenovnik : $scope.parentID,
-						id_artikla : $scope.catalog.rows[index].fields.id_artikla,
-						jedinicna_cena : $scope.catalog.rows[index].fields.jedinicna_cena
-					}
-				row.fields = fields;
-				 
-				tableService.addTableRow(row).then(
-					function (response) {
-					},
-					function (response) {
-						alert("Greska");
-					}
-				);
-			 }
-		}
-	};
-	$scope.delete = function (index){
-		
-			tableService.deleteTableRow($scope.documentChild.rows[index]).then(
-					function (response) {
-					},
-					function (response) {
-						alert("Greska");
-					}
-				);
-	}
 
 }]);
