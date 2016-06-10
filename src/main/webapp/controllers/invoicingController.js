@@ -7,6 +7,8 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 		var yyyy = today.getFullYear();
 		$scope.currentDate=dd+"."+mm+"."+yyyy+".";
 		
+		$scope.addedInvoice=[];
+		
 		tableService.getTableRows("Narudzba").then(
 			function(response){
 				$scope.allOrderForms=response.data;
@@ -141,10 +143,18 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	$scope.addInvoice=function(additionalNotes){
-		if($scope.invoice){
+		var added=false;
+		for(var i in $scope.addedInvoice){
+			if($scope.addedInvoice[i]==$scope.invoice.rows[0].fields.narudzba){
+				alert("Faktura za trazenu narudzbenicu je vec kreirana.");
+				added=true;
+			}
+		}
+		if($scope.invoice && !added){
 			$scope.invoice.rows[0].fields.dodatne_napomene=additionalNotes ? additionalNotes : "";
 			tableService.addTableRow($scope.invoice.tableName,$scope.invoice.rows).then(
 				function(response){
+					$scope.addedInvoice.push($scope.invoice.rows[0].fields.narudzba);
 					$scope.addInvoiceItems();
 					console.log(response.data);
 				},

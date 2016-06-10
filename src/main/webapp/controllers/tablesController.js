@@ -15,7 +15,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	init();
 
 	$scope.showTable = function () {
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
 		$scope.currentRow = undefined;
         if (!$scope.selectedTable) {
@@ -41,7 +40,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	};
 
     $scope.openDocument = function (id) {
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
         if ($scope.requestedTable.documentChildName){
             tableService.getDocChild($scope.requestedTable.tableName, id).then(
@@ -56,7 +54,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     };
 
     $scope.openNextTableTop = function(parentTable, childTable, parentId){
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
     	if ($scope.nextTableTop && $scope.idNextTableTop){
     		tableService.getByNameFiltered(parentTable, childTable, parentId).then(
@@ -71,20 +68,17 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     }
     
     $scope.removeTableNext = function(){
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
     	$scope.filteredNextTable = undefined;
     	$scope.currentRow = undefined;
     }
     
     $scope.showNextTableSelection = function(){
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
     	$scope.showNextSelect = !$scope.showNextSelect;
     }
     
     $scope.deleteRowNext = function(index, row, event) {
-        $scope.selectedForeignKey=false;
         $scope.closeForeignKeyForm();
 		event.stopPropagation();
 		tableService.delete($scope.filteredNextTable.tableName, row.fields.id).then(
@@ -99,7 +93,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	}
     
 		$scope.deleteRow = function(index, row, event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
 			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
@@ -115,7 +108,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.deleteSubRow = function(index, row, event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
 			tableService.delete($scope.documentChild.tableName, row.fields.id).then(
@@ -130,7 +122,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateEditFormNext = function(index, row, event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
 			$scope.currentRow = {fields:{}};
@@ -142,7 +133,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 		
 		$scope.generateEditForm = function(index, row, event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
 			$scope.currentRow = {fields:{}};
@@ -154,7 +144,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateCreateFormNext = function() {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			$scope.currentRow = {fields:{}};
 			$scope.formText = "Dodaj";
@@ -163,7 +152,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 		
 		$scope.generateCreateForm = function() {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			$scope.currentRow = {fields:{}};
 			$scope.formText = "Dodaj";
@@ -172,7 +160,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateEditSubForm = function(index, row, event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
 			$scope.currentRow = {fields:{}};
@@ -184,7 +171,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.generateCreateSubForm = function() {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			$scope.currentRow = {fields:{}};
 			$scope.formText = "Dodaj stavku";
@@ -193,7 +179,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.submitForm = function() {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
@@ -274,7 +259,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.closeForm = function() {
-		        $scope.selectedForeignKey=false;
 		        $scope.closeForeignKeyForm();
 				$scope.currentRow = undefined;
 		}
@@ -333,7 +317,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	}
 
 		$scope.downloadPDF = function(row, $event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			$event.stopPropagation();
 			tableService.generatePDF(row.fields.id).then(
@@ -344,7 +327,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.downloadXML = function(row, $event) {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			$event.stopPropagation();
 			tableService.generateXML(row.fields.id).then(
@@ -355,7 +337,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.downloadKIF = function() {
-	        $scope.selectedForeignKey=false;
 	        $scope.closeForeignKeyForm();
 			if(tableService.isKIFFormValid($scope.dateFrom, $scope.dateTo)) {
 				tableService.generateKIF($scope.dateFrom, $scope.dateTo).then(
