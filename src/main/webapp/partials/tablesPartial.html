@@ -160,8 +160,8 @@
 	</div>
 	
 		
-	<div ng-if="foreignKeyClicked" class="centered">
-		<label>Izaberite tabelu:</label>
+	<div ng-if="foreignKeyClicked" >
+		<h3>Izaberite zeljeni red:</h3>
 		<table class="table table-hover table-bordered">
 		  <thead>
 		    <tr>
@@ -174,9 +174,10 @@
 		    </tr>
 		  </tbody>
 		</table>
+		<label>Selektovan red: {{selectedForeignKey}}</label>
 		<br/><br/>
 		<button ng-click="addForeignKey()" class="btn btn-success">
-				<span class="glyphicon glyphicon-ok"></span> Dodaj tabelu
+				<span class="glyphicon glyphicon-ok"></span> Dodaj
 		</button>
 		<button ng-click="closeForeignKeyForm()" class="btn btn-danger">
 			<span class="glyphicon glyphicon-remove"></span> Poništi
