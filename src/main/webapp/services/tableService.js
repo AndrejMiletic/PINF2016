@@ -126,9 +126,15 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.isValidPricelistDate = function(date){
 		if(date){
 			if(isDate(date)){
+				var newDate = new Date(date);
+				var todayDate = new Date();
+				if(newDate < todayDate){
+					alert("Unesite datum veći od današnjeg.");
+					return false;
+				}
 				return true;
 			}else{
-				alert("Unesite datum veći od današnjeg u formatu mm/dd/yyyy.");
+				alert("Unesite datum u formatu mm/dd/yyyy.");
 				return false;
 			}
 			
@@ -168,9 +174,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
             return false;
         }
     }
-	if(day < 10 || month < 6 || year < 2016){
-		return false;
-	}
     return true; // date is valid
 	}
 	
