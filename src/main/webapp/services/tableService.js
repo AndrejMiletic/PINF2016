@@ -174,4 +174,13 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
     return true; // date is valid
 	}
 	
+	this.getTableRows=function(tableName){
+		return $http.get(url+"/getTableRows/"+tableName);
+	}
+	
+	this.addTableRow=function(tableName, rows){
+		return $http.post(url+"/addRow/"+tableName,rows);
+	}
+	
+	
 }]);
