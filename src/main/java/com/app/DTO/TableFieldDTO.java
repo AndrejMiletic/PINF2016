@@ -1,18 +1,21 @@
 package com.app.DTO;
 
+import com.app.constants.AppConstants.DataTypes;
+
 public class TableFieldDTO {
 
 	private String name;
 	private boolean nullable;
 	private boolean fk;
+	private boolean lookup;
 	private String fkTableName;
-	private String type;
+	private DataTypes type;
 	
 	public TableFieldDTO() {
 		super();
 	}
-	public TableFieldDTO(String name, boolean nullable, boolean fk,
-			String fkTableName, String type) {
+	public TableFieldDTO(String name, boolean nullable, boolean fk, boolean lookup,
+			String fkTableName, DataTypes type) {
 		super();
 		this.type = type;
 		this.name = name;
@@ -44,10 +47,16 @@ public class TableFieldDTO {
 	public void setFkTableName(String fkTableName) {
 		this.fkTableName = fkTableName;
 	}
-	public String getType() {
+	public DataTypes getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(DataTypes type) {
 		this.type = type;
+	}
+	public boolean isLookup() {
+		return lookup;
+	}
+	public void setLookup(boolean lookup) {
+		this.lookup = lookup;
 	}
 }

@@ -247,6 +247,7 @@ public class TableController {
 	private ArrayList<TableDTO> getMockData() {
 		ArrayList<TableDTO> tables = new ArrayList<TableDTO>();
 
+		/*
 		ArrayList<TableFieldDTO> invoiceFields= new ArrayList<TableFieldDTO>();
 		invoiceFields.add(new TableFieldDTO("id", false, false, null, "number"));
 		invoiceFields.add(new TableFieldDTO("narudzba", false, true, "Narudzba","number"));
@@ -546,15 +547,6 @@ public class TableController {
 		rows1PricelistItem.add(row4PricelistItem);
 		rows1PricelistItem.add(row5PricelistItem);
 		rows1PricelistItem.add(row6PricelistItem);
-		/*
-		 * int ind = -1; if(deleteRowsPricelist.size() == 1){ for (int i = 0; i
-		 * < rows1PricelistItem.size(); i++) {
-		 * if(rows1PricelistItem.get(i).getFields().get("id").equals(
-		 * deleteRowsPricelist.get(0).getFields().get("id"))){ ind = i; } } }
-		 * if(ind!=-1){ rows1PricelistItem.remove(ind); } if
-		 * (addedRowsPricelistItem.size() != 0) { for (TableRowDTO row :
-		 * addedRowsPricelistItem) { rows1PricelistItem.add(row); } }
-		 */
 		if (addedRowsPricelist.size() != 0) {
 			for (TableRowDTO row : addedRowsPricelist) {
 				rows1Pricelist.add(row);
@@ -632,8 +624,8 @@ public class TableController {
 		tables.add(new TableDTO("Stavka cenovnika", fieldsPriceListItem, rows1PricelistItem, true, null, null, null));
 		tables.add(new TableDTO("Preduzece", fieldsCompany, rows1Company, false, null, preduzeceChildren, null));
 		tables.add(new TableDTO("Katalog", catalogFields, rows1Catalog, false, null, null, null));
+		*/
 		return tables;
 	}
-
 
 }
