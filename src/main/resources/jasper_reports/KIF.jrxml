@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="KIF" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b9ff1cca-3a41-4b1e-b7bc-92ac6ad4d616">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_preduzeca" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Datum_od" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Datum_do" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Naziv_preduzeca" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     faktura_otpremnica.`FA_BROJ` AS Broj_fakture,
+     faktura_otpremnica.`FA_DATUM` AS Datum_fakture,
+     faktura_otpremnica.`FA_DATUM_VALUTE` AS Datum_valute,
+     faktura_otpremnica.`FA_UKUPNO` AS Ukupno,
+     faktura_otpremnica.`FA_TEKRACUN` AS Tekuci_racun,
+     preduzece.`NAZIV` AS Naziv_preduzeca
+FROM
+     `poslovni_partner` poslovni_partner INNER JOIN `faktura_otpremnica` faktura_otpremnica ON poslovni_partner.`ID_PARTNERSTVA` = faktura_otpremnica.`ID_PARTNERSTVA`
+     INNER JOIN `preduzece` preduzece ON preduzece.`ID_PREDUZECA` = poslovni_partner.`ID_PARTNERA`
+WHERE
+     STATUS_FAKTURE LIKE 'D'
+ OR STATUS_FAKTURE LIKE 'O'
+ AND FA_DATUM >= $P{Datum_od}
+ AND FA_DATUM <= $P{Datum_do}
+ AND poslovni_partner.ID_PREDUZECA = $P{ID_preduzeca}]]>
+	</queryString>
+	<field name="Broj_fakture" class="java.math.BigDecimal"/>
+	<field name="Datum_fakture" class="java.sql.Date"/>
+	<field name="Datum_valute" class="java.sql.Date"/>
+	<field name="Ukupno" class="java.math.BigDecimal"/>
+	<field name="Tekuci_racun" class="java.lang.String"/>
+	<field name="Naziv_preduzeca" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="682" y="0" width="80" height="20" uuid="d67eabb3-3d64-4604-885a-0a5740379212"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="0" width="40" height="20" uuid="a9bc10c2-ed24-4409-9c36-20c20a9c9600"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy">
+				<reportElement x="0" y="0" width="107" height="20" uuid="a4c2c873-b353-4b28-b37b-1837b98e5294"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="275" y="0" width="258" height="32" uuid="b959e770-7f38-4da6-ab45-f63a305039b8"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Knjiga izlaznih faktura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="125" height="20" uuid="39f06261-cde1-49e0-aacb-f163f4b8a861"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Broj fakture]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="80" width="121" height="20" uuid="168fc481-643c-45f6-8446-56abd329af41"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datum prijema]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="80" width="183" height="20" uuid="ea352171-739f-4fa8-bc03-923b535f2925"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Naziv dobavljača]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="669" y="80" width="133" height="20" uuid="d911b47a-c80b-410a-9711-fb29bafd3402"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Iznos fakture]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="80" width="119" height="20" uuid="ff7d6197-cb29-4726-8b94-73933447d86b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datum valute]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="429" y="80" width="121" height="20" uuid="a00c9a0e-9251-464e-b53d-14fea596f0e6"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Broj računa]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="275" y="32" width="258" height="38" uuid="5b5338af-d8fd-4459-b249-5e6a4092b457"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Naziv_preduzeca}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="80" width="125" height="20" backcolor="#000000" uuid="2ce1e46d-eb6d-45cc-964e-5463c22c61f9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="125" y="80" width="121" height="20" backcolor="#000000" uuid="0a176f52-978b-44cb-8219-fbd37903205b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="246" y="80" width="183" height="20" backcolor="#000000" uuid="4b592ba8-80a5-456a-a96d-4eccb8bf8e25"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="429" y="80" width="121" height="20" backcolor="#000000" uuid="19c7961f-f02c-4f7c-a03a-3647676653c2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="550" y="80" width="119" height="20" backcolor="#000000" uuid="c29cdab7-9c8d-4a5e-83b1-4055d12aee48"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="669" y="80" width="133" height="20" backcolor="#000000" uuid="8595493b-7bdd-411e-afdd-ef2b11393c78"/>
+			</rectangle>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="125" height="20" uuid="409b6729-02c4-4aed-ad94-5789c3855295"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="125" y="0" width="121" height="20" uuid="7615c34d-4801-492b-8b3c-928b1b19075b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="246" y="0" width="183" height="20" uuid="baf0084a-ba48-4124-9a68-d089333b47e3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="429" y="0" width="121" height="20" uuid="59b74302-9bf2-46d1-81c5-75da7963f511"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="550" y="0" width="119" height="20" uuid="9a048ce4-6c76-498d-b304-068ebe043ce2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="669" y="0" width="133" height="20" uuid="3e80bf6d-0170-49cf-8ed6-ff319a794e38"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="125" height="20" uuid="a43df19a-f5eb-49fe-a620-a97fcac3871d"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Broj_fakture}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy">
+				<reportElement x="125" y="0" width="121" height="20" uuid="0270f050-6a2b-448d-bf80-dd29a16223f6"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Datum_fakture}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy">
+				<reportElement x="550" y="0" width="119" height="20" uuid="24d6799a-e69b-48cf-9c4a-72f5be12e105"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Datum_valute}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="0" width="183" height="20" uuid="81a7b062-74aa-4793-aefc-44e40d5ffb66"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Naziv_preduzeca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="0" width="117" height="20" uuid="1f61fac2-1622-4b06-a9cb-9192df26a072"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tekuci_racun}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="669" y="0" width="133" height="20" uuid="84363ab2-cd3f-405c-9fad-9322c26c2e6f"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Ukupno}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
