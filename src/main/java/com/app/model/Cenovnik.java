@@ -1,5 +1,5 @@
 package com.app.model;
-// Generated May 16, 2016 4:54:12 PM by Hibernate Tools 5.1.0.Alpha1
+// Generated Jun 20, 2016 4:41:29 PM by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -68,7 +68,7 @@ public class Cenovnik implements java.io.Serializable {
 		this.preduzece = preduzece;
 	}
 
-	@Column(name = "NAZIV_CENOVNIKA", length = 30)
+	@Column(name = "NAZIV_CENOVNIKA", length = 100)
 	public String getNazivCenovnika() {
 		return this.nazivCenovnika;
 	}

@@ -1,5 +1,5 @@
 package com.app.model;
-// Generated May 16, 2016 4:54:12 PM by Hibernate Tools 5.1.0.Alpha1
+// Generated Jun 20, 2016 4:41:29 PM by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -85,7 +85,7 @@ public class KatalogRobeIUsluga implements java.io.Serializable {
 		this.jediniceMere = jediniceMere;
 	}
 
-	@Column(name = "SIFRA_ARTIKLA", nullable = false, length = 13)
+	@Column(name = "SIFRA_ARTIKLA", nullable = false, length = 20)
 	public String getSifraArtikla() {
 		return this.sifraArtikla;
 	}
@@ -94,7 +94,7 @@ public class KatalogRobeIUsluga implements java.io.Serializable {
 		this.sifraArtikla = sifraArtikla;
 	}
 
-	@Column(name = "NAZIV_ARTIKLA", nullable = false, length = 20)
+	@Column(name = "NAZIV_ARTIKLA", nullable = false, length = 100)
 	public String getNazivArtikla() {
 		return this.nazivArtikla;
 	}

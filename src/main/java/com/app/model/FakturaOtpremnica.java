@@ -1,5 +1,5 @@
 package com.app.model;
-// Generated May 16, 2016 4:54:12 PM by Hibernate Tools 5.1.0.Alpha1
+// Generated Jun 20, 2016 4:41:29 PM by Hibernate Tools 5.1.0.Alpha1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -223,7 +223,7 @@ public class FakturaOtpremnica implements java.io.Serializable {
 		this.faIznos = faIznos;
 	}
 
-	@Column(name = "FA_TEKRACUN", nullable = false, length = 30)
+	@Column(name = "FA_TEKRACUN", nullable = false, length = 50)
 	public String getFaTekracun() {
 		return this.faTekracun;
 	}
@@ -232,7 +232,7 @@ public class FakturaOtpremnica implements java.io.Serializable {
 		this.faTekracun = faTekracun;
 	}
 
-	@Column(name = "FA_POZIV", length = 20)
+	@Column(name = "FA_POZIV", length = 50)
 	public String getFaPoziv() {
 		return this.faPoziv;
 	}
@@ -250,7 +250,7 @@ public class FakturaOtpremnica implements java.io.Serializable {
 		this.statusFakture = statusFakture;
 	}
 
-	@Column(name = "DODATNE_NAPOMENE", length = 100)
+	@Column(name = "DODATNE_NAPOMENE", length = 200)
 	public String getDodatneNapomene() {
 		return this.dodatneNapomene;
 	}

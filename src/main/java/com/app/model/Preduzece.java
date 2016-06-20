@@ -1,5 +1,5 @@
 package com.app.model;
-// Generated May 16, 2016 4:54:12 PM by Hibernate Tools 5.1.0.Alpha1
+// Generated Jun 20, 2016 4:41:29 PM by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +23,7 @@ public class Preduzece implements java.io.Serializable {
 
 	private Long idPreduzeca;
 	private SifraDelatnosti sifraDelatnosti;
+	private String naziv;
 	private String pib;
 	private String maticniBroj;
 	private String adresa;
@@ -39,18 +40,21 @@ public class Preduzece implements java.io.Serializable {
 	public Preduzece() {
 	}
 
-	public Preduzece(SifraDelatnosti sifraDelatnosti, String pib, String maticniBroj, String tekuciRacun) {
+	public Preduzece(SifraDelatnosti sifraDelatnosti, String naziv, String pib, String maticniBroj,
+			String tekuciRacun) {
 		this.sifraDelatnosti = sifraDelatnosti;
+		this.naziv = naziv;
 		this.pib = pib;
 		this.maticniBroj = maticniBroj;
 		this.tekuciRacun = tekuciRacun;
 	}
 
-	public Preduzece(SifraDelatnosti sifraDelatnosti, String pib, String maticniBroj, String adresa,
+	public Preduzece(SifraDelatnosti sifraDelatnosti, String naziv, String pib, String maticniBroj, String adresa,
 			String brojTelefona, String email, String banka, String tekuciRacun, Set<GrupaProizvoda> grupaProizvodas,
 			Set<Cenovnik> cenovniks, Set<PoslovnaGodina> poslovnaGodinas,
 			Set<PoslovniPartner> poslovniPartnersForIdPreduzeca, Set<PoslovniPartner> poslovniPartnersForIdPartnera) {
 		this.sifraDelatnosti = sifraDelatnosti;
+		this.naziv = naziv;
 		this.pib = pib;
 		this.maticniBroj = maticniBroj;
 		this.adresa = adresa;
@@ -87,6 +91,15 @@ public class Preduzece implements java.io.Serializable {
 		this.sifraDelatnosti = sifraDelatnosti;
 	}
 
+	@Column(name = "NAZIV", nullable = false, length = 100)
+	public String getNaziv() {
+		return this.naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
 	@Column(name = "PIB", nullable = false, length = 9)
 	public String getPib() {
 		return this.pib;
@@ -105,7 +118,7 @@ public class Preduzece implements java.io.Serializable {
 		this.maticniBroj = maticniBroj;
 	}
 
-	@Column(name = "ADRESA", length = 20)
+	@Column(name = "ADRESA", length = 100)
 	public String getAdresa() {
 		return this.adresa;
 	}
@@ -114,7 +127,7 @@ public class Preduzece implements java.io.Serializable {
 		this.adresa = adresa;
 	}
 
-	@Column(name = "BROJ_TELEFONA", length = 12)
+	@Column(name = "BROJ_TELEFONA", length = 20)
 	public String getBrojTelefona() {
 		return this.brojTelefona;
 	}
@@ -123,7 +136,7 @@ public class Preduzece implements java.io.Serializable {
 		this.brojTelefona = brojTelefona;
 	}
 
-	@Column(name = "EMAIL", length = 20)
+	@Column(name = "EMAIL", length = 100)
 	public String getEmail() {
 		return this.email;
 	}
@@ -132,7 +145,7 @@ public class Preduzece implements java.io.Serializable {
 		this.email = email;
 	}
 
-	@Column(name = "BANKA", length = 20)
+	@Column(name = "BANKA", length = 100)
 	public String getBanka() {
 		return this.banka;
 	}
@@ -141,7 +154,7 @@ public class Preduzece implements java.io.Serializable {
 		this.banka = banka;
 	}
 
-	@Column(name = "TEKUCI_RACUN", nullable = false, length = 25)
+	@Column(name = "TEKUCI_RACUN", nullable = false, length = 100)
 	public String getTekuciRacun() {
 		return this.tekuciRacun;
 	}

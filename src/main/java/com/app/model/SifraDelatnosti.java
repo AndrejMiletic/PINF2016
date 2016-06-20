@@ -1,5 +1,5 @@
 package com.app.model;
-// Generated May 16, 2016 4:54:12 PM by Hibernate Tools 5.1.0.Alpha1
+// Generated Jun 20, 2016 4:41:29 PM by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -59,7 +59,7 @@ public class SifraDelatnosti implements java.io.Serializable {
 		this.oznakaSifreDelatnosti = oznakaSifreDelatnosti;
 	}
 
-	@Column(name = "NAZIV_SIFRE_DELATNOSTI", nullable = false, length = 30)
+	@Column(name = "NAZIV_SIFRE_DELATNOSTI", nullable = false, length = 100)
 	public String getNazivSifreDelatnosti() {
 		return this.nazivSifreDelatnosti;
 	}
