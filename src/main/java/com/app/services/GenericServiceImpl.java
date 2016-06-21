@@ -48,50 +48,70 @@ public class GenericServiceImpl implements IGenericService{
 		
 	@Override
 	public boolean create(TableRowDTO row) {
-		CrudRepository repo = getTableRepo(row.getTableName());
-		ITransformer transformer = getTransformer(row.getTableName());
-		HashMap<String, Object> fks = getFKs(row);
-		Object entity = transformer.transformFromDTO(row, fks);
-		repo.save(entity);
+		try{
+			CrudRepository repo = getTableRepo(row.getTableName());
+			ITransformer transformer = getTransformer(row.getTableName());
+			HashMap<String, Object> fks = getFKs(row);
+			Object entity = transformer.transformFromDTO(row, fks);
+			repo.save(entity);
+		}catch(Exception e) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public boolean update(TableRowDTO row) {
-		CrudRepository repo = getTableRepo(row.getTableName());
-		ITransformer transformer = getTransformer(row.getTableName());
-		HashMap<String, Object> fks = getFKs(row);
-		Object entity = transformer.transformFromDTO(row, fks);
-		repo.save(entity);
+		try{
+			CrudRepository repo = getTableRepo(row.getTableName());
+			ITransformer transformer = getTransformer(row.getTableName());
+			HashMap<String, Object> fks = getFKs(row);
+			Object entity = transformer.transformFromDTO(row, fks);
+			repo.save(entity);
+		}catch(Exception e) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public boolean delete(Long id, String tableCode) {
-		String tableName = ConversionHelper.getTableName(tableCode);
-		CrudRepository repo = getTableRepo(tableName);
-		repo.delete(id);
+		try{
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			repo.delete(id);
+		}catch(Exception e) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
-	public TableDTO getById(Long id, String tableCode) {
-		String tableName = ConversionHelper.getTableName(tableCode);
-		CrudRepository repo = getTableRepo(tableName);
-		Object result = repo.findOne(id);
-		ITransformer tr = getTransformer(tableName);
-		TableDTO dto = tr.transformToDTO(result); 
-		return dto;
+	public TableDTO getById(Long id, String tableCode) {		
+		try{
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			Object result = repo.findOne(id);
+			ITransformer tr = getTransformer(tableName);
+			TableDTO dto = tr.transformToDTO(result);
+			return dto;
+		}catch(Exception e) {
+			return null;
+		}		
 	}
 
 	@Override
 	public TableDTO getAll(String tableCode) {
-		String tableName = ConversionHelper.getTableName(tableCode);
-		CrudRepository repo = getTableRepo(tableName);
-		ArrayList<Object> rows = (ArrayList<Object>) repo.findAll();
-		ITransformer tr = getTransformer(tableName);
-		TableDTO dto = tr.transformToDTO(rows);
-		return dto;
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			ArrayList<Object> rows = (ArrayList<Object>) repo.findAll();
+			ITransformer tr = getTransformer(tableName);
+			TableDTO dto = tr.transformToDTO(rows);
+			return dto;
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 	private HashMap<String, Object> getFKs(TableRowDTO row) {

@@ -35,32 +35,51 @@ public class TableController {
 	
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
-		crudService.create(row);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		if(crudService.create(row)) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 	}
 	
 	@RequestMapping(path = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<Object> update(@RequestBody TableRowDTO row) {
-		crudService.update(row);
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(crudService.update(row)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@RequestMapping(path = "/delete/{tableCode}/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> delete(@PathVariable String tableCode, @PathVariable Long id) {
-		crudService.delete(id, tableCode);
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(crudService.delete(id, tableCode)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@RequestMapping(path = "/getById/{tableCode}/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getById(@PathVariable String tableCode, @PathVariable Long id) {				
 		TableDTO result = crudService.getById(id, tableCode);
-		return new ResponseEntity<Object>(result, HttpStatus.OK);
+		
+		if(result == null) {
+			return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
 	}
 	
 	@RequestMapping(path = "/getAll/{tableCode}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {				
+	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {		
 		TableDTO result = crudService.getAll(tableCode);
-		return new ResponseEntity<Object>(result, HttpStatus.OK);
+		
+		if(result == null) {
+			return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
 	}
 	
 	
