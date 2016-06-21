@@ -113,6 +113,17 @@ public class GenericServiceImpl implements IGenericService{
 			return null;
 		}
 	}
+
+	@Override
+	public HashMap<String, String> getEditableTables() {
+		HashMap<String, String> tables = new HashMap<String, String>();
+		
+		for (String tableName : TableNames.getEditableTableNames()) {
+			tables.put(ConversionHelper.getTableCode(tableName), tableName);
+		}
+		
+		return tables;
+	}
 	
 	private HashMap<String, Object> getFKs(TableRowDTO row) {
 		HashMap<String, Object> fks = new HashMap<String, Object>();

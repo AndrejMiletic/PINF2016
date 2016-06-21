@@ -82,6 +82,11 @@ public class TableController {
 		}
 	}
 	
+	@RequestMapping(path = "/getAllNames", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAllEditableTableNames() {		
+		return new ResponseEntity<Object>(crudService.getEditableTables(), HttpStatus.OK);
+	}
+	
 	
 	
 	
