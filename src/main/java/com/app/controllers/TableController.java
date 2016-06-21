@@ -3,6 +3,7 @@ package com.app.controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,19 +15,57 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.DTO.KifDTO;
 import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
-import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.services.IGenericService;
 
 @RestController
 @RequestMapping(value = "/table")
 public class TableController {
 
+	
+	@Autowired
+	private IGenericService crudService;
+	
 	private ArrayList<TableRowDTO> rows1Pricelist;
 	private ArrayList<TableRowDTO> rows1PricelistItem;
 	private ArrayList<TableRowDTO> addedRowsPricelistItem = new ArrayList<TableRowDTO>();
 	private ArrayList<TableRowDTO> addedRowsPricelist = new ArrayList<TableRowDTO>();
 	private ArrayList<TableRowDTO> deleteRowsPricelist = new ArrayList<TableRowDTO>();
 
+	
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
+		crudService.create(row);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(path = "/update", method = RequestMethod.PUT)
+	public ResponseEntity<Object> update(@RequestBody TableRowDTO row) {
+		crudService.update(row);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/delete/{tableCode}/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> delete(@PathVariable String tableCode, @PathVariable Long id) {
+		crudService.delete(id, tableCode);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/getById/{tableCode}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getById(@PathVariable String tableCode, @PathVariable Long id) {				
+		TableDTO result = crudService.getById(id, tableCode);
+		return new ResponseEntity<Object>(result, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/getAll/{tableCode}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {				
+		TableDTO result = crudService.getAll(tableCode);
+		return new ResponseEntity<Object>(result, HttpStatus.OK);
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<String>> getAllUsers() {
 		ArrayList<TableDTO> tables = getMockData();
@@ -38,6 +77,7 @@ public class TableController {
 		}
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
+	
 	@RequestMapping(value = "/getPricelistItems", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<TableRowDTO>> getPricelistItems() {
 		ArrayList<TableRowDTO> data = rows1PricelistItem;

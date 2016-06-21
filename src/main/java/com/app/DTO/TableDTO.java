@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class TableDTO {
 	
 	private String tableName;
+	private String tableCode;
 	private ArrayList<TableFieldDTO> fields; 
 	private ArrayList<TableRowDTO> rows;
 	private boolean documentPattern;
@@ -18,7 +19,7 @@ public class TableDTO {
 		rows = new ArrayList<TableRowDTO>();
 	}
 
-	public TableDTO(String tableName, ArrayList<TableFieldDTO> fields,
+	public TableDTO(String tableName, String tableCode, ArrayList<TableFieldDTO> fields,
 			ArrayList<TableRowDTO> rows, boolean documentPattern,
 			String documentChildName, ArrayList<String> children,
 			ArrayList<String> parents) {
@@ -30,6 +31,7 @@ public class TableDTO {
 		this.documentChildName = documentChildName;
 		this.children = children;
 		this.parents = parents;
+		this.tableCode = tableCode;
 	}
 
 	public String getTableName() {
@@ -86,5 +88,13 @@ public class TableDTO {
 
 	public void setParents(ArrayList<String> parents) {
 		this.parents = parents;
+	}
+
+	public String getTableCode() {
+		return tableCode;
+	}
+
+	public void setTableCode(String tableCode) {
+		this.tableCode = tableCode;
 	}
 }

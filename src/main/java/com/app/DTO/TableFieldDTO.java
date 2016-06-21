@@ -5,6 +5,7 @@ import com.app.constants.AppConstants.DataTypes;
 public class TableFieldDTO {
 
 	private String name;
+	private boolean pk;
 	private boolean nullable;
 	private boolean fk;
 	private boolean lookup;
@@ -14,7 +15,7 @@ public class TableFieldDTO {
 	public TableFieldDTO() {
 		super();
 	}
-	public TableFieldDTO(String name, boolean nullable, boolean fk, boolean lookup,
+	public TableFieldDTO(String name, boolean pk, boolean nullable, boolean fk, boolean lookup,
 			String fkTableName, DataTypes type) {
 		super();
 		this.type = type;
@@ -22,6 +23,8 @@ public class TableFieldDTO {
 		this.nullable = nullable;
 		this.fk = fk;
 		this.fkTableName = fkTableName;
+		this.lookup = lookup;
+		this.pk = pk;
 	}
 	public String getName() {
 		return name;
@@ -58,5 +61,11 @@ public class TableFieldDTO {
 	}
 	public void setLookup(boolean lookup) {
 		this.lookup = lookup;
+	}
+	public boolean isPk() {
+		return pk;
+	}
+	public void setPk(boolean pk) {
+		this.pk = pk;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 public class TableRowDTO {
 
 	private String tableName;
+	private String tableCode;
 	private LinkedHashMap<String, Object> fields;
 
 	public TableRowDTO() {
@@ -18,10 +19,11 @@ public class TableRowDTO {
 		this.fields = fields;
 	}
 
-	public TableRowDTO(String tableName, LinkedHashMap<String, Object> fields) {
+	public TableRowDTO(String tableName, String tableCode, LinkedHashMap<String, Object> fields) {
 		super();
 		this.tableName = tableName;
 		this.fields = fields;
+		this.tableCode = tableCode;
 	}
 
 	public HashMap<String, Object> getFields() {
@@ -47,5 +49,13 @@ public class TableRowDTO {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+
+	public String getTableCode() {
+		return tableCode;
+	}
+
+	public void setTableCode(String tableCode) {
+		this.tableCode = tableCode;
 	}
 }

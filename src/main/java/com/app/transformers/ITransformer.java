@@ -1,8 +1,10 @@
 package com.app.transformers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.app.DTO.TableDTO;
+import com.app.DTO.TableRowDTO;
 
 public interface ITransformer {
 	
@@ -25,5 +27,5 @@ public interface ITransformer {
 	 * @param table - apstraktna reprezentacija tabele.
 	 * @return niz entiteta.
 	 */
-	public Object transformFromDTO(TableDTO table);
+	public Object transformFromDTO(TableRowDTO row, HashMap<String, Object> fks);
 }
