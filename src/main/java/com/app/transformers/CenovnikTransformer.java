@@ -17,7 +17,6 @@ import com.app.model.Preduzece;
 
 public class CenovnikTransformer implements ITransformer{
 
-	private final String NAZIV_CENOVNIKA = "Naziv cenovnika";
 	private final String DATUM_PRIMENE = "Datum primene";
 	
 	@Override
@@ -57,8 +56,8 @@ public class CenovnikTransformer implements ITransformer{
 		c.setPreduzece((Preduzece)fks.get(TableNames.PREDUZECE));
 		c.setDatumPrimene(datumPrimene);
 		
-		if(rows.containsKey(NAZIV_CENOVNIKA)) {
-			c.setNazivCenovnika(rows.get(NAZIV_CENOVNIKA).toString());
+		if(rows.containsKey(FieldNames.CENOVNIK_LOOKUP)) {
+			c.setNazivCenovnika(rows.get(FieldNames.CENOVNIK_LOOKUP).toString());
 		}
 		
 		if(rows.containsKey(FieldNames.PRIMARY_KEY)) {
@@ -79,12 +78,12 @@ public class CenovnikTransformer implements ITransformer{
 		TableRowDTO row = new TableRowDTO();
 		LinkedHashMap<String, Object> fields = new LinkedHashMap<String, Object>(); 
 		
-		fields.put("Id", c.getIdCenovnika());
+		fields.put(FieldNames.PRIMARY_KEY, c.getIdCenovnika());
 				
 		if(c.getNazivCenovnika() == null || c.getNazivCenovnika().equals("")) {
-			fields.put(NAZIV_CENOVNIKA, "Nije unet naziv");
+			fields.put(FieldNames.CENOVNIK_LOOKUP, "Nije unet naziv");
 		} else {
-			fields.put(NAZIV_CENOVNIKA, c.getNazivCenovnika());
+			fields.put(FieldNames.CENOVNIK_LOOKUP, c.getNazivCenovnika());
 		}
 		
 		fields.put(DATUM_PRIMENE, c.getDatumPrimene());
@@ -120,7 +119,7 @@ public class CenovnikTransformer implements ITransformer{
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(NAZIV_CENOVNIKA, false, true, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.CENOVNIK_LOOKUP, false, true, false, false, "", DataTypes.TEXT);
 		fields.add(field);
 		field = new TableFieldDTO(DATUM_PRIMENE, false, false, false, false, "", DataTypes.DATE);
 		fields.add(field);
@@ -131,7 +130,6 @@ public class CenovnikTransformer implements ITransformer{
 		
 		table.setFields(fields);
 	}
-
 
 	private ArrayList<Cenovnik> castList(ArrayList<Object> entities) {
 		ArrayList<Cenovnik> menus = new ArrayList<Cenovnik>();
