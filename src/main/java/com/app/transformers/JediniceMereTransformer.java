@@ -58,6 +58,17 @@ public class JediniceMereTransformer implements ITransformer {
 		return jedinica;	
 	}
 	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new JediniceMere());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+	
 	private void fillData(TableDTO table, ArrayList<JediniceMere> c) {
 		for (JediniceMere cenovnik : c) {
 			fillData(table, cenovnik);

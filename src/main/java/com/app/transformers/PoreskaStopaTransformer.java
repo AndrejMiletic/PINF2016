@@ -70,6 +70,17 @@ private final String DATUM_VAZENJA = "Datum važenja";
 		return stopa;	
 	}
 	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new PoreskaStopa());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+	
 	private void fillData(TableDTO table, ArrayList<PoreskaStopa> c) {
 		for (PoreskaStopa stopa : c) {
 			fillData(table, stopa);

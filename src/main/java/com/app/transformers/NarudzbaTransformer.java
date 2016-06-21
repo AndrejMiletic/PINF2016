@@ -92,6 +92,17 @@ public class NarudzbaTransformer implements ITransformer {
 		return narudzba;	
 	}
 	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new Narudzba());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+	
 	private void fillData(TableDTO table, ArrayList<Narudzba> c) {
 		for (Narudzba artikal : c) {
 			fillData(table, artikal);

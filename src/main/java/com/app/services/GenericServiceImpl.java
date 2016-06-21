@@ -125,6 +125,21 @@ public class GenericServiceImpl implements IGenericService{
 		return tables;
 	}
 	
+
+	@Override
+	public TableDTO getMetaData(String tableCode) {
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			TableDTO metaData = new TableDTO();
+			ITransformer transformer = getTransformer(tableName);
+			metaData = transformer.getMetaData();
+			return metaData;
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	
 	private HashMap<String, Object> getFKs(TableRowDTO row) {
 		HashMap<String, Object> fks = new HashMap<String, Object>();
 		ArrayList<String> tableNames = TableNames.getAllTableNames();
@@ -236,5 +251,5 @@ public class GenericServiceImpl implements IGenericService{
 	
 	@Autowired
 	private IStavkeNarudzbeRepository stavkeNarudzbeRepo;
-	
+
 }

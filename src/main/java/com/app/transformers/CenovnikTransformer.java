@@ -68,6 +68,17 @@ public class CenovnikTransformer implements ITransformer{
 		return c;
 	}
 	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new Cenovnik());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+	
 	private void fillData(TableDTO table, ArrayList<Cenovnik> c) {
 		for (Cenovnik cenovnik : c) {
 			fillData(table, cenovnik);

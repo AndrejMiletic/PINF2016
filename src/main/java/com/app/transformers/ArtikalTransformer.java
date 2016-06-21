@@ -26,7 +26,8 @@ private final String SIFRA_ARTIKLA = "Šifra artikla";
 		
 		fillMetaData(table, c);
 		
-		table.setRows(new ArrayList<TableRowDTO>());		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
 		fillData(table, c);
 		
 		return table;	
@@ -40,6 +41,7 @@ private final String SIFRA_ARTIKLA = "Šifra artikla";
 		fillMetaData(table, c.get(0));
 			
 		table.setRows(new ArrayList<TableRowDTO>());
+		
 		fillData(table, c);
 		
 		return table;	
@@ -63,6 +65,17 @@ private final String SIFRA_ARTIKLA = "Šifra artikla";
 		}
 		
 		return artikal;	
+	}
+	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new KatalogRobeIUsluga());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
 	}
 	
 	private void fillData(TableDTO table, ArrayList<KatalogRobeIUsluga> c) {

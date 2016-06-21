@@ -65,6 +65,17 @@ public class GrupaProizvodaTransformer implements ITransformer {
 		return gp;
 	}
 	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new GrupaProizvoda());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+	
 	private void fillData(TableDTO table, ArrayList<GrupaProizvoda> c) {
 		for (GrupaProizvoda grupa : c) {
 			fillData(table, grupa);

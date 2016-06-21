@@ -26,4 +26,10 @@ public class PoslovniPartnerTransformer implements ITransformer {
 		return null;
 	}
 
+	@Override
+	public TableDTO getMetaData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -87,6 +87,19 @@ public class TableController {
 		return new ResponseEntity<Object>(crudService.getEditableTables(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(path = "/getMetaData/{tableCode}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getMetaData(@PathVariable String tableCode) {		
+		TableDTO result = crudService.getMetaData(tableCode);
+		
+		if(result == null) {
+			return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
+	}
+	
+	
+	
 	
 	
 	

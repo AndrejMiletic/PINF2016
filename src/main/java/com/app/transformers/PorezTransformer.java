@@ -7,9 +7,9 @@ import java.util.LinkedHashMap;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
-import com.app.constants.AppConstants.DataTypes;
 import com.app.helpers.ConversionHelper;
 import com.app.model.Porez;
 
@@ -58,6 +58,17 @@ private final String VAZI = "Važi";
 		}
 		
 		return porez;	
+	}
+	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new Porez());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
 	}
 	
 	private void fillData(TableDTO table, ArrayList<Porez> c) {
