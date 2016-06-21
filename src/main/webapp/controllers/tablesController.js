@@ -14,6 +14,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 	init();
 
+	$scope.open = function() {
+		$scope.popup1.opened = true;
+	}
+	
 	$scope.showTable = function () {
         $scope.closeForeignKeyForm();
 		$scope.currentRow = undefined;
