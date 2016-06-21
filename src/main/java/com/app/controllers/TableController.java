@@ -105,13 +105,15 @@ public class TableController {
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<String>> getAllUsers() {
-		ArrayList<TableDTO> tables = getMockData();
+//		ArrayList<TableDTO> tables = getMockData();
 		ArrayList<String> names = new ArrayList<String>();
-		for (TableDTO table : tables) {
-			if (!names.contains(table.getTableName()) && ((table.isDocumentPattern() && !(table.getDocumentChildName() == null))
-					|| (!table.isDocumentPattern())))
-				names.add(table.getTableName());
-		}
+//		for (TableDTO table : tables) {
+//			if (!names.contains(table.getTableName()) && ((table.isDocumentPattern() && !(table.getDocumentChildName() == null))
+//					|| (!table.isDocumentPattern())))
+//				names.add(table.getTableName());
+//		}
+		names.add("Cenovnik");
+		names.add("Faktura_otpremnica");
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
 	

@@ -21,3 +21,11 @@
 div, h{
 	color: #337ab7;
 }
+
+.currentRow{
+	height: 30pt;
+}
+
+.buttons{
+	margin-bottom: 20px;
+}
