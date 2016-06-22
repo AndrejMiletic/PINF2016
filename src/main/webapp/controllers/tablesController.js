@@ -72,6 +72,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     		tableService.getByNameFiltered(parentTable, childTable, parentId).then(
     			function (response){
     				$scope.filteredNextTable = response.data;
+    				document.getElementById('idNext').style.display='block'
     			},
     			function (response){
     				alert("Doslo je do greske");
