@@ -20,7 +20,7 @@
     	</header>
     	<div class="w3-container">
 			<div class="form-inline">
-				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="removeTableNext()" class="btn btn-primary centered">
+				<button onclick="document.getElementById('idNext').style.display='none'" ng-click="removeTableNext()" class="btn btn-primary centered">
 					Ukloni tabelu
 				</button>
 			</div>
@@ -180,7 +180,7 @@
 				</table>
 				<label>Selektovan red: {{selectedForeignKey}}</label>
 				<br/><br/>
-				<button ng-click="addForeignKey()" class="btn btn-success">
+				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="addForeignKey()" class="btn btn-success">
 						<span class="glyphicon glyphicon-ok"></span> Dodaj
 				</button>
 				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="closeForeignKeyForm()" class="btn btn-danger">
