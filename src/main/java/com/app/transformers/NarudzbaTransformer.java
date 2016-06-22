@@ -120,10 +120,14 @@ public class NarudzbaTransformer implements ITransformer {
 		
 		if(c.getNacinOtpreme() != null) {
 			fields.put(NACIN_OTPREME, c.getNacinOtpreme());
+		} else {
+			fields.put(NACIN_OTPREME, "");
 		}
 		
 		if(c.getNacinPlacanja() != null) {
 			fields.put(NACIN_PLACANJA, c.getNacinPlacanja());
+		} else {
+			fields.put(NACIN_PLACANJA, "");
 		}
 		
 		fields.put(STATUS_NARUDZBE, c.getStatusNarudzbe());
@@ -136,7 +140,13 @@ public class NarudzbaTransformer implements ITransformer {
 			fields.put(TableNames.POSLOVNI_PARTNER, c.getPoslovniPartner().getIdPartnerstva());
 			//uzima naziv preduzeca koji je partner
 			fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getNaziv());
+		} else {
+			//uzima ID preduzeca koji je partner
+			fields.put(TableNames.POSLOVNI_PARTNER, "");
+			//uzima naziv preduzeca koji je partner
+			fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, "");
 		}
+		
 		row.setFields(fields);
 		row.setTableName(TableNames.NARUDZBA);
 		row.setTableCode(ConversionHelper.getTableCode(TableNames.NARUDZBA));
@@ -176,10 +186,16 @@ public class NarudzbaTransformer implements ITransformer {
 		field = new TableFieldDTO(ROK_ISPORUKE, false, false, false, false, "", DataTypes.DATE);
 		fields.add(field);
 		field = new TableFieldDTO(NACIN_OTPREME, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(30);
 		fields.add(field);
 		field = new TableFieldDTO(NACIN_PLACANJA, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(30);
 		fields.add(field);
 		field = new TableFieldDTO(STATUS_NARUDZBE, false, false, false, false, "", DataTypes.CHAR);
+		field.addEnumValue("E");
+		field.addEnumValue("P");
+		field.addEnumValue("S");
+		field.setMaxLength(1);
 		fields.add(field);
 		
 		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, true, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
@@ -190,6 +206,7 @@ public class NarudzbaTransformer implements ITransformer {
 		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, true, true, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POSLOVNI_PARTNER_LOOKUP, false, true, false, true, TableNames.POSLOVNI_PARTNER, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);

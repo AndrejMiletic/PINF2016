@@ -132,6 +132,7 @@ private final String DATUM_VAZENJA = "Datum važenja";
 		field = new TableFieldDTO(TableNames.POREZ, false, false, true, false, TableNames.POREZ, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POREZ_LOOKUP, false, false, false, true, TableNames.POREZ, DataTypes.TEXT);
+		field.setMaxLength(120);
 		fields.add(field);
 		
 		table.setFields(fields);

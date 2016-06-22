@@ -114,8 +114,10 @@ public class JediniceMereTransformer implements ITransformer {
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.JEDINICA_MERE_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(OZNAKA_JEDINCE, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(3);
 		fields.add(field);
 		
 		table.setFields(fields);

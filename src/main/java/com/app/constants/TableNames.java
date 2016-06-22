@@ -48,7 +48,7 @@ public class TableNames {
 		ArrayList<String> names = new ArrayList<String>();
 		
 		names.add(CENOVNIK);
-		//names.add(FAKTURA_OTPREMNICA);
+		names.add(FAKTURA_OTPREMNICA);
 		names.add(GRUPA_PROIZVODA);
 		names.add(JEDINICE_MERE);
 		names.add(KATALOG_ROBE_I_USLUGA);

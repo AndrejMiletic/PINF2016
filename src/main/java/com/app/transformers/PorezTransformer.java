@@ -116,6 +116,7 @@ private final String VAZI = "Važi";
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POREZ_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(120);
 		fields.add(field);
 		field = new TableFieldDTO(VAZI, false, false, false, false, "", DataTypes.BOOLEAN);
 		fields.add(field);

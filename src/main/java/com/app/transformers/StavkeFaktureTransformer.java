@@ -146,19 +146,20 @@ public class StavkeFaktureTransformer implements ITransformer {
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.FAKTURA_OTPREMNICA, false, false, true, false, TableNames.FAKTURA_OTPREMNICA, DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, false, false, false, true, TableNames.FAKTURA_OTPREMNICA, DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, false, false, false, true, TableNames.FAKTURA_OTPREMNICA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.KATALOG_ROBE_I_USLUGA, false, false, true, false, TableNames.KATALOG_ROBE_I_USLUGA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.KATALOG_ROBE_I_USLUGA_LOOKUP, false, false, false, true, TableNames.KATALOG_ROBE_I_USLUGA, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
-		field = new TableFieldDTO("Količina", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Količina", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Rabat", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Rabat", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Osnovica pdv", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Osnovica pdv", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Jedinična cena stavke", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Jedinična cena stavke", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		
 		table.setFields(fields);

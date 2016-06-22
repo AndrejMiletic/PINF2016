@@ -20,23 +20,23 @@ import com.app.model.PoslovniPartner;
 
 public class FakturaTransformer implements ITransformer{
 
-	private final String TIP_FAKTURE = "Šifra artikla";
-	private final String DATUM_FAKTURE = "Šifra artikla";
-	private final String DATUM_VALUTE = "Šifra artikla";
-	private final String DATUM_OBRACUNA = "Šifra artikla";
-	private final String UKUPNO = "Šifra artikla";
-	private final String RABAT = "Šifra artikla";
-	private final String POREZ = "Šifra artikla";
-	private final String IZNOS = "Šifra artikla";
-	private final String TEKUCI_RACUN = "Šifra artikla";
-	private final String POZIV_NA_BROJ = "Šifra artikla";
-	private final String STATUS = "Šifra artikla";
-	private final String DODATNE_NAPOMENE = "Šifra artikla";
-	private final String ADRESA_ISPORUKE = "Šifra artikla";
-	private final String BROJ_KAMIONA = "Šifra artikla";
-	private final String PREVOZNIK = "Šifra artikla";
-	private final String IZDAO = "Šifra artikla";
-	private final String PREUZEO = "Šifra artikla";
+	private final String TIP_FAKTURE = "Tip";
+	private final String DATUM_FAKTURE = "Datum fakture";
+	private final String DATUM_VALUTE = "Datum valute";
+	private final String DATUM_OBRACUNA = "Datum obračuna";
+	private final String UKUPNO = "Ukupno";
+	private final String RABAT = "Rabat";
+	private final String POREZ = "Porez";
+	private final String IZNOS = "Iznos";
+	private final String TEKUCI_RACUN = "Tekući račun";
+	private final String POZIV_NA_BROJ = "Poziv na broj";
+	private final String STATUS = "Status";
+	private final String DODATNE_NAPOMENE = "Dodatne napomene";
+	private final String ADRESA_ISPORUKE = "Adresa isporuke";
+	private final String BROJ_KAMIONA = "Broj kamiona";
+	private final String PREVOZNIK = "Prevoznik";
+	private final String IZDAO = "Izdao robu";
+	private final String PREUZEO = "Preuzeo robu";
 	
 	@Override
 	public TableDTO transformToDTO(Object entity) {
@@ -88,12 +88,7 @@ public class FakturaTransformer implements ITransformer{
 		if(rows.get(DATUM_OBRACUNA) != null) {
 			datum = ConversionHelper.convertToDate(rows.get(DATUM_OBRACUNA).toString());
 			faktura.setFaDatumValute(datum);
-		}
-		
-		faktura.setFaUkupno(new BigDecimal(0));
-		faktura.setFaRabat(new BigDecimal(0));
-		faktura.setFaPorez(new BigDecimal(0));
-		faktura.setFaIznos(new BigDecimal(0));
+		}		
 		
 		faktura.setFaTekracun(rows.get(TEKUCI_RACUN).toString());
 		
@@ -134,6 +129,17 @@ public class FakturaTransformer implements ITransformer{
 		if(rows.containsKey(FieldNames.PRIMARY_KEY)) {
 			id = Long.parseLong(rows.get(FieldNames.PRIMARY_KEY).toString());
 			faktura.setIdFaktureOtpremnice(id);
+			//ako ima PK, onda je update => ostaviti vec izracunate vrednosti
+			faktura.setFaUkupno(new BigDecimal(rows.get(UKUPNO).toString()));
+			faktura.setFaRabat(new BigDecimal(rows.get(RABAT).toString()));
+			faktura.setFaPorez(new BigDecimal(rows.get(POREZ).toString()));
+			faktura.setFaIznos(new BigDecimal(rows.get(IZNOS).toString()));
+		} else {
+			//ako nema PK, onda je create => staviti nule
+			faktura.setFaUkupno(new BigDecimal(0));
+			faktura.setFaRabat(new BigDecimal(0));
+			faktura.setFaPorez(new BigDecimal(0));
+			faktura.setFaIznos(new BigDecimal(0));
 		}
 		
 		return faktura;	
@@ -159,37 +165,103 @@ public class FakturaTransformer implements ITransformer{
 	private void fillData(TableDTO table, FakturaOtpremnica c) {
 		TableRowDTO row = new TableRowDTO();
 		LinkedHashMap<String, Object> fields = new LinkedHashMap<String, Object>(); 
-		/*
-		fields.put(FieldNames.PRIMARY_KEY, c.getIdArtikla());				
-		fields.put(FieldNames.KATALOG_ROBE_I_USLUGA_LOOKUP, c.getNazivArtikla());
-		fields.put(SIFRA_ARTIKLA, c.getSifraArtikla());		
+		
+		fields.put(FieldNames.PRIMARY_KEY, c.getIdFaktureOtpremnice());				
+		fields.put(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, c.getFaBroj());
+		fields.put(TIP_FAKTURE, c.getFaTip());
+		fields.put(DATUM_FAKTURE, c.getFaDatum());		
+		fields.put(DATUM_VALUTE, c.getFaDatumValute());
+		
+		if(c.getDatumObracuna() != null) {
+			fields.put(DATUM_OBRACUNA, c.getDatumObracuna());
+		} else {
+			fields.put(DATUM_OBRACUNA, "");
+		}
+		
+		fields.put(UKUPNO, c.getFaUkupno());
+		fields.put(RABAT, c.getFaRabat());
+		fields.put(POREZ, c.getFaPorez());
+		fields.put(IZNOS, c.getFaIznos());
+		fields.put(TEKUCI_RACUN, c.getFaTekracun());
+		
+		if(c.getFaPoziv() != null) {
+			fields.put(POZIV_NA_BROJ, c.getFaPoziv());
+		} else {
+			fields.put(POZIV_NA_BROJ, "");
+		}
+		
+		fields.put(STATUS, c.getStatusFakture());
+		
+		if(c.getDodatneNapomene() != null) {
+			fields.put(DODATNE_NAPOMENE, c.getDodatneNapomene());
+		} else {
+			fields.put(DODATNE_NAPOMENE, "");
+		}
+		
+		if(c.getAdresaIsporuke() != null) {
+			fields.put(ADRESA_ISPORUKE, c.getAdresaIsporuke());
+		} else {
+			fields.put(ADRESA_ISPORUKE, "");
+		}
+		
+		if(c.getBrojKamiona() != null) {
+			fields.put(BROJ_KAMIONA, c.getBrojKamiona());
+		} else {
+			fields.put(BROJ_KAMIONA, "");
+		}
+		
+		if(c.getPrevoznik() != null) {
+			fields.put(PREVOZNIK, c.getPrevoznik());
+		} else {
+			fields.put(PREVOZNIK, "");
+		}
+		
+		if(c.getRobuIRacunIzdao() != null) {
+			fields.put(IZDAO, c.getRobuIRacunIzdao());
+		} else {
+			fields.put(IZDAO, "");
+		}
+		
+		if(c.getRobuIRacunPreuzeo() != null) {
+			fields.put(PREUZEO, c.getRobuIRacunPreuzeo());
+		} else {
+			fields.put(PREUZEO, "");
+		}
+		
+		
+		if(c.getNarudzba() != null) {
+			fields.put(TableNames.NARUDZBA, c.getNarudzba().getIdNarudzbe());
+			fields.put(FieldNames.NARUDZBA_LOOKUP, c.getNarudzba().getBrojNarudzbe());
+		} else {
+			fields.put(TableNames.NARUDZBA, "");
+			fields.put(FieldNames.NARUDZBA_LOOKUP, "");
+		}
 
-		fields.put(TableNames.GRUPA_PROIZVODA, c.getGrupaProizvoda().getIdGrupe());
-		fields.put(FieldNames.GRUPA_PROIZVODA_LOOKUP, c.getGrupaProizvoda().getNazivGrupe());		
-
-		fields.put(TableNames.JEDINICE_MERE, c.getJediniceMere().getIdJediniceMere());
-		fields.put(FieldNames.JEDINICA_MERE_LOOKUP, c.getJediniceMere().getNazivJediniceMere());
-		*/
+		fields.put(TableNames.POSLOVNA_GODINA, c.getPoslovnaGodina().getIdPoslovneGodine());
+		fields.put(FieldNames.POSLOVNA_GODINA_LOOKUP, c.getPoslovnaGodina().getPgGodina2());
+		
+		fields.put(TableNames.POSLOVNI_PARTNER, c.getPoslovniPartner().getIdPartnerstva());
+		fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getIdPreduzeca());
+		
 		row.setFields(fields);
-		row.setTableName(TableNames.KATALOG_ROBE_I_USLUGA);
-		row.setTableCode(ConversionHelper.getTableCode(TableNames.KATALOG_ROBE_I_USLUGA));
+		row.setTableName(TableNames.FAKTURA_OTPREMNICA);
+		row.setTableCode(ConversionHelper.getTableCode(TableNames.FAKTURA_OTPREMNICA));
 		table.getRows().add(row);				
 	}
 	
 	private void fillMetaData(TableDTO table, FakturaOtpremnica jedinica) {
 		ArrayList<String> children = new ArrayList<String>();
 		children.add(TableNames.STAVKE_FAKTURE_OTPREMNICE);
-		children.add(TableNames.STAVKE_NARUDZBE);
-		children.add(TableNames.STAVKE_CENOVNIKA);
 		
 		ArrayList<String> parents = new ArrayList<String>();
-		parents.add(TableNames.JEDINICE_MERE);
-		parents.add(TableNames.GRUPA_PROIZVODA);
+		parents.add(TableNames.NARUDZBA);
+		parents.add(TableNames.POSLOVNA_GODINA);
+		parents.add(TableNames.POSLOVNI_PARTNER);
 				
-		table.setTableName(TableNames.KATALOG_ROBE_I_USLUGA);
-		table.setTableCode(ConversionHelper.getTableCode(TableNames.KATALOG_ROBE_I_USLUGA));
-		table.setDocumentPattern(false);
-		table.setDocumentChildName("");		
+		table.setTableName(TableNames.FAKTURA_OTPREMNICA);
+		table.setTableCode(ConversionHelper.getTableCode(TableNames.FAKTURA_OTPREMNICA));
+		table.setDocumentPattern(true);
+		table.setDocumentChildName(TableNames.STAVKE_FAKTURE_OTPREMNICE);		
 		table.setChildren(children);
 		table.setParents(parents);
 		
@@ -203,19 +275,77 @@ public class FakturaTransformer implements ITransformer{
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.KATALOG_ROBE_I_USLUGA_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		//field = new TableFieldDTO(SIFRA_ARTIKLA, false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO(TIP_FAKTURE, false, false, false, false, "", DataTypes.CHAR);
+		field.addEnumValue("P");
+		field.addEnumValue("R");
+		fields.add(field);
+		field = new TableFieldDTO(DATUM_FAKTURE, false, false, false, false, "", DataTypes.DATE);
+		fields.add(field);
+		field = new TableFieldDTO(DATUM_VALUTE, false, false, false, false, "", DataTypes.DATE);
+		fields.add(field);
+		field = new TableFieldDTO(DATUM_OBRACUNA, false, true, false, false, "", DataTypes.DATE);
+		fields.add(field);
+		field = new TableFieldDTO(UKUPNO, false, false, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);
+		fields.add(field);
+		field = new TableFieldDTO(RABAT, false, true, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);
+		fields.add(field);
+		field = new TableFieldDTO(POREZ, false, false, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);
+		fields.add(field);
+		field = new TableFieldDTO(IZNOS, false, false, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);
+		fields.add(field);
+		field = new TableFieldDTO(TEKUCI_RACUN, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(50);
+		fields.add(field);
+		field = new TableFieldDTO(POZIV_NA_BROJ, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(50);
+		fields.add(field);
+		field = new TableFieldDTO(STATUS, false, false, false, false, "", DataTypes.CHAR);
+		field.addEnumValue("E");
+		field.addEnumValue("O");
+		field.addEnumValue("P");
+		field.addEnumValue("S");
+		field.setMaxLength(1);
+		fields.add(field);
+		field = new TableFieldDTO(DODATNE_NAPOMENE, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(200);
+		fields.add(field);
+		field = new TableFieldDTO(ADRESA_ISPORUKE, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(50);
+		fields.add(field);
+		field = new TableFieldDTO(BROJ_KAMIONA, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(10);
+		fields.add(field);
+		field = new TableFieldDTO(PREVOZNIK, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(50);
+		fields.add(field);
+		field = new TableFieldDTO(IZDAO, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(30);
+		fields.add(field);
+		field = new TableFieldDTO(PREUZEO, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(30);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.JEDINICE_MERE, false, false, false, false, TableNames.JEDINICE_MERE, DataTypes.NUMBER);
+		
+		field = new TableFieldDTO(TableNames.NARUDZBA, false, true, false, false, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.JEDINICA_MERE_LOOKUP, false, false, false, true, TableNames.JEDINICE_MERE, DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.NARUDZBA_LOOKUP, false, true, false, true, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.GRUPA_PROIZVODA, false, false, false, false, TableNames.GRUPA_PROIZVODA, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, false, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.GRUPA_PROIZVODA_LOOKUP, false, false, false, true, TableNames.GRUPA_PROIZVODA, DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.POSLOVNA_GODINA_LOOKUP, false, false, false, true, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
+		fields.add(field);
+		
+		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, false, false, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
+		fields.add(field);
+		field = new TableFieldDTO(FieldNames.POSLOVNI_PARTNER_LOOKUP, false, false, false, true, TableNames.POSLOVNI_PARTNER, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);
