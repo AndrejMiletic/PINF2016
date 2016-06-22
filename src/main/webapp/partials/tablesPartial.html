@@ -14,41 +14,39 @@
 		</div>
 	</div>
 	<br/><br/>
-	<div ng-show="filteredNextTable">
-		<div class="form-inline">
-			<button ng-click="generateCreateFormNext()" class="btn btn-success centered">
-				<span class="glyphicon glyphicon-plus"></span> Dodaj novi red
-			</button>
-			<button ng-click="removeTableNext()" class="btn btn-primary centered">
-				Ukloni tabelu
-			</button>
+	<div id="idNext" class="w3-modal">
+		<header class="w3-container w3-teal">
+      		<h2>{{filteredNextTable.tableName}}</h2>
+    	</header>
+    	<div class="w3-container">
+			<div class="form-inline">
+				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="removeTableNext()" class="btn btn-primary centered">
+					Ukloni tabelu
+				</button>
+			</div>
+			<table class="table table-hover table-bordered">
+				  <thead>
+				    <tr>
+				      <th class="centered" ng-repeat="field in filteredNextTable.fields">{{field.name}}</th>
+							<th class="centered">Operacije</th>
+				    </tr>
+				  </thead>
+				  <tbody class="centered">
+				    <tr ng-repeat="row in filteredNextTable.rows track by $index">
+				      <td ng-repeat="data in row.fields track by $index">{{row.fields[filteredNextTable.fields[$index].name]}}</td>
+							<td>
+								<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
+		          		<span class="glyphicon glyphicon-save"></span> PDF</button>
+		        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
+		          		<span class="glyphicon glyphicon-save"></span> XML</button>
+							</td>
+				    </tr>
+				  </tbody>
+			</table>
 		</div>
-		<table class="table table-hover table-bordered">
-			  <thead>
-			    <tr>
-			      <th class="centered" ng-repeat="field in filteredNextTable.fields">{{field.name}}</th>
-						<th class="centered">Operacije</th>
-			    </tr>
-			  </thead>
-			  <tbody class="centered">
-			    <tr ng-repeat="row in filteredNextTable.rows track by $index">
-			      <td ng-repeat="data in row.fields track by $index">{{row.fields[filteredNextTable.fields[$index].name]}}</td>
-						<td>
-							<button ng-click="generateEditFormNext($index, row, $event)" class="btn btn-warning">
-		          	<span class="glyphicon glyphicon-edit"></span> Uredi
-							</button>
-							<button ng-click="deleteRowNext($index, row, $event)" class="btn btn-danger">
-		          	<span class="glyphicon glyphicon-trash"></span> Obriši
-							</button>
-							<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
-	          		<span class="glyphicon glyphicon-save"></span> PDF</button>
-	        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
-	          		<span class="glyphicon glyphicon-save"></span> XML</button>
-						</td>
-			    </tr>
-			  </tbody>
-		</table>
 	</div>
+	
+	
 	<br/><br/>
 	<div ng-show="requestedTable">
 		<div class="form-inline">
@@ -69,7 +67,8 @@
 				</div>
 				<input type = "text" ng-model="idNextTableTop" class="form-control"
 					placeholder="Unesite id reda za next"/>
-				<button type="button" class="btn btn-primary" ng-click="openNextTableTop(requestedTable.tableName, nextTableTop, idNextTableTop)">Prikazi next tabelu</button>
+				<button type="button" class="btn btn-primary" onclick="document.getElementById('idNext').style.display='block'"
+				 ng-click="openNextTableTop(requestedTable.tableName, nextTableTop, idNextTableTop)">Prikazi next tabelu</button>
 			</div>
 		</div>
 		<table class="table table-hover table-bordered">
@@ -142,7 +141,7 @@
 							ng-model="currentRow.fields[field.name]" class="form-control"
 							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>
 						<date-picker ng-if="field.type == 'DATE'" ng-model="currentRow.fields[field.name]"></date-picker>
-						<button ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
+						<button onclick="document.getElementById('idZoom').style.display='block'" ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
 							<span class="glyphicon glyphicon-option-horizontal"></span>
 						</button>
 					</div>
@@ -161,44 +160,48 @@
 	</div>
 	
 		
-	<div ng-if="foreignKeyClicked" >
-		<h3>Izaberite zeljeni red:</h3>
-		<table class="table table-hover table-bordered">
-		  <thead>
-		    <tr>
-		      <th class="centered" ng-repeat="field in foreignTable.fields">{{field.name}}</th>
-		    </tr>
-		  </thead>
-		  <tbody class="centered">
-		    <tr ng-click="openDocumentForeignKey(row.fields.Id)" ng-repeat="row in foreignTable.rows track by $index">
-		      <td ng-repeat="data in row.fields track by $index">{{row.fields[foreignTable.fields[$index].name]}}</td>
-		    </tr>
-		  </tbody>
-		</table>
-		<label>Selektovan red: {{selectedForeignKey}}</label>
-		<br/><br/>
-		<button ng-click="addForeignKey()" class="btn btn-success">
-				<span class="glyphicon glyphicon-ok"></span> Dodaj
-		</button>
-		<button ng-click="closeForeignKeyForm()" class="btn btn-danger">
-			<span class="glyphicon glyphicon-remove"></span> Poništi
-		</button><br/><br/>
+	<div id="idZoom" class="w3-modal" >
+		<div class="w3-modal-content">
+			<header class="w3-container w3-teal">
+      			<h2>Izaberite zeljeni red:</h2>
+    		</header>
+			<div class="w3-container">
+				<table class="table table-hover table-bordered">
+				  <thead>
+				    <tr>
+				      <th class="centered" ng-repeat="field in foreignTable.fields">{{field.name}}</th>
+				    </tr>
+				  </thead>
+				  <tbody class="centered">
+				    <tr ng-click="openDocumentForeignKey(row.fields.Id)" ng-repeat="row in foreignTable.rows track by $index">
+				      <td ng-repeat="data in row.fields track by $index">{{row.fields[foreignTable.fields[$index].name]}}</td>
+				    </tr>
+				  </tbody>
+				</table>
+				<label>Selektovan red: {{selectedForeignKey}}</label>
+				<br/><br/>
+				<button ng-click="addForeignKey()" class="btn btn-success">
+						<span class="glyphicon glyphicon-ok"></span> Dodaj
+				</button>
+				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="closeForeignKeyForm()" class="btn btn-danger">
+					<span class="glyphicon glyphicon-remove"></span> Poništi
+				</button><br/><br/>
+				
 		
-
-		<div ng-if="foreignTable.documentPattern && documentForeignChild && selectedForeignKey">
-			<table class="table table-hover table-bordered">
-			  <thead>
-			    <tr>
-			      <th class="centered" ng-repeat="field in documentForeignChild.fields">{{field.name}}</th>
-			    </tr>
-			  </thead>
-			  <tbody class="centered">
-			    <tr ng-repeat="row in documentForeignChild.rows">
-			      <td ng-repeat="data in row.fields track by $index">{{row.fields[documentForeignChild.fields[$index].name]}}</td>
-			    </tr>
-			  </tbody>
-			</table>
+				<div ng-if="foreignTable.documentPattern && documentForeignChild && selectedForeignKey">
+					<table class="table table-hover table-bordered">
+					  <thead>
+					    <tr>
+					      <th class="centered" ng-repeat="field in documentForeignChild.fields">{{field.name}}</th>
+					    </tr>
+					  </thead>
+					  <tbody class="centered">
+					    <tr ng-repeat="row in documentForeignChild.rows">
+					      <td ng-repeat="data in row.fields track by $index">{{row.fields[documentForeignChild.fields[$index].name]}}</td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
-	
-</div>
