@@ -179,6 +179,7 @@ public class GenericServiceImpl implements IGenericService{
 			case TableNames.STAVKE_CENOVNIKA: return stavkeCenovnikaRepo;
 			case TableNames.STAVKE_FAKTURE_OTPREMNICE: return stavkeFaktureRepo;
 			case TableNames.STAVKE_NARUDZBE: return stavkeNarudzbeRepo;
+			case TableNames.PARTNER: return preduzeceRepo;
 		}
 		
 		return null;
