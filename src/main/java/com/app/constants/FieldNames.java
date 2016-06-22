@@ -39,6 +39,6 @@ public interface FieldNames {
 	public static final String PREDUZECE_LOOKUP_PREDUZECE = "Naziv preduzeća";
 	
 	public static final String SIFRA_DELATNOSTI_ID = "Id šifre delatnosti";
-	public static final String SIFRA_DELATNOSTI_LOOKUP = "Naziv šifre delatnosti";
+	public static final String SIFRA_DELATNOSTI_LOOKUP = "Naziv delatnosti";
 
 }

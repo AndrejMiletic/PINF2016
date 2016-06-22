@@ -96,11 +96,13 @@ public class PoslovnaGodinaTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(TableNames.PREDUZECE, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
-		fields.add(field);
 		field = new TableFieldDTO(GODINA, false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(ZAKLJUČENA, false, false, false, false, "", DataTypes.BOOLEAN);
+		fields.add(field);
+		field = new TableFieldDTO(TableNames.PREDUZECE, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
+		fields.add(field);
+		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
 		fields.add(field);
 		
 		table.setFields(fields);

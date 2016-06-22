@@ -48,7 +48,7 @@ public class SifraDelatnostiTransformer implements ITransformer {
 		Long id;		
 			
 		sd.setOznakaSifreDelatnosti(rows.get("Oznaka šifre delatnosti").toString());
-		sd.setNazivSifreDelatnosti(rows.get("Naziv šifre delatnosti").toString());
+		sd.setNazivSifreDelatnosti(rows.get("Naziv delatnosti").toString());
 		
 		if(rows.containsKey(FieldNames.PRIMARY_KEY)) {
 			id = Long.parseLong(rows.get(FieldNames.PRIMARY_KEY).toString());
@@ -82,7 +82,7 @@ public class SifraDelatnostiTransformer implements ITransformer {
 		fields.put(FieldNames.PRIMARY_KEY, sd.getIdSifreDelatnosti());
 						
 		fields.put("Oznaka šifre delatnosti", sd.getOznakaSifreDelatnosti());
-		fields.put("Naziv šifre delatnosti", sd.getNazivSifreDelatnosti());
+		fields.put("Naziv delatnosti", sd.getNazivSifreDelatnosti());
 		
 		row.setFields(fields);
 		row.setTableName(TableNames.SIFRA_DELATNOSTI);
@@ -110,7 +110,7 @@ public class SifraDelatnostiTransformer implements ITransformer {
 		fields.add(field);
 		field = new TableFieldDTO("Oznaka šifre delatnosti", false, false, false, false, "", DataTypes.TEXT);
 		fields.add(field);
-		field = new TableFieldDTO("Naziv šifre delatnosti", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Naziv delatnosti", false, false, false, false, "", DataTypes.TEXT);
 		fields.add(field);
 		
 		table.setFields(fields);

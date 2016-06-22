@@ -96,7 +96,11 @@ public class PreduzeceTransformer implements ITransformer {
 		LinkedHashMap<String, Object> fields = new LinkedHashMap<String, Object>(); 
 		
 		fields.put("Id", p.getIdPreduzeca());
-				
+			
+		fields.put("Naziv",p.getNaziv());
+		fields.put("PIB", p.getPib());
+		fields.put("Matični broj", p.getMaticniBroj());
+		
 		if(p.getAdresa() == null ||p.getAdresa().equals("")) {
 			fields.put("Adresa", "Nije uneta adresa");
 		} else {
@@ -110,15 +114,15 @@ public class PreduzeceTransformer implements ITransformer {
 		if(p.getEmail() == null ||p.getEmail().equals("")) {
 			fields.put("Email", "Nije unet email");
 		} else {
-			fields.put("Emal", p.getEmail());
+			fields.put("Email", p.getEmail());
 		}
 		if(p.getBanka() == null ||p.getBanka().equals("")) {
 			fields.put("Banka", "Nije uneta banka");
 		} else {
 			fields.put("Banka", p.getBanka());
-		}
-		
+		}		
 		fields.put("Tekući račun", p.getTekuciRacun());
+		
 		fields.put(TableNames.SIFRA_DELATNOSTI, p.getSifraDelatnosti().getIdSifreDelatnosti());
 		fields.put(FieldNames.SIFRA_DELATNOSTI_LOOKUP, p.getSifraDelatnosti().getNazivSifreDelatnosti());
 		
@@ -153,8 +157,6 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(TableNames.SIFRA_DELATNOSTI, false, false, true, false, TableNames.SIFRA_DELATNOSTI, DataTypes.NUMBER);
-		fields.add(field);
 		field = new TableFieldDTO("Naziv", false, true, false, false, "", DataTypes.TEXT);
 		fields.add(field);
 		field = new TableFieldDTO("PIB", false, false, false, false, "", DataTypes.TEXT);
@@ -170,6 +172,8 @@ public class PreduzeceTransformer implements ITransformer {
 		field = new TableFieldDTO("Banka", false, false, false, false, "", DataTypes.TEXT);
 		fields.add(field);
 		field = new TableFieldDTO("Tekući račun", false, false, false, false, "", DataTypes.TEXT);
+		fields.add(field);
+		field = new TableFieldDTO(TableNames.SIFRA_DELATNOSTI, false, false, true, false, TableNames.SIFRA_DELATNOSTI, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.SIFRA_DELATNOSTI_LOOKUP, false, false, false, true, TableNames.SIFRA_DELATNOSTI, DataTypes.TEXT);
 		fields.add(field);
