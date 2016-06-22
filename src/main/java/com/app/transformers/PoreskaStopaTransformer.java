@@ -51,11 +51,9 @@ private final String DATUM_VAZENJA = "Datum važenja";
 		PoreskaStopa stopa = new PoreskaStopa();
 		HashMap<String, Object> rows = row.getFields();
 		Long id;
-		int broj;
 		Date datumVazenja;
 		
-		broj = Integer.parseInt(rows.get(FieldNames.PORESKA_STOPA_LOOKUP).toString());
-		stopa.setIznosStope(new BigDecimal(broj));
+		stopa.setIznosStope(new BigDecimal(rows.get(FieldNames.PORESKA_STOPA_LOOKUP).toString()));
 		
 		datumVazenja = ConversionHelper.convertToDate(rows.get(DATUM_VAZENJA).toString());
 		stopa.setDatumVazenja(datumVazenja);

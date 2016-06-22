@@ -182,12 +182,12 @@ public class NarudzbaTransformer implements ITransformer {
 		field = new TableFieldDTO(STATUS_NARUDZBE, false, false, false, false, "", DataTypes.CHAR);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, false, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, true, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POSLOVNA_GODINA_LOOKUP, false, false, false, true, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, true, false, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, true, true, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POSLOVNI_PARTNER_LOOKUP, false, true, false, true, TableNames.POSLOVNI_PARTNER, DataTypes.TEXT);
 		fields.add(field);

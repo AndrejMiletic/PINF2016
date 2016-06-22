@@ -12,6 +12,8 @@ public class TableFieldDTO {
 	private String fkTableName;
 	private DataTypes type;
 	
+	private boolean calculated;
+	
 	public TableFieldDTO() {
 		super();
 	}
@@ -24,6 +26,7 @@ public class TableFieldDTO {
 		this.fkTableName = fkTableName;
 		this.lookup = lookup;
 		this.pk = pk;
+		this.calculated = false;
 	}
 	public String getName() {
 		return name;
@@ -66,5 +69,11 @@ public class TableFieldDTO {
 	}
 	public void setPk(boolean pk) {
 		this.pk = pk;
+	}
+	public boolean isCalculated() {
+		return calculated;
+	}
+	public void setCalculated(boolean calculated) {
+		this.calculated = calculated;
 	}
 }
