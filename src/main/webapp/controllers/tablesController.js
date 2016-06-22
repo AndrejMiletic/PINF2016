@@ -5,6 +5,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		tableService.getAll().then(
 			function (response) {
 				$scope.allTableNames = response.data;
+				console.log(response)
 			},
 			function (response) {
 				alert("Greska");
@@ -27,14 +28,21 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
             $scope.documentChild = {};
             $scope.filteredNextTable = undefined;
             $scope.showNextSelect = false;
-            tableService.getTableByName($scope.selectedTable).then(
+            var tableCode;
+            angular.forEach($scope.allTableNames, function(value, key){
+                if(value == $scope.selectedTable)
+                   tableCode = key;
+             });
+            tableService.getTableByName(tableCode).then(
                 function (response) {
                     $scope.requestedTable = response.data;
                     $scope.fieldNames = [];
-                    var temp = response.data.rows[0].fields
-                    angular.forEach(temp, function(key, value){
-                    	$scope.fieldNames.push(value);
-                    })
+                    if (response.data.rows[0] !== undefined){
+	                    var temp = response.data.rows[0].fields
+	                    angular.forEach(temp, function(key, value){
+	                    	$scope.fieldNames.push(value);
+	                    })
+                	}
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");
