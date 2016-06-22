@@ -43,6 +43,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	                    	$scope.fieldNames.push(value);
 	                    })
                 	}
+                    console.log($scope.requestedTable);
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");
@@ -107,7 +108,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.deleteRow = function(index, row, event) {
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
-			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
+			tableService.delete($scope.requestedTable.tableName, row.fields.Id).then(
 				function(response) {
 						$scope.documentChild = undefined;
 						$scope.currentRow = undefined;
@@ -194,9 +195,9 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-					$scope.currentRow.fields.id = 100;
+					$scope.currentRow.fields.Id = 100;
 			}
-
+			
 			var row =  angular.copy($scope.currentRow);
 
 			if(tableService.isValid($scope.currentTable, row)) {
@@ -277,7 +278,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.foreignKey = function(field) {
             $scope.documentChild = {};
-            tableService.getTableByName(field.fkTableName).then(
+            
+            var code;
+    		code = field.fkTableName.replace(" ", "_")
+    					.replace("ć", "c")
+    					.replace("ž", "z")
+    					.replace("š", "s");
+
+            tableService.getTableByName(code).then(
                 function (response) {
                 	$scope.foreignTable = response.data;
 			        if($scope.foreignTable){
@@ -290,9 +298,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		            }
                 },
                 function (response) {
-
-                	console.log($scope.requestedTable.tableName);
-                	console.log(id);
                     alert("Neuspesno dobavljanje tabele");
                 }
             );
