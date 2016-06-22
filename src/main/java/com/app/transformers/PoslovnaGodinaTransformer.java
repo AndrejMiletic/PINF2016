@@ -11,6 +11,7 @@ import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
+import com.app.model.Cenovnik;
 import com.app.model.PoslovnaGodina;
 import com.app.model.Preduzece;
 
@@ -133,4 +134,15 @@ public class PoslovnaGodinaTransformer implements ITransformer {
 			fillData(table, godina);
 		}		
 	}
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		fillMetaData(table, new PoslovnaGodina());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
+
 }

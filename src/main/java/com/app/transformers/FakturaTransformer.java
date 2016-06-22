@@ -25,5 +25,16 @@ public class FakturaTransformer implements ITransformer{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public TableDTO getMetaData() {
+		TableDTO table = new TableDTO();
+		
+		//fillMetaData(table, new KatalogRobeIUsluga());
+		
+		table.setRows(new ArrayList<TableRowDTO>());
+		
+		return table;
+	}
 
 }

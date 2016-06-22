@@ -4,8 +4,8 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getAll = function(){
 		return $http.get(url + "/getAll");
 	}
-	this.getTableByName = function(name) {
-		return $http.get(url + "/getByName/" + name);
+	this.getTableByName = function(tableCode) {
+		return $http.get(url + "/getAll/" + tableCode);
 	}
 
     this.getDocChild = function(parentName, parentId){

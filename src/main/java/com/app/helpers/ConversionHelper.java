@@ -31,7 +31,7 @@ public class ConversionHelper {
 		code = name.replace(" ", "_")
 					.replace("ć", "c")
 					.replace("ž", "z")
-					.replace("š", "s");		
+					.replace("š", "s");
 		
 		return code;
 	}

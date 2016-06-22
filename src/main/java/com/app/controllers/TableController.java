@@ -83,18 +83,38 @@ public class TableController {
 		}
 	}
 	
+	@RequestMapping(path = "/getAllNames", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAllEditableTableNames() {		
+		return new ResponseEntity<Object>(crudService.getEditableTables(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/getMetaData/{tableCode}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getMetaData(@PathVariable String tableCode) {		
+		TableDTO result = crudService.getMetaData(tableCode);
+		
+		if(result == null) {
+			return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
+	}
+	
+	
+	
 	
 	
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public ResponseEntity<ArrayList<String>> getAllUsers() {
-		ArrayList<TableDTO> tables = getMockData();
+//		ArrayList<TableDTO> tables = getMockData();
 		ArrayList<String> names = new ArrayList<String>();
-		for (TableDTO table : tables) {
-			if (!names.contains(table.getTableName()) && ((table.isDocumentPattern() && !(table.getDocumentChildName() == null))
-					|| (!table.isDocumentPattern())))
-				names.add(table.getTableName());
-		}
+//		for (TableDTO table : tables) {
+//			if (!names.contains(table.getTableName()) && ((table.isDocumentPattern() && !(table.getDocumentChildName() == null))
+//					|| (!table.isDocumentPattern())))
+//				names.add(table.getTableName());
+//		}
+		names.add("Cenovnik");
+		names.add("Faktura_otpremnica");
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
 	

@@ -43,4 +43,23 @@ public class TableNames {
 		
 		return names;
 	}
+	
+	public static ArrayList<String> getEditableTableNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		
+		names.add(CENOVNIK);
+		//names.add(FAKTURA_OTPREMNICA);
+		names.add(GRUPA_PROIZVODA);
+		names.add(JEDINICE_MERE);
+		names.add(KATALOG_ROBE_I_USLUGA);
+		names.add(NARUDZBA);
+		names.add(PORESKA_STOPA);
+		names.add(POREZ);
+		names.add(POSLOVNA_GODINA);
+		names.add(POSLOVNI_PARTNER);
+		names.add(PREDUZECE);
+		names.add(SIFRA_DELATNOSTI);
+		
+		return names;
+	}
 }

@@ -30,6 +30,8 @@ public interface FieldNames {
 	
 	public static final String POSLOVNA_GODINA_ID = "Id poslovne godine";
 	public static final String POSLOVNA_GODINA_LOOKUP = "Godina poslovanja";
+		
+	public static final String POSLOVNI_PARTNER_LOOKUP = "Naziv partnera";
 	
 	public static final String PREDUZECE_ID = "Id preduzeća";
 	public static final String PREDUZECE_LOOKUP = "Naziv preduzeća";	

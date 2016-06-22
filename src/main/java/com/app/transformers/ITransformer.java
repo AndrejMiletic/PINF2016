@@ -23,6 +23,12 @@ public interface ITransformer {
 	public TableDTO transformToDTO(ArrayList<Object> entities);
 	
 	/**
+	 * Vraca TableDTO sa praznim rows poljem, tj. samo sa meta podacima
+	 * @return meta podaci tabele
+	 */
+	public TableDTO getMetaData();
+	
+	/**
 	 * Transformise TableDTO u niz (od bar jednog) entiteta.
 	 * @param table - apstraktna reprezentacija tabele.
 	 * @return niz entiteta.

@@ -15,8 +15,7 @@ public class TableFieldDTO {
 	public TableFieldDTO() {
 		super();
 	}
-	public TableFieldDTO(String name, boolean pk, boolean nullable, boolean fk, boolean lookup,
-			String fkTableName, DataTypes type) {
+	public TableFieldDTO(String name, boolean pk, boolean nullable, boolean fk, boolean lookup,	String fkTableName, DataTypes type) {
 		super();
 		this.type = type;
 		this.name = name;
