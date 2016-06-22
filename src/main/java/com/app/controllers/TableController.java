@@ -74,7 +74,9 @@ public class TableController {
 	@RequestMapping(path = "/getAll/{tableCode}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {		
 		TableDTO result = crudService.getAll(tableCode);
-		
+		if (result == null){
+			result = crudService.getMetaData(tableCode);	
+		}
 		if(result == null) {
 			return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
 		} else {

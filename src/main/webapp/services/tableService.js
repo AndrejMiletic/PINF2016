@@ -2,7 +2,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	var url = '/table';
 
 	this.getAll = function(){
-		return $http.get(url + "/getAll");
+		return $http.get(url + "/getAllNames");
 	}
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
