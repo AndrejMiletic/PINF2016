@@ -7,35 +7,84 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
 	}
+	
+	this.getTableById=function(tableName,Id){
+		var tableCode;
+		tableCode = tableName.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		return $http.get(url + "/getById/" + tableCode + "/" + Id);
+	}
+
+	this.create = function(parent, entity) {
+		var code;
+		code = parent.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		var payload = {
+			tableName: parent,
+			tableCode: code,
+			fields: entity.fields
+		}
+		return $http.post(url + "/create", payload);
+	}
+	
+	this.edit = function(parent, entity) {
+		var code;
+		code = parent.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		var payload = {
+			tableName: parent,
+			tableCode: code,
+			fields: entity.fields
+		}
+		return $http.put(url + "/update", payload);
+	}
+
+	this.delete = function(tableName, id) {
+		var code;
+		code = tableName.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		return $http.delete(url + "/delete/" + code + "/" + id);
+	}
+
 
     this.getDocChild = function(parentName, parentId){
         return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
     }
 
   	this.getByNameFiltered = function(parentTable, childTable, parentId){
-  		return $http.get(url + "/filterNextTable/" + childTable + "/" + parentTable + "/" + parentId);
+  		
+  		var childTableCode= childTable.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+  		childTableCode=childTableCode.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+  		childTableCode=childTableCode.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+  		var parentTableCode= parentTable.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+  		
+  		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
   	}
   
-	this.create = function(parent, entity) {
-		var payload = {
-			tableName: parent,
-			fields: entity
-		}
-		return $http.post(url + "/addRow", payload);
-	}
-	
-	this.edit = function(parent, entity) {
-		var payload = {
-			tableName: parent,
-			fields: entity
-		}
-		return $http.patch(url + "/editRow", payload);
-	}
-
-	this.delete = function(tableName, id) {
-		return $http.delete(url + "/" + tableName + "/" + id);
-	}
-
 	this.generatePDF = function(id) {
 		return $http.get(url + "/generatePDF/" + id);
 	}
@@ -72,7 +121,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		{
 			angular.forEach(table.fields, function(field, key) {
 				currentValue = row.fields[field.name];
-				if(field.name!=="id") {
+				if(field.name!=="Id") {
 
 					if(!field.nullable) {
 						if(!currentValue) {
