@@ -15,6 +15,7 @@ public class TableNames {
 	public static final String POSLOVNA_GODINA = "Poslovna godina";
 	public static final String POSLOVNI_PARTNER = "Poslovni partner";
 	public static final String PREDUZECE = "Preduzeće";
+	public static final String PARTNER = "Partner";
 	public static final String SIFRA_DELATNOSTI = "Šifra delatnosti";
 	public static final String STAVKE_CENOVNIKA = "Stavke cenovnika";
 	public static final String STAVKE_FAKTURE_OTPREMNICE = "Stavke fakture i otpremnice";
@@ -34,6 +35,7 @@ public class TableNames {
 		names.add(POSLOVNA_GODINA);
 		names.add(POSLOVNI_PARTNER);
 		names.add(PREDUZECE);
+		names.add(PARTNER);
 		names.add(SIFRA_DELATNOSTI);
 		names.add(STAVKE_CENOVNIKA);
 		names.add(STAVKE_FAKTURE_OTPREMNICE);

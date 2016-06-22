@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.DTO.KifDTO;
 import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
+import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
 import com.app.services.IGenericService;
 
