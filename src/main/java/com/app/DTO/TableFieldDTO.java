@@ -1,5 +1,7 @@
 package com.app.DTO;
 
+import java.util.ArrayList;
+
 import com.app.constants.AppConstants.DataTypes;
 
 public class TableFieldDTO {
@@ -11,6 +13,12 @@ public class TableFieldDTO {
 	private boolean lookup;
 	private String fkTableName;
 	private DataTypes type;
+	
+	private boolean calculated;
+	private int maxLength;
+	
+	private boolean enumeration;
+	private ArrayList<String> enumValues;
 	
 	public TableFieldDTO() {
 		super();
@@ -24,6 +32,10 @@ public class TableFieldDTO {
 		this.fkTableName = fkTableName;
 		this.lookup = lookup;
 		this.pk = pk;
+		this.calculated = false;
+		this.maxLength = -1;
+		this.enumeration = false;
+		this.enumValues = new ArrayList<String>();
 	}
 	public String getName() {
 		return name;
@@ -66,5 +78,33 @@ public class TableFieldDTO {
 	}
 	public void setPk(boolean pk) {
 		this.pk = pk;
+	}
+	public boolean isCalculated() {
+		return calculated;
+	}
+	public void setCalculated(boolean calculated) {
+		this.calculated = calculated;
+	}
+	public int getMaxLength() {
+		return maxLength;
+	}
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
+	}
+	public boolean isEnumeration() {
+		return enumeration;
+	}
+	public void setEnumeration(boolean enumeration) {
+		this.enumeration = enumeration;
+	}
+	public ArrayList<String> getEnumValues() {
+		return enumValues;
+	}
+	public void setEnumValues(ArrayList<String> enumValues) {
+		this.enumValues = enumValues;
+	}
+	public void addEnumValue(String val) {
+		this.enumeration = true;
+		this.enumValues.add(val);
 	}
 }

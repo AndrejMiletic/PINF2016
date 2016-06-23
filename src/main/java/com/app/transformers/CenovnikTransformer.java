@@ -92,7 +92,7 @@ public class CenovnikTransformer implements ITransformer{
 		fields.put(FieldNames.PRIMARY_KEY, c.getIdCenovnika());
 				
 		if(c.getNazivCenovnika() == null || c.getNazivCenovnika().equals("")) {
-			fields.put(FieldNames.CENOVNIK_LOOKUP, "Nije unet naziv");
+			fields.put(FieldNames.CENOVNIK_LOOKUP, "");
 		} else {
 			fields.put(FieldNames.CENOVNIK_LOOKUP, c.getNazivCenovnika());
 		}
@@ -131,12 +131,14 @@ public class CenovnikTransformer implements ITransformer{
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.CENOVNIK_LOOKUP, false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(DATUM_PRIMENE, false, false, false, false, "", DataTypes.DATE);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.PREDUZECE, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, false, false, true, TableNames.PREDUZECE, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);

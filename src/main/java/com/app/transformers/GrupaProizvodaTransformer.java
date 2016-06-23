@@ -128,18 +128,22 @@ public class GrupaProizvodaTransformer implements ITransformer {
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.GRUPA_PROIZVODA_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(SIFRA_GRUPE, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(4);
 		fields.add(field);
 		
 		field = new TableFieldDTO(TableNames.PREDUZECE, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, false, false, true, TableNames.PREDUZECE, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		field = new TableFieldDTO(TableNames.POREZ, false, false, true, false, TableNames.POREZ, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POREZ_LOOKUP, false, false, false, true, TableNames.POREZ, DataTypes.TEXT);
+		field.setMaxLength(120);
 		fields.add(field);
 		
 		table.setFields(fields);

@@ -156,25 +156,34 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Naziv", false, true, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Naziv preduzeća", false, true, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("PIB", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(9);
 		fields.add(field);
 		field = new TableFieldDTO("Matični broj", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(8);
 		fields.add(field);
 		field = new TableFieldDTO("Adresa", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("Broj telefona", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(20);
 		fields.add(field);
 		field = new TableFieldDTO("Email", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("Banka", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("Tekući račun", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.SIFRA_DELATNOSTI, false, false, true, false, TableNames.SIFRA_DELATNOSTI, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.SIFRA_DELATNOSTI_LOOKUP, false, false, false, true, TableNames.SIFRA_DELATNOSTI, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);

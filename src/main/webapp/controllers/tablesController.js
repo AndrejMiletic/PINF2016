@@ -43,6 +43,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	                    	$scope.fieldNames.push(value);
 	                    })
                 	}
+                    console.log($scope.requestedTable);
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");
@@ -53,6 +54,18 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
     $scope.openDocument = function (id) {
         $scope.closeForeignKeyForm();
+        var childName=$scope.requestedTable.children[0];
+        var childCode=tableService.replace(childName);
+//        if ($scope.requestedTable.documentChildName){
+//          tableService.getTableByName(childCode).then(
+//              function (response) {
+//                  $scope.documentChild = response.data;
+//              },
+//              function (response) {
+//                  alert("Neuspesno dobavljanje tabele");
+//              }
+//          );
+//      }
         if ($scope.requestedTable.documentChildName){
             tableService.getDocChild($scope.requestedTable.tableCode, id).then(
                 function (response) {
@@ -71,6 +84,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     		tableService.getByNameFiltered(parentTable, childTable, parentId).then(
     			function (response){
     				$scope.filteredNextTable = response.data;
+    				document.getElementById('idNext').style.display='block'
     			},
     			function (response){
     				alert("Doslo je do greske");
@@ -107,7 +121,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.deleteRow = function(index, row, event) {
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
-			tableService.delete($scope.requestedTable.tableName, row.fields.id).then(
+			tableService.delete($scope.requestedTable.tableName, row.fields.Id).then(
 				function(response) {
 						$scope.documentChild = undefined;
 						$scope.currentRow = undefined;
@@ -194,11 +208,23 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-					$scope.currentRow.fields.id = 100;
+				$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
 			}
-
+			
 			var row =  angular.copy($scope.currentRow);
 
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].type=='DATE'){
+					var name=$scope.currentTable.fields[field].name;
+					var dateField=$scope.currentRow.fields[name];
+					console.log(dateField);
+					if(dateField!=null){
+						var date=dateField.toLocaleDateString("sr-rs");
+						row.fields[name]=date;
+					}
+				}
+			}
+			
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
@@ -277,13 +303,20 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.foreignKey = function(field) {
             $scope.documentChild = {};
-            tableService.getTableByName(field.fkTableName).then(
+            
+            var code;
+    		code = field.fkTableName.replace(" ", "_")
+    					.replace("ć", "c")
+    					.replace("ž", "z")
+    					.replace("š", "s");
+
+            tableService.getTableByName(code).then(
                 function (response) {
                 	$scope.foreignTable = response.data;
 			        if($scope.foreignTable){
 						$scope.foreignKeyClicked=true;
 						$scope.foreignTableName=field.fkTableName;
-						$scope.foreignKeyField=field;	
+						$scope.foreignKeyField=field;
 		            	
 		            }else{
 		            	alert("Ne postoji nijedna tabela.");
@@ -295,8 +328,18 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
             );
 	}
 	
-	$scope.openDocumentForeignKey=function(id){
-		$scope.selectedForeignKey=id;
+	$scope.openDocumentForeignKey=function(row){
+		$scope.selectedForeignKey=row.fields.Id;
+		for(var field in $scope.currentTable.fields){
+			if($scope.currentTable.fields[field].lookup){
+				var fkTableName=$scope.currentTable.fields[field].fkTableName;
+				if(fkTableName==$scope.foreignKeyField.name){
+					var name=$scope.currentTable.fields[field].name;
+					$scope.selectedForeignKeyName=row.fields[name];
+					console.log(row);
+				}
+			}
+		}
         if ($scope.foreignTable && $scope.foreignTable.documentPattern && $scope.foreignTable.documentChildName){
             tableService.getDocChild($scope.foreignTable.tableCode, id).then(
                 function (response) {
@@ -312,6 +355,15 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	$scope.addForeignKey=function(){
 		if($scope.selectedForeignKey){
 			$scope.currentRow.fields[$scope.foreignKeyField.name]=$scope.selectedForeignKey;
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].lookup){
+					var fkTableName=$scope.currentTable.fields[field].fkTableName;
+					if(fkTableName==$scope.foreignKeyField.name){
+						var name=$scope.currentTable.fields[field].name;
+						$scope.currentRow.fields[name]=$scope.selectedForeignKeyName;
+					}
+				}
+			}
 			$scope.foreignKeyClicked=false;
 			$scope.selectedForeignKey=null;
 		}else{

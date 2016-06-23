@@ -17,7 +17,7 @@ import com.app.model.KatalogRobeIUsluga;
 
 public class ArtikalTransformer implements ITransformer {
 
-private final String SIFRA_ARTIKLA = "Šifra artikla";
+	private final String SIFRA_ARTIKLA = "Šifra artikla";
 	
 	@Override
 	public TableDTO transformToDTO(Object entity) {
@@ -132,18 +132,22 @@ private final String SIFRA_ARTIKLA = "Šifra artikla";
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.KATALOG_ROBE_I_USLUGA_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(SIFRA_ARTIKLA, false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(20);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.JEDINICE_MERE, false, false, false, false, TableNames.JEDINICE_MERE, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.JEDINICE_MERE, false, false, true, false, TableNames.JEDINICE_MERE, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.JEDINICA_MERE_LOOKUP, false, false, false, true, TableNames.JEDINICE_MERE, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.GRUPA_PROIZVODA, false, false, false, false, TableNames.GRUPA_PROIZVODA, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.GRUPA_PROIZVODA, false, false, true, false, TableNames.GRUPA_PROIZVODA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.GRUPA_PROIZVODA_LOOKUP, false, false, false, true, TableNames.GRUPA_PROIZVODA, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);

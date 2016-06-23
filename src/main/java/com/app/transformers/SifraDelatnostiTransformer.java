@@ -109,8 +109,10 @@ public class SifraDelatnostiTransformer implements ITransformer {
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO("Oznaka šifre delatnosti", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(4);
 		fields.add(field);
 		field = new TableFieldDTO("Naziv delatnosti", false, false, false, false, "", DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		
 		table.setFields(fields);
