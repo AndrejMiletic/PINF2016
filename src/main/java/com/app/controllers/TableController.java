@@ -207,30 +207,54 @@ public class TableController {
 	@RequestMapping(value = "/getDocChild/{parentName}/{parentId}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentName, @PathVariable String parentId) {
 
+//		Long id = Long.valueOf(parentId);
+//		ArrayList<TableDTO> tables = getMockData();
+//		TableDTO requestedTable = null;
+//		String name = null;
+//		for (TableDTO table : tables) {
+//			if (table.getTableName().equals(parentName)) {
+//				name = table.getDocumentChildName();
+//				break;
+//			}
+//		}
+//		for (TableDTO table : tables) {
+//			if (table.getTableName().equals(name)) {
+//				requestedTable = table;
+//				break;
+//			}
+//		}
+//		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
+//		for (int i=0; i < requestedTable.getRows().size(); i++){
+//			if (((Integer)requestedTable.getRows().get(i).getFields().get(parentName.toLowerCase())) == id.longValue()){
+//				rows.add(requestedTable.getRows().get(i));
+//			}
+//		}
+//		requestedTable.setRows(rows);
+		
 		Long id = Long.valueOf(parentId);
-		ArrayList<TableDTO> tables = getMockData();
-		TableDTO requestedTable = null;
-		String name = null;
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(parentName)) {
-				name = table.getDocumentChildName();
-				break;
+		String parentCode=ConversionHelper.getTableCode(parentName);
+		TableDTO parentTable=crudService.getAll(parentCode);
+		if(parentTable!=null){
+			if(parentTable.getChildren().size()>0){
+				String childName=parentTable.getChildren().get(0);
+				String childCode=ConversionHelper.getTableCode(childName);
+				TableDTO childTable=crudService.getAll(childCode);
+				if(childTable!=null){
+					ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
+					for (int i=0; i < childTable.getRows().size(); i++){
+						if (((Long)childTable.getRows().get(i).getFields().get(parentName)) == id){
+							rows.add(childTable.getRows().get(i));
+						}
+					}
+					childTable.setRows(rows);
+					return new ResponseEntity<>(childTable, HttpStatus.OK);
+				}
 			}
 		}
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(name)) {
-				requestedTable = table;
-				break;
-			}
-		}
-		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
-		for (int i=0; i < requestedTable.getRows().size(); i++){
-			if (((Integer)requestedTable.getRows().get(i).getFields().get(parentName.toLowerCase())) == id.longValue()){
-				rows.add(requestedTable.getRows().get(i));
-			}
-		}
-		requestedTable.setRows(rows);
-		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+		
+		
+		
+		return new ResponseEntity<>( HttpStatus.NOT_FOUND);
 	}
 
 	@RequestMapping(value = "/filterNextTable/{childCode}/{parentCode}/{parentId}", method = RequestMethod.GET)

@@ -9,22 +9,12 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	}
 	
 	this.getTableById=function(tableName,Id){
-		var tableCode;
-		tableCode = tableName.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-
+		var tableCode=this.replace(tableName);
 		return $http.get(url + "/getById/" + tableCode + "/" + Id);
 	}
 
 	this.create = function(parent, entity) {
-		var code;
-		code = parent.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-
+		var code=this.replace(parent);
 		var payload = {
 			tableName: parent,
 			tableCode: code,
@@ -34,12 +24,8 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	}
 	
 	this.edit = function(parent, entity) {
-		var code;
-		code = parent.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-
+		var code=this.replace(parent);
+		
 		var payload = {
 			tableName: parent,
 			tableCode: code,
@@ -49,15 +35,19 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	}
 
 	this.delete = function(tableName, id) {
-		var code;
-		code = tableName.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
+		var code=this.replace(tableName);
 
 		return $http.delete(url + "/delete/" + code + "/" + id);
 	}
 
+	this.replace=function(tableName){
+		var tableCode;
+		tableCode = tableName.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+		return tableCode;
+	}
 
     this.getDocChild = function(parentName, parentId){
         return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
@@ -65,22 +55,10 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 
   	this.getByNameFiltered = function(parentTable, childTable, parentId){
   		
-  		var childTableCode= childTable.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-  		childTableCode=childTableCode.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-  		childTableCode=childTableCode.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
-  		var parentTableCode= parentTable.replace(" ", "_")
-					.replace("ć", "c")
-					.replace("ž", "z")
-					.replace("š", "s");
+  		var childTableCode= this.replace(childTable);
+  		childTableCode=this.replace(childTableCode);
+  		childTableCode=this.replace(childTableCode);
+  		var parentTableCode= this.replace(parentTable);
   		
   		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
   	}
@@ -112,6 +90,9 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
   }
 
 	this.isValid = function(table, row) {
+
+		console.log(table);
+		console.log(row);
 		var currentValue;
 		var isValid = true;
 
@@ -139,10 +120,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 					if(field.type === appConstants.types.DATE) {
 						if(!currentValue) {
 							isValid = false;
-						} else
-						if(!isDate(currentValue)) {
-							isValid =  false;
 						}
+//						else
+//						if(!isDate(currentValue)) {
+//							isValid =  false;
+//						}
 					} else
 					if(field.type === appConstants.types.TEXT ) {
 						if(!currentValue) {
@@ -192,38 +174,38 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	
 	isDate = function(dateStr) {
 
-    var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
-    var matchArray = dateStr.match(datePat); // is the format ok?
-
-    if (matchArray == null) {
-        // alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
-        return false;
-    }
-
-    month = matchArray[1]; // p@rse date into variables
-    day = matchArray[3];
-    year = matchArray[5];
+	    var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+	    var matchArray = dateStr.match(datePat); // is the format ok?
 	
-
-    if (month < 1 || month > 12) { // check month range
-        return false;
-    }
-
-    if (day < 1 || day > 31) {
-        return false;
-    }
-
-    if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
-        return false;
-    }
-
-    if (month == 2) { // check for february 29th
-        var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
-        if (day > 29 || (day == 29 && !isleap)) {
-            return false;
-        }
-    }
-    return true; // date is valid
+	    if (matchArray == null) {
+	        // alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
+	        return false;
+	    }
+	
+	    month = matchArray[1]; // p@rse date into variables
+	    day = matchArray[3];
+	    year = matchArray[5];
+		
+	
+	    if (month < 1 || month > 12) { // check month range
+	        return false;
+	    }
+	
+	    if (day < 1 || day > 31) {
+	        return false;
+	    }
+	
+	    if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+	        return false;
+	    }
+	
+	    if (month == 2) { // check for february 29th
+	        var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+	        if (day > 29 || (day == 29 && !isleap)) {
+	            return false;
+	        }
+	    }
+	    return true; // date is valid
 	}
 	
 	this.getTableRows=function(tableName){
