@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.DTO.KifDTO;
 import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
-import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.helpers.ConversionHelper;
 import com.app.services.IGenericService;
 
 @RestController
@@ -73,7 +73,7 @@ public class TableController {
 	}
 	
 	@RequestMapping(path = "/getAll/{tableCode}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {		
+	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {	
 		TableDTO result = crudService.getAll(tableCode);
 		if (result == null){
 			result = crudService.getMetaData(tableCode);	
@@ -216,20 +216,13 @@ public class TableController {
 	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
 		Long id = Long.valueOf(parentId);
-		ArrayList<TableDTO> tables = getMockData();
 		TableDTO requestedTable = null;
-		
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(childName)) {
-				requestedTable = table;
-				break;
-			}
-		}
+		requestedTable = crudService.getAll(childName);
 		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
 		for (int i=0; i < requestedTable.getRows().size(); i++){
-			if (((Integer)requestedTable.getRows().get(i).
+			if (((Long)requestedTable.getRows().get(i).
 					getFields().
-					get(parentName.toLowerCase())) == id.longValue()){
+					get(ConversionHelper.getTableName(parentName))) == id){
 				rows.add(requestedTable.getRows().get(i));
 			}
 		}
