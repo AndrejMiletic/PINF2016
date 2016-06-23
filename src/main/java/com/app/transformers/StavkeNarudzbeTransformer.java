@@ -131,25 +131,26 @@ public class StavkeNarudzbeTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Količina stavke", false, false, false, false, "", DataTypes.DATE);
+		field = new TableFieldDTO("Količina stavke", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Cena bez pdv", false, false, false, false, "", DataTypes.DATE);
+		field = new TableFieldDTO("Cena bez pdv", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Iznos stavke", false, false, false, false, "", DataTypes.DATE);
+		field = new TableFieldDTO("Iznos stavke", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.JEDINICE_MERE, false, false, true, false, TableNames.JEDINICE_MERE, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.JEDINICA_MERE_LOOKUP, false, false, false, true, TableNames.JEDINICE_MERE, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.KATALOG_ROBE_I_USLUGA, false, false, true, false, TableNames.KATALOG_ROBE_I_USLUGA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.KATALOG_ROBE_I_USLUGA_LOOKUP, false, false, false, true, TableNames.KATALOG_ROBE_I_USLUGA, DataTypes.TEXT);
+		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.NARUDZBA, false, false, true, false, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.NARUDZBA_LOOKUP, false, false, false, true, TableNames.NARUDZBA, DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.NARUDZBA_LOOKUP, false, false, false, true, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
-		
 		
 		table.setFields(fields);
 	}
