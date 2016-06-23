@@ -71,6 +71,7 @@ public class ConversionHelper {
 		return null;
 	}
 
+	/*
 	public static void convertDatesToSrRs(TableDTO dto) throws ParseException {
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		Date date;
@@ -94,5 +95,5 @@ public class ConversionHelper {
 				}
 			}
 		}
-	}
+	}*/
 }

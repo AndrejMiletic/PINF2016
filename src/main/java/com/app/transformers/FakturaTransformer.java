@@ -251,7 +251,6 @@ public class FakturaTransformer implements ITransformer{
 	
 	private void fillMetaData(TableDTO table, FakturaOtpremnica jedinica) {
 		ArrayList<String> children = new ArrayList<String>();
-		children.add(TableNames.STAVKE_FAKTURE_OTPREMNICE);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.NARUDZBA);
