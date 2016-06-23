@@ -8,7 +8,7 @@
 		<label>Izbor cenovnika:</label>
 		<select ng-model="selectedPricelist" class="form-control" required>
 			<option data-hidden="true" ng-repeat="obj in requestedTable.rows track by $index" >
-				{{obj.fields.naziv}}
+				{{obj.fields["Naziv cenovnika"]}}
 			</option>
 		</select>
 	</div>
@@ -20,7 +20,7 @@
 		<div class="form-group">&nbsp;
 			<label>Datum primene: </label>
 		</div>
-	 	<input type="text" class="form-control adjust" ng-model="$parent.selectedData.fields.datum_primene">
+		<date-picker ng-model="$parent.selectedData.fields['Datum primene']"></date-picker>
 	</div>
 </div>
 <div ng-if="documentChild"></br>
@@ -46,6 +46,3 @@
 	</table>
 	<button ng-click="copyPricelist()" type="button" class="btn btn-primary">Kopiraj cenovnik</button>
 </div></br>
-
-
-

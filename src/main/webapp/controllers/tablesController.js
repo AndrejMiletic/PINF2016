@@ -208,7 +208,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
+				//$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
 			}
 			
 			var row =  angular.copy($scope.currentRow);

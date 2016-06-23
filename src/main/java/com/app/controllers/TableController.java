@@ -151,15 +151,23 @@ public class TableController {
 
 	@RequestMapping(path = "/addPricelist", method = RequestMethod.POST)
 	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDTO pricelist) {
-		ArrayList<String> ids = new ArrayList<String>();
+		TableRowDTO cenovnik = pricelist.getParent();
+		cenovnik.getFields().put("Id", null);
+		crudService.create(cenovnik);
+		ArrayList<TableRowDTO> stavke = pricelist.getChild();
+		for (TableRowDTO row : stavke){
+			row.getFields().put("Id", null);
+			crudService.create(cenovnik);
+		}
+		/*ArrayList<String> ids = new ArrayList<String>();
 		for (TableRowDTO row : rows1Pricelist) {
-			ids.add(row.getFields().get("id").toString());
+			ids.add(row.getFields().get("Id").toString());
 		}
 		ArrayList<Integer> resultList = getIntegerArray(ids);
 		int max = Collections.max(resultList);
 
 		pricelist.getParent().getFields().put("naziv", "Cenovnik " + (max + 1));
-		pricelist.getParent().getFields().put("id", (max + 1));
+		pricelist.getParent().getFields().put("Id", (max + 1));
 		
 		addedRowsPricelist.add(pricelist.getParent());
 		for (TableRowDTO row : pricelist.getChild()) {
@@ -170,7 +178,7 @@ public class TableController {
 		System.out.println("Stavke cenovnika: \n");
 		for (TableRowDTO row : pricelist.getChild()) {
 			System.out.println(row);
-		}
+		}*/
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
