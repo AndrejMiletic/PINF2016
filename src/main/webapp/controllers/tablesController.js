@@ -217,7 +217,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.currentTable.fields[field].type=='DATE'){
 					var name=$scope.currentTable.fields[field].name;
 					var dateField=$scope.currentRow.fields[name];
-					console.log(dateField);
 					if(dateField!=null){
 						var date=dateField.toLocaleDateString("sr-rs");
 						row.fields[name]=date;
@@ -303,12 +302,13 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.foreignKey = function(field) {
             $scope.documentChild = {};
-            
-            var code;
-    		code = field.fkTableName.replace(" ", "_")
-    					.replace("ć", "c")
-    					.replace("ž", "z")
-    					.replace("š", "s");
+           
+            var code=tableService.replace(field.fkTableName);    		
+//            var code;
+//    		code = field.fkTableName.replace(" ", "_")
+//    					.replace("ć", "c")
+//    					.replace("ž", "z")
+//    					.replace("š", "s");
 
             tableService.getTableByName(code).then(
                 function (response) {
@@ -341,7 +341,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			}
 		}
         if ($scope.foreignTable && $scope.foreignTable.documentPattern && $scope.foreignTable.documentChildName){
-            tableService.getDocChild($scope.foreignTable.tableCode, id).then(
+            tableService.getDocChild($scope.foreignTable.tableCode, row.fields.Id).then(
                 function (response) {
                     $scope.documentForeignChild = response.data;
                 },
@@ -366,6 +366,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			}
 			$scope.foreignKeyClicked=false;
 			$scope.selectedForeignKey=null;
+			$scope.selectedForeignKeyName=null;
 		}else{
 			alert("Niste izabrali tabelu.");
 		}

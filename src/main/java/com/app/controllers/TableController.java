@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.DTO.KifDTO;
 import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
-import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.helpers.ConversionHelper;
 import com.app.services.IGenericService;
 
 @RestController
@@ -66,7 +66,7 @@ public class TableController {
 	}
 	
 	@RequestMapping(path = "/getAll/{tableCode}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {		
+	public ResponseEntity<Object> getAll(@PathVariable String tableCode) {	
 		TableDTO result = crudService.getAll(tableCode);
 		if (result == null){
 			result = crudService.getMetaData(tableCode);	
@@ -104,6 +104,16 @@ public class TableController {
 		} else {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
+	}
+	@RequestMapping(path = "/filter", method = RequestMethod.POST)
+	public ResponseEntity<Object> filter(@RequestBody TableRowDTO filterRow) {
+	TableDTO requestedTable = crudService.getFilteredTable(filterRow);
+		
+		if(requestedTable == null) {
+			return new ResponseEntity<Object>(requestedTable, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(requestedTable, HttpStatus.OK);
+		}
 	}
 //------------------------------------------------------------------------------------------------------------------
 	
@@ -145,7 +155,24 @@ public class TableController {
 			}
 		}
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	}	
+	}
+
+	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
+		Long id = Long.valueOf(parentId);
+		TableDTO requestedTable = null;
+		requestedTable = crudService.getAll(childName);
+		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
+		for (int i=0; i < requestedTable.getRows().size(); i++){
+			if (((Long)requestedTable.getRows().get(i).
+					getFields().
+					get(ConversionHelper.getTableName(parentName))) == id){
+				rows.add(requestedTable.getRows().get(i));
+			}
+		}
+		requestedTable.setRows(rows);
+		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<Object> addTable(@RequestBody TableDTO table) {
