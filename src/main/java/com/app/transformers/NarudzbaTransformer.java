@@ -156,7 +156,6 @@ public class NarudzbaTransformer implements ITransformer {
 	private void fillMetaData(TableDTO table, Narudzba jedinica) {
 		ArrayList<String> children = new ArrayList<String>();
 		children.add(TableNames.FAKTURA_OTPREMNICA);
-		children.add(TableNames.STAVKE_NARUDZBE);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.POSLOVNA_GODINA);
