@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
-import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
-import com.app.model.StavkeCenovnika;
 import com.app.repositories.ICenovnikRepository;
 import com.app.repositories.IFakturaOtpremnicaRepository;
 import com.app.repositories.IGrupaProizvodaRepository;
@@ -96,6 +94,7 @@ public class GenericServiceImpl implements IGenericService{
 			Object result = repo.findOne(id);
 			ITransformer tr = getTransformer(tableName);
 			TableDTO dto = tr.transformToDTO(result);
+			ConversionHelper.convertDatesToSrRs(dto);
 			return dto;
 		}catch(Exception e) {
 			return null;
@@ -110,6 +109,7 @@ public class GenericServiceImpl implements IGenericService{
 			ArrayList<Object> rows = (ArrayList<Object>) repo.findAll();
 			ITransformer tr = getTransformer(tableName);
 			TableDTO dto = tr.transformToDTO(rows);
+			ConversionHelper.convertDatesToSrRs(dto);
 			return dto;
 		}catch(Exception e) {
 			return null;
@@ -159,6 +159,7 @@ public class GenericServiceImpl implements IGenericService{
 			if(rowsOfDocTable.size() != 0){
 				 retVal = tr1.transformToDTO(rowsOfDocTable);
 			}		
+			ConversionHelper.convertDatesToSrRs(retVal);
 			return retVal;
 			
 		}catch(Exception e) {
