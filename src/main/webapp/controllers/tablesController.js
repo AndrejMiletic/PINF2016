@@ -54,7 +54,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     $scope.openDocument = function (id) {
         $scope.closeForeignKeyForm();
         if ($scope.requestedTable.documentChildName){
-            tableService.getDocChild($scope.requestedTable.tableName, id).then(
+            tableService.getDocChild($scope.requestedTable.tableCode, id).then(
                 function (response) {
                     $scope.documentChild = response.data;
                 },
@@ -290,9 +290,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		            }
                 },
                 function (response) {
-
-                	console.log($scope.requestedTable.tableName);
-                	console.log(id);
                     alert("Neuspesno dobavljanje tabele");
                 }
             );
@@ -301,7 +298,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	$scope.openDocumentForeignKey=function(id){
 		$scope.selectedForeignKey=id;
         if ($scope.foreignTable && $scope.foreignTable.documentPattern && $scope.foreignTable.documentChildName){
-            tableService.getDocChild($scope.foreignTable.tableName, id).then(
+            tableService.getDocChild($scope.foreignTable.tableCode, id).then(
                 function (response) {
                     $scope.documentForeignChild = response.data;
                 },

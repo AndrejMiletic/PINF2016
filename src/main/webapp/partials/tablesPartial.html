@@ -80,7 +80,7 @@
 		    </tr>
 		  </thead>
 		  <tbody class="centered">
-		    <tr ng-click="openDocument(row.fields.id)" ng-repeat="row in requestedTable.rows track by $index">
+		    <tr ng-click="openDocument(row.fields.Id)" ng-repeat="row in requestedTable.rows track by $index">
 		      <td ng-repeat="data in row.fields track by $index">{{row.fields[requestedTable.fields[$index].name]}}</td>
 					<td>
 						<button ng-click="generateEditForm($index, row, $event)" class="btn btn-warning">
@@ -169,14 +169,14 @@
 		    </tr>
 		  </thead>
 		  <tbody class="centered">
-		    <tr ng-click="openDocumentForeignKey(row.fields.id)" ng-repeat="row in foreignTable.rows track by $index">
+		    <tr ng-click="openDocumentForeignKey(row.fields.Id)" ng-repeat="row in foreignTable.rows track by $index">
 		      <td ng-repeat="data in row.fields track by $index">{{row.fields[foreignTable.fields[$index].name]}}</td>
 		    </tr>
 		  </tbody>
 		</table>
 		<label>Selektovan red: {{selectedForeignKey}}</label>
 		<br/><br/>
-		<button ng-click="addForeignKey()" class="btn btn-success">
+		<button ng-click="addf" class="btn btn-success">
 				<span class="glyphicon glyphicon-ok"></span> Dodaj
 		</button>
 		<button ng-click="closeForeignKeyForm()" class="btn btn-danger">

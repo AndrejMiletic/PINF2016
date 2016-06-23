@@ -117,7 +117,11 @@ public class StavkeFaktureTransformer implements ITransformer {
 		}
 		
 		fields.put("Osnovica pdv", c.getOsnovicaPdv());
-		fields.put("Jedinična cena stavke", c.getJedinicnaCenaStavkeFakture());		
+		if(c.getJedinicnaCenaStavkeFakture() == null || c.getJedinicnaCenaStavkeFakture().equals("")) {
+			fields.put("Jedinična cena stavke", "Nije uneta cena");
+		} else {
+			fields.put("Jedinična cena stavke", c.getJedinicnaCenaStavkeFakture());
+		}	
 		
 		row.setFields(fields);
 		row.setTableName(TableNames.STAVKE_FAKTURE_OTPREMNICE);

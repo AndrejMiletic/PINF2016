@@ -138,7 +138,6 @@ public class PreduzeceTransformer implements ITransformer {
 		children.add(TableNames.CENOVNIK);
 		children.add(TableNames.POSLOVNA_GODINA);
 		children.add(TableNames.POSLOVNI_PARTNER);
-		children.add(TableNames.POSLOVNI_PARTNER);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.SIFRA_DELATNOSTI);

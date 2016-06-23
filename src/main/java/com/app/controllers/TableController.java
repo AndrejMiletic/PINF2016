@@ -101,9 +101,18 @@ public class TableController {
 		}
 	}
 	
-	
-	
-	
+	@RequestMapping(value = "/getDocChild/{parentTableCode}/{parentId}", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentTableCode, @PathVariable String parentId) {
+		
+		TableDTO requestedTable = crudService.getTableByParent(parentTableCode, parentId);
+		
+		if(requestedTable == null) {
+			return new ResponseEntity<>(requestedTable, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+		}		
+	}
+//------------------------------------------------------------------------------------------------------------------
 	
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -202,34 +211,7 @@ public class TableController {
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/getDocChild/{parentName}/{parentId}", method = RequestMethod.GET)
-	public ResponseEntity<TableDTO> getDocChild(@PathVariable String parentName, @PathVariable String parentId) {
-
-		Long id = Long.valueOf(parentId);
-		ArrayList<TableDTO> tables = getMockData();
-		TableDTO requestedTable = null;
-		String name = null;
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(parentName)) {
-				name = table.getDocumentChildName();
-				break;
-			}
-		}
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(name)) {
-				requestedTable = table;
-				break;
-			}
-		}
-		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
-		for (int i=0; i < requestedTable.getRows().size(); i++){
-			if (((Integer)requestedTable.getRows().get(i).getFields().get(parentName.toLowerCase())) == id.longValue()){
-				rows.add(requestedTable.getRows().get(i));
-			}
-		}
-		requestedTable.setRows(rows);
-		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	}
+	
 
 	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
