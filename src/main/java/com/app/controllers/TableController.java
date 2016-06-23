@@ -26,14 +26,7 @@ public class TableController {
 	
 	@Autowired
 	private IGenericService crudService;
-	
-	private ArrayList<TableRowDTO> rows1Pricelist;
-	private ArrayList<TableRowDTO> rows1PricelistItem;
-	private ArrayList<TableRowDTO> addedRowsPricelistItem = new ArrayList<TableRowDTO>();
-	private ArrayList<TableRowDTO> addedRowsPricelist = new ArrayList<TableRowDTO>();
-	private ArrayList<TableRowDTO> deleteRowsPricelist = new ArrayList<TableRowDTO>();
-
-	
+		
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
 		if(crudService.create(row)) {
@@ -112,6 +105,16 @@ public class TableController {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
 	}
+	@RequestMapping(path = "/filter", method = RequestMethod.POST)
+	public ResponseEntity<Object> filter(@RequestBody TableRowDTO filterRow) {
+	TableDTO requestedTable = crudService.getFilteredTable(filterRow);
+		
+		if(requestedTable == null) {
+			return new ResponseEntity<Object>(requestedTable, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(requestedTable, HttpStatus.OK);
+		}
+	}
 //------------------------------------------------------------------------------------------------------------------
 	
 	
@@ -127,13 +130,6 @@ public class TableController {
 		names.add("Cenovnik");
 		names.add("Faktura_otpremnica");
 		return new ResponseEntity<>(names, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/getPricelistItems", method = RequestMethod.GET)
-	public ResponseEntity<ArrayList<TableRowDTO>> getPricelistItems() {
-		ArrayList<TableRowDTO> data = rows1PricelistItem;
-
-		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
 	private ArrayList<Integer> getIntegerArray(ArrayList<String> stringArray) {
@@ -185,7 +181,7 @@ public class TableController {
 	@RequestMapping(path = "/addTableRow", method = RequestMethod.POST)
 	public ResponseEntity<Object> addTableRow(@RequestBody TableRowDTO row) {
 
-		ArrayList<String> ids = new ArrayList<String>();
+		/*ArrayList<String> ids = new ArrayList<String>();
 		for (TableRowDTO roww : rows1PricelistItem) {
 			ids.add(roww.getFields().get("id").toString());
 		}
@@ -195,14 +191,14 @@ public class TableController {
 		row.getFields().put("id", (max + 1));
 
 		addedRowsPricelistItem.add(row);
-		System.out.println(row);
+		System.out.println(row);*/
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@RequestMapping(path = "/deleteTableRow", method = RequestMethod.POST)
 	public ResponseEntity<Object> deleteTableRow(@RequestBody TableRowDTO row) {
 
-		deleteRowsPricelist.add(row);
+		//deleteRowsPricelist.add(row);
 		System.out.println(row);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -218,8 +214,6 @@ public class TableController {
 		}
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 	}
-
-	
 
 	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
