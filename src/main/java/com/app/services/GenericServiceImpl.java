@@ -102,7 +102,6 @@ public class GenericServiceImpl implements IGenericService {
 			Object result = repo.findOne(id);
 			ITransformer tr = getTransformer(tableName);
 			TableDTO dto = tr.transformToDTO(result);
-			ConversionHelper.convertDatesToSrRs(dto);
 			return dto;
 		} catch (Exception e) {
 			return null;
@@ -117,7 +116,6 @@ public class GenericServiceImpl implements IGenericService {
 			ArrayList<Object> rows = (ArrayList<Object>) repo.findAll();
 			ITransformer tr = getTransformer(tableName);
 			TableDTO dto = tr.transformToDTO(rows);
-			ConversionHelper.convertDatesToSrRs(dto);
 			return dto;
 		} catch (Exception e) {
 			return null;
@@ -167,7 +165,6 @@ public class GenericServiceImpl implements IGenericService {
 			if(rowsOfDocTable.size() != 0){
 				 retVal = tr1.transformToDTO(rowsOfDocTable);
 			}		
-			ConversionHelper.convertDatesToSrRs(retVal);
 			return retVal;
 
 		} catch (Exception e) {
