@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
+import com.app.model.StavkeCenovnika;
 import com.app.repositories.ICenovnikRepository;
 import com.app.repositories.IFakturaOtpremnicaRepository;
 import com.app.repositories.IGrupaProizvodaRepository;
@@ -123,6 +125,45 @@ public class GenericServiceImpl implements IGenericService{
 		}
 		
 		return tables;
+	}
+	
+	@Override
+	public TableDTO getTableByParent(String parentTableCode, String parentId) {
+		try {
+			Long parent= null;
+			TableDTO retVal = null;
+			ArrayList<Object> rowsOfDocTable = new ArrayList<Object>();
+			
+			String tableName = ConversionHelper.getTableName(parentTableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			parent = Long.parseLong(parentId);
+			Object result = repo.findOne(parent);
+			ITransformer tr = getTransformer(tableName);
+			TableDTO dto = tr.transformToDTO(result);
+			
+			String child = dto.getDocumentChildName();
+			CrudRepository repo1 = getTableRepo(child);
+			ArrayList<Object> rows = (ArrayList<Object>) repo1.findAll();			
+			ITransformer tr1 = getTransformer(child);
+			TableDTO dto1 = tr1.transformToDTO(rows);	
+		
+			
+			for (TableRowDTO row : dto1.getRows()) {				
+				if(row.getFields().containsKey(tableName) && row.getFields().get(tableName).toString().equals(parentId)){
+					HashMap<String, Object> fks = getFKs(row);
+					Object entity = tr1.transformFromDTO(row, fks);
+					rowsOfDocTable.add(entity);
+				}
+			}
+			
+			if(rowsOfDocTable.size() != 0){
+				 retVal = tr1.transformToDTO(rowsOfDocTable);
+			}		
+			return retVal;
+			
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 

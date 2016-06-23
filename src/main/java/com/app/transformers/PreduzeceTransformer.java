@@ -52,8 +52,8 @@ public class PreduzeceTransformer implements ITransformer {
 			
 		p.setSifraDelatnosti((SifraDelatnosti)fks.get(TableNames.SIFRA_DELATNOSTI));
 	
-		if(rows.containsKey("Naziv")) {
-			p.setNaziv(rows.get("Naziv").toString());
+		if(rows.containsKey("Naziv preduzeća")) {
+			p.setNaziv(rows.get("Naziv preduzeća").toString());
 		}
 		if(rows.containsKey("PIB")) {
 			p.setPib(rows.get("PIB").toString());
@@ -97,7 +97,7 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		fields.put("Id", p.getIdPreduzeca());
 			
-		fields.put("Naziv",p.getNaziv());
+		fields.put("Naziv preduzeća",p.getNaziv());
 		fields.put("PIB", p.getPib());
 		fields.put("Matični broj", p.getMaticniBroj());
 		
@@ -137,7 +137,6 @@ public class PreduzeceTransformer implements ITransformer {
 		children.add(TableNames.GRUPA_PROIZVODA);
 		children.add(TableNames.CENOVNIK);
 		children.add(TableNames.POSLOVNA_GODINA);
-		children.add(TableNames.POSLOVNI_PARTNER);
 		children.add(TableNames.POSLOVNI_PARTNER);
 		
 		ArrayList<String> parents = new ArrayList<String>();

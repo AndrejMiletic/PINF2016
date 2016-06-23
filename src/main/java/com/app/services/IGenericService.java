@@ -14,4 +14,5 @@ public interface IGenericService {
 	TableDTO getAll(String tableCode);
 	HashMap<String, String> getEditableTables();
 	TableDTO getMetaData(String tableCode);
+	TableDTO getTableByParent(String parentTableCode, String parentId);
 }

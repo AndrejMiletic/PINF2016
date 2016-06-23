@@ -65,8 +65,7 @@ public class StavkeFaktureTransformer implements ITransformer {
 			rabat = new BigDecimal(rows.get("Rabat").toString());
 			c.setRabat(rabat);
 		}		
-		osnovicaPdv = new BigDecimal(rows.get("Osnovica pdv").toString());
-		c.setOsnovicaPdv(osnovicaPdv);
+		
 		jedCena = new BigDecimal(rows.get("Jedinična cena stavke").toString());
 		c.setJedinicnaCenaStavkeFakture(jedCena);
 		
@@ -74,6 +73,10 @@ public class StavkeFaktureTransformer implements ITransformer {
 		if(rows.containsKey(FieldNames.PRIMARY_KEY)) {
 			id = Long.parseLong(rows.get(FieldNames.PRIMARY_KEY).toString());
 			c.setIdStavkeFakture(id);
+			osnovicaPdv = new BigDecimal(rows.get("Osnovica pdv").toString());
+			c.setOsnovicaPdv(osnovicaPdv);
+		}else{
+			c.setOsnovicaPdv(new BigDecimal(0));
 		}
 		
 		return c;
@@ -117,7 +120,11 @@ public class StavkeFaktureTransformer implements ITransformer {
 		}
 		
 		fields.put("Osnovica pdv", c.getOsnovicaPdv());
-		fields.put("Jedinična cena stavke", c.getJedinicnaCenaStavkeFakture());		
+		if(c.getJedinicnaCenaStavkeFakture() == null || c.getJedinicnaCenaStavkeFakture().equals("")) {
+			fields.put("Jedinična cena stavke", "Nije uneta cena");
+		} else {
+			fields.put("Jedinična cena stavke", c.getJedinicnaCenaStavkeFakture());
+		}	
 		
 		row.setFields(fields);
 		row.setTableName(TableNames.STAVKE_FAKTURE_OTPREMNICE);
@@ -158,6 +165,7 @@ public class StavkeFaktureTransformer implements ITransformer {
 		field = new TableFieldDTO("Rabat", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO("Osnovica pdv", false, false, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);
 		fields.add(field);
 		field = new TableFieldDTO("Jedinična cena stavke", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);

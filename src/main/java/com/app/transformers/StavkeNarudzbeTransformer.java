@@ -60,14 +60,16 @@ public class StavkeNarudzbeTransformer implements ITransformer {
 		c.setKolicinaStavkeNarudzbenice(Integer.parseInt(rows.get("Količina stavke").toString()));
 		cena = new BigDecimal(rows.get("Cena bez pdv").toString());
 		c.setCenaBezPdvAStavkeNarudzbenice(cena);
-		iznos = new BigDecimal(rows.get("Iznos stavke").toString());
-		c.setIznosStavkeNarudzbenice(iznos);
 		
 		if(rows.containsKey(FieldNames.PRIMARY_KEY)) {
 			id = Long.parseLong(rows.get(FieldNames.PRIMARY_KEY).toString());
 			c.setIdStavkeNarudzbe(id);
-		}
+			iznos = new BigDecimal(rows.get("Iznos stavke").toString());
+			c.setIznosStavkeNarudzbenice(iznos);
 		
+		}else{
+			c.setIznosStavkeNarudzbenice(new BigDecimal(0));
+		}		
 		return c;
 	}
 	
@@ -136,6 +138,7 @@ public class StavkeNarudzbeTransformer implements ITransformer {
 		field = new TableFieldDTO("Cena bez pdv", false, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO("Iznos stavke", false, false, false, false, "", DataTypes.NUMBER);
+		field.setCalculated(true);		
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.JEDINICE_MERE, false, false, true, false, TableNames.JEDINICE_MERE, DataTypes.NUMBER);
 		fields.add(field);

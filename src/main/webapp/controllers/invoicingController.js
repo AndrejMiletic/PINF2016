@@ -9,15 +9,26 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 		
 		$scope.addedInvoice=[];
 		
-		tableService.getTableRows("Narudzba").then(
-			function(response){
-				$scope.allOrderForms=response.data;
-			}
+		tableService.getTableByName("Narudzba").then(
+				function(response){
+					$scope.allOrderForms=[];
+					$scope.naruzdba=response.data
+					for(var rowIndex in response.data.rows){
+						var Id=response.data.rows[rowIndex].fields.Id;
+				        $scope.allOrderForms.push(Id);
+					}
+					console.log($scope.allOrderForms);
+				}
 		);
+		
+//		tableService.getTableRows("Narudzba").then(
+//			function(response){
+//				$scope.allOrderForms=response.data;
+//			}
+//		);
 	}
 	
 	init();
-
 
 	$scope.showOrderForm=function(){
 		if($scope.selectedOrderForm){
@@ -26,7 +37,7 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 				function(response) {
 					$scope.orderForm= response.data;
 					$scope.createInvoice();
-					tableService.getTableByName('Stavka_narudzbe').then(
+					tableService.getTableByName('Stavke_narudzbe').then(
 						function(response){
 							$scope.orderFormItems=response.data;
 							$scope.createInvoiceItems();
@@ -45,7 +56,7 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	$scope.createInvoice=function(){
-		tableService.getTableByName('Faktura').then(
+		tableService.getTableByName('Faktura_otpremnica').then(
 			function(response) {
 				$scope.invoice= response.data;
 				var fields = {};
@@ -82,7 +93,7 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	$scope.createInvoiceItems=function(){
-		tableService.getTableByName('Stavka_fakture').then(
+		tableService.getTableByName('Stavke_fakture_otpremnice').then(
 			function(response) {
 				$scope.ukupanIznos=0;
 				$scope.ukupanRabat=0;
