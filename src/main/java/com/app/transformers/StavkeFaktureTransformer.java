@@ -114,7 +114,7 @@ public class StavkeFaktureTransformer implements ITransformer {
 		fields.put("Količina", c.getKolicina());
 		
 		if(c.getRabat() == null || c.getRabat().equals("")) {
-			fields.put("Rabat", "Nije unet rabat");
+			fields.put("Rabat", "");
 		} else {
 			fields.put("Rabat", c.getRabat());
 		}

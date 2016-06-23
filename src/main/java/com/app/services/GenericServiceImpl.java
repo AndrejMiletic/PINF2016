@@ -165,7 +165,6 @@ public class GenericServiceImpl implements IGenericService{
 			return null;
 		}
 	}
-	
 
 	@Override
 	public TableDTO getMetaData(String tableCode) {
@@ -293,5 +292,6 @@ public class GenericServiceImpl implements IGenericService{
 	
 	@Autowired
 	private IStavkeNarudzbeRepository stavkeNarudzbeRepo;
+
 
 }

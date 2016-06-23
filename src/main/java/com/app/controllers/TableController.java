@@ -26,14 +26,7 @@ public class TableController {
 	
 	@Autowired
 	private IGenericService crudService;
-	
-	private ArrayList<TableRowDTO> rows1Pricelist;
-	private ArrayList<TableRowDTO> rows1PricelistItem;
-	private ArrayList<TableRowDTO> addedRowsPricelistItem = new ArrayList<TableRowDTO>();
-	private ArrayList<TableRowDTO> addedRowsPricelist = new ArrayList<TableRowDTO>();
-	private ArrayList<TableRowDTO> deleteRowsPricelist = new ArrayList<TableRowDTO>();
-
-	
+		
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
 		if(crudService.create(row)) {
@@ -128,13 +121,6 @@ public class TableController {
 		names.add("Faktura_otpremnica");
 		return new ResponseEntity<>(names, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/getPricelistItems", method = RequestMethod.GET)
-	public ResponseEntity<ArrayList<TableRowDTO>> getPricelistItems() {
-		ArrayList<TableRowDTO> data = rows1PricelistItem;
-
-		return new ResponseEntity<>(data, HttpStatus.OK);
-	}
 
 	private ArrayList<Integer> getIntegerArray(ArrayList<String> stringArray) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
@@ -149,56 +135,6 @@ public class TableController {
 		return result;
 	}
 
-	@RequestMapping(path = "/addPricelist", method = RequestMethod.POST)
-	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDTO pricelist) {
-		ArrayList<String> ids = new ArrayList<String>();
-		for (TableRowDTO row : rows1Pricelist) {
-			ids.add(row.getFields().get("id").toString());
-		}
-		ArrayList<Integer> resultList = getIntegerArray(ids);
-		int max = Collections.max(resultList);
-
-		pricelist.getParent().getFields().put("naziv", "Cenovnik " + (max + 1));
-		pricelist.getParent().getFields().put("id", (max + 1));
-		
-		addedRowsPricelist.add(pricelist.getParent());
-		for (TableRowDTO row : pricelist.getChild()) {
-			row.getFields().put("cenovnik", (max+1));
-			addedRowsPricelistItem.add(row);
-		}
-		System.out.println("Podaci o cenovniku: \n\n" + pricelist.getParent());
-		System.out.println("Stavke cenovnika: \n");
-		for (TableRowDTO row : pricelist.getChild()) {
-			System.out.println(row);
-		}
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
-	@RequestMapping(path = "/addTableRow", method = RequestMethod.POST)
-	public ResponseEntity<Object> addTableRow(@RequestBody TableRowDTO row) {
-
-		ArrayList<String> ids = new ArrayList<String>();
-		for (TableRowDTO roww : rows1PricelistItem) {
-			ids.add(roww.getFields().get("id").toString());
-		}
-		ArrayList<Integer> resultList = getIntegerArray(ids);
-		int max = Collections.max(resultList);
-
-		row.getFields().put("id", (max + 1));
-
-		addedRowsPricelistItem.add(row);
-		System.out.println(row);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
-	@RequestMapping(path = "/deleteTableRow", method = RequestMethod.POST)
-	public ResponseEntity<Object> deleteTableRow(@RequestBody TableRowDTO row) {
-
-		deleteRowsPricelist.add(row);
-		System.out.println(row);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
 	@RequestMapping(value = "/getByName/{name}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getByName(@PathVariable String name) {
 		ArrayList<TableDTO> tables = getMockData();
@@ -209,33 +145,7 @@ public class TableController {
 			}
 		}
 		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	}
-
-	
-
-	@RequestMapping(value = "/filterNextTable/{childName}/{parentName}/{parentId}", method = RequestMethod.GET)
-	public ResponseEntity<TableDTO> getFilteredForNext(@PathVariable String childName, @PathVariable String parentName, @PathVariable String parentId) {
-		Long id = Long.valueOf(parentId);
-		ArrayList<TableDTO> tables = getMockData();
-		TableDTO requestedTable = null;
-		
-		for (TableDTO table : tables) {
-			if (table.getTableName().equals(childName)) {
-				requestedTable = table;
-				break;
-			}
-		}
-		ArrayList<TableRowDTO> rows = new ArrayList<TableRowDTO>();
-		for (int i=0; i < requestedTable.getRows().size(); i++){
-			if (((Integer)requestedTable.getRows().get(i).
-					getFields().
-					get(parentName.toLowerCase())) == id.longValue()){
-				rows.add(requestedTable.getRows().get(i));
-			}
-		}
-		requestedTable.setRows(rows);
-		return new ResponseEntity<>(requestedTable, HttpStatus.OK);
-	}
+	}	
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<Object> addTable(@RequestBody TableDTO table) {
