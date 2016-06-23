@@ -11,6 +11,7 @@ app.service('appConstants', function(){
 	this.types = {
 		TEXT: "text",
 		DATE: "date",
-		NUMBER: "number"
+		NUMBER: "number",
+		BOOLEAN: "boolean"
 	};
 });

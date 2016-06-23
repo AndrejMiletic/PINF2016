@@ -29,11 +29,6 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	init();
-	
-	$scope.addText= function(Id) {
-        $scope.allOrderForms.push(Id);
-    }
-
 
 	$scope.showOrderForm=function(){
 		if($scope.selectedOrderForm){

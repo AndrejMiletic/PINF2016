@@ -138,14 +138,23 @@
 				</div>
 				<div class="form-inline">
 					<div>
-						<input ng-if="field.type != 'DATE' && field.name!='Id'" type = "text" 
-							ng-readonly="field.fk || field.lookup"
+						<input ng-if="field.type != 'DATE' && field.name!='Id' && field.type!='BOOLEAN' && !field.enumeration" 
+							type = "text" ng-readonly="field.fk || field.lookup"
 							ng-model="currentRow.fields[field.name]" class="form-control"
 							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>
 						<date-picker ng-if="field.type == 'DATE'" ng-model="currentRow.fields[field.name]"></date-picker>
 						<button onclick="document.getElementById('idZoom').style.display='block'" ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
 							<span class="glyphicon glyphicon-option-horizontal"></span>
 						</button>
+						<select ng-model="currentRow.fields[field.name]"
+								ng-if="field.type=='BOOLEAN'" class="form-control" style="width:210px;">
+								<option>true</option>
+								<option>false</option>
+						</select>
+						<select ng-model="currentRow.fields[field.name]"
+								ng-if="field.enumeration" class="form-control" style="width:210px;">
+								<option ng-repeat="enumValue in field.enumValues">{{enumValue}}</option>
+						</select>
 					</div>
 				</div>
 				

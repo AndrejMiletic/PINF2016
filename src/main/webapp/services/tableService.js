@@ -46,6 +46,21 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 					.replace("ć", "c")
 					.replace("ž", "z")
 					.replace("š", "s");
+		
+		tableCode=tableCode.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		tableCode=tableCode.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
+
+		tableCode=tableCode.replace(" ", "_")
+					.replace("ć", "c")
+					.replace("ž", "z")
+					.replace("š", "s");
 		return tableCode;
 	}
 
@@ -56,8 +71,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
   	this.getByNameFiltered = function(parentTable, childTable, parentId){
   		
   		var childTableCode= this.replace(childTable);
-  		childTableCode=this.replace(childTableCode);
-  		childTableCode=this.replace(childTableCode);
   		var parentTableCode= this.replace(parentTable);
   		
   		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
@@ -103,7 +116,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 			angular.forEach(table.fields, function(field, key) {
 				currentValue = row.fields[field.name];
 				if(field.name!=="Id") {
-
 					if(!field.nullable) {
 						if(!currentValue) {
 							isValid = false;
@@ -133,6 +145,14 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 							currentValue = currentValue.trim();
 							if(currentValue.length === 0) {
 								isValid = false;
+							}
+						}
+					}else
+					if(field.type=='CHAR'){
+						var maxLength=field.maxLength;
+						if(maxLength!=-1){
+							if(currentValue.length!=maxLength){
+								isValid=false;
 							}
 						}
 					}
