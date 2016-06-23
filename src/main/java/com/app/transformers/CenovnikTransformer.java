@@ -97,7 +97,7 @@ public class CenovnikTransformer implements ITransformer{
 			fields.put(FieldNames.CENOVNIK_LOOKUP, c.getNazivCenovnika());
 		}
 		
-		fields.put(DATUM_PRIMENE, c.getDatumPrimene());
+		fields.put(DATUM_PRIMENE, ConversionHelper.convertDateToSrRsFormat(c.getDatumPrimene()));
 		fields.put(TableNames.PREDUZECE, c.getPreduzece().getIdPreduzeca());
 		fields.put(FieldNames.PREDUZECE_LOOKUP, c.getPreduzece().getNaziv());
 		

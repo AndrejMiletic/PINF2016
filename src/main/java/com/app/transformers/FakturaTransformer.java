@@ -169,11 +169,11 @@ public class FakturaTransformer implements ITransformer{
 		fields.put(FieldNames.PRIMARY_KEY, c.getIdFaktureOtpremnice());				
 		fields.put(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, c.getFaBroj());
 		fields.put(TIP_FAKTURE, c.getFaTip());
-		fields.put(DATUM_FAKTURE, c.getFaDatum());		
-		fields.put(DATUM_VALUTE, c.getFaDatumValute());
+		fields.put(DATUM_FAKTURE, ConversionHelper.convertDateToSrRsFormat(c.getFaDatum()));		
+		fields.put(DATUM_VALUTE, ConversionHelper.convertDateToSrRsFormat(c.getFaDatumValute()));
 		
 		if(c.getDatumObracuna() != null) {
-			fields.put(DATUM_OBRACUNA, c.getDatumObracuna());
+			fields.put(DATUM_OBRACUNA, ConversionHelper.convertDateToSrRsFormat(c.getDatumObracuna()));
 		} else {
 			fields.put(DATUM_OBRACUNA, "");
 		}
