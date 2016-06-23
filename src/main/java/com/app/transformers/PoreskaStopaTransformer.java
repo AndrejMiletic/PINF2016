@@ -91,7 +91,7 @@ private final String DATUM_VAZENJA = "Datum važenja";
 		
 		fields.put(FieldNames.PRIMARY_KEY, c.getIdStope());				
 		fields.put(FieldNames.PORESKA_STOPA_LOOKUP, c.getIznosStope());
-		fields.put(DATUM_VAZENJA, c.getDatumVazenja());
+		fields.put(DATUM_VAZENJA, ConversionHelper.convertDateToSrRsFormat(c.getDatumVazenja()));
 		fields.put(TableNames.POREZ, c.getPorez().getIdPoreza());
 		fields.put(FieldNames.POREZ_LOOKUP, c.getPorez().getPorNaziv());
 		

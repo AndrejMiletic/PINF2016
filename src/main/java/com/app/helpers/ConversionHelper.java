@@ -30,6 +30,12 @@ public class ConversionHelper {
 		return result;
 	}
 	
+	public static String convertDateToSrRsFormat(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+		String result = formatter.format(date);
+		return result;
+	}
+	
 	public static Date convertInternationalToDate(String date) {
 		Date result;
 		

@@ -115,8 +115,8 @@ public class NarudzbaTransformer implements ITransformer {
 		
 		fields.put(FieldNames.PRIMARY_KEY, c.getIdNarudzbe());				
 		fields.put(FieldNames.NARUDZBA_LOOKUP, c.getBrojNarudzbe());
-		fields.put(DATUM_NARUCIVANJA, c.getDatumNarucivanja());
-		fields.put(ROK_ISPORUKE, c.getRokIsporuke());
+		fields.put(DATUM_NARUCIVANJA, ConversionHelper.convertDateToSrRsFormat(c.getDatumNarucivanja()));
+		fields.put(ROK_ISPORUKE, ConversionHelper.convertDateToSrRsFormat(c.getRokIsporuke()));
 		
 		if(c.getNacinOtpreme() != null) {
 			fields.put(NACIN_OTPREME, c.getNacinOtpreme());
