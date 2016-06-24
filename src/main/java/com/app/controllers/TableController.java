@@ -1,9 +1,13 @@
 package com.app.controllers;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +30,9 @@ public class TableController {
 	
 	@Autowired
 	private IGenericService crudService;
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 		
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
@@ -105,6 +112,7 @@ public class TableController {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
 	}
+	
 	@RequestMapping(path = "/filter", method = RequestMethod.POST)
 	public ResponseEntity<Object> filter(@RequestBody TableRowDTO filterRow) {
 	TableDTO requestedTable = crudService.getFilteredTable(filterRow);
@@ -115,6 +123,20 @@ public class TableController {
 			return new ResponseEntity<Object>(requestedTable, HttpStatus.OK);
 		}
 	}
+	
+	@SuppressWarnings("unused")
+	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
+	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
+		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
+		try {
+			Connection c = ds.getConnection();
+			crudService.generateKIF(new Long(1), c);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Object>(HttpStatus.OK);
+	}
+	
 //------------------------------------------------------------------------------------------------------------------
 	
 	
@@ -295,12 +317,6 @@ public class TableController {
 	public ResponseEntity<Object> generateXML(@PathVariable String id){
 		System.out.println("Generisanje XML-a za fakturu sa ID " + id);
 		return new ResponseEntity<Object>(HttpStatus.OK);		
-	}
-	
-	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
-	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
-		System.out.println("KIF od " + info.getDateFrom() + " do " + info.getDateTo());
-		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 	private ArrayList<TableDTO> getMockData() {

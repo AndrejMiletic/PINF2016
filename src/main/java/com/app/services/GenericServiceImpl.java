@@ -1,13 +1,16 @@
 package com.app.services;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -54,6 +57,8 @@ import com.app.transformers.SifraDelatnostiTransformer;
 import com.app.transformers.StavkeCenovnikaTransformer;
 import com.app.transformers.StavkeFaktureTransformer;
 import com.app.transformers.StavkeNarudzbeTransformer;
+
+import net.sf.jasperreports.engine.JasperFillManager;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
@@ -510,6 +515,15 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		
 		return iznosPoreza.doubleValue();
+	}
+	
+	public boolean generateKIF(Long id, Connection connection) {
+		/*
+		JasperFillManager.fillReportToFile(new jas,
+                java.lang.String destFileName,
+                java.util.Map<java.lang.String,java.lang.Object> parameters,
+                java.sql.Connection connection)*/
+		return true;
 	}
 	
 	@Autowired
