@@ -8,16 +8,16 @@ import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Repository;
 
-import com.app.model.invoice.FakturaOtpremnica;
+import com.app.model.invoice.Faktura;
 
 @Repository
-public class XHTML_PDF_Repository {
+public class XML_Repository {
 
-	public boolean generateXml(FakturaOtpremnica obj, String filePath){
+	public boolean generateXml(Faktura obj, String filePath){
 
 		try{
 				// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
-				JAXBContext context = JAXBContext.newInstance(FakturaOtpremnica.class);
+				JAXBContext context = JAXBContext.newInstance(Faktura.class);
 
 				// Marshaller je objekat zadužen za konverziju iz objektnog u XML model
 				Marshaller marshaller = context.createMarshaller();

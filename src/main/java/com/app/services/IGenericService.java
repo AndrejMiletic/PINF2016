@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.model.invoice.Faktura;
 
 public interface IGenericService {
 	
@@ -18,4 +19,5 @@ public interface IGenericService {
 	TableDTO getTableByParent(String parentTableCode, String parentId);
 	TableDTO getFilteredTable(TableRowDTO filterRow);
 	boolean generateKIF(Long id, Connection connection);
+	boolean generateXML(Long id,String filePath);
 }
