@@ -9,28 +9,30 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				alert("Greska");
 			}
 		);
+		 	
 			$scope.modelArray = [];
 	}
 
 	init();
 	
-	 $scope.openDocument = function () {
+	 $scope.openDocumentPriceList = function () {
 		
 		 
 		 if($scope.selectedPricelist){
 		 
 			 for (var index in $scope.requestedTable.rows) {
 
-				 if($scope.requestedTable.rows[index].fields.naziv == $scope.selectedPricelist.trim()){
+				 if($scope.requestedTable.rows[index].fields["Naziv cenovnika"] == $scope.selectedPricelist.trim()){
 					 		
 						 $scope.selectedData = $scope.requestedTable.rows[index];
 					 	 
-						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.id).then(
+						 tableService.getDocChild($scope.requestedTable.tableName, $scope.requestedTable.rows[index].fields.Id).then(
 							function (response) {
 								$scope.documentChild = response.data;
 								if($scope.documentChild.rows.length != 0){
 										$scope.parentID = $scope.documentChild.rows[0].fields.cenovnik;
-										$scope.date =  $scope.selectedData.fields.datum_primene;
+										$scope.date =  $scope.selectedData.fields["Datum primene"];
+										console.log($scope.selectedData.fields["Datum primene"])
 								}
 							},
 							function (response) {
@@ -63,9 +65,9 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 					    }
 				 if(isValid){
 					var newPrice = $scope.modelArray[index];
-					var oldPrice = $scope.documentChild.rows[index].fields.jedinicna_cena;
+					var oldPrice = $scope.documentChild.rows[index].fields["Jedinična cena stavke"];
 					
-					$scope.documentChild.rows[index].fields.jedinicna_cena = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields.jedinicna_cena*newPrice/100);
+					$scope.documentChild.rows[index].fields["Jedinična cena stavke"] = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields["Jedinična cena stavke"]*newPrice/100);
 					$scope.modelArray[index] = 0;
 				 }else{
 					 alert("Unesite broj!");
@@ -77,10 +79,9 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 	}
 	$scope.copyPricelist = function(){
 		
-		if($scope.selectedData.fields.datum_primene == $scope.date){
+		if($scope.selectedData.fields["Datum primene"] == $scope.date){
 			alert("Promeni datum primene cenovnika.");
 		}else{
-			if(tableService.isValidPricelistDate($scope.selectedData.fields.datum_primene)){
 				var pricelist = {
 					parent :  $scope.selectedData,
 					child : $scope.documentChild.rows
@@ -102,7 +103,6 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 							alert("Greska");
 						}
 					);
-			}
 		}
 	};
 

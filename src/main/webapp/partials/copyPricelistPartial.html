@@ -1,51 +1,39 @@
 <div>
-	<h1>&nbsp;Kopiranje cenovnika</h1>
-</div>
-	</br></br>
-
-<div class="form-inline">
-	<div class="form-group">&nbsp;
-		<label>Izbor cenovnika:</label>
-		<select ng-model="selectedPricelist" class="form-control" required>
-			<option data-hidden="true" ng-repeat="obj in requestedTable.rows track by $index" >
-				{{obj.fields.naziv}}
-			</option>
-		</select>
+	<div>
+		<h1>&nbsp;Kopiranje cenovnika</h1>
 	</div>
-	<button ng-click="openDocument()"type="button" class="btn btn-primary">Prikazi stavke cenovnika</button>
-</div>
-</br>
-<div ng-if="selectedPricelist">
-	<div class="form-inline">
-		<div class="form-group">&nbsp;
-			<label>Datum primene: </label>
+		</br></br>
+	
+	</br>
+	<div ng-if="selectedPricelist">
+		<div class="form-inline">
+			<div class="form-group">&nbsp;
+				<label>Datum primene: </label>
+			</div>
+			<date-picker ng-model="$parent.selectedDataPricelist.fields['Datum primene']"></date-picker>
 		</div>
-	 	<input type="text" class="form-control adjust" ng-model="$parent.selectedData.fields.datum_primene">
 	</div>
+	<div ng-if="documentChild"></br>
+		<table class="table table-hover">
+			<thead>
+			  <tr>
+				<th ng-repeat="field in documentChild.fields track by $index">{{field.name}}</th>
+				<th>Operacija izmene cene</th>
+			  </tr>
+			</thead>
+			<tbody>
+	 		  <tr ng-repeat="row in documentChild.rows">
+	 		  <tr ng-repeat="(dataIndex,row) in documentChild.rows">
+	  			<td ng-repeat="data in row.fields track by $index">{{data}}</td>		  
+	  			<td>				
+	  				<div class="row-fluid form-inline" style="overflow: hidden;">
+	  				   <input type="text" ng-model = "$parent.modelArray[$index]"/>
+	  					<button ng-click="apply(row.fields)">Potvrda</button>
+	  				</div>
+	  			</td>
+	  		  </tr>
+	  		</tbody>
+		</table>
+		<button ng-click="copyPricelist()" type="button" class="btn btn-primary">Kopiraj cenovnik</button>
+	</div></br>
 </div>
-<div ng-if="documentChild"></br>
-	<table class="table table-hover">
-		<thead>
-		  <tr>
-			<th ng-repeat="field in documentChild.fields track by $index">{{field.name}}</th>
-			<th>Operacija izmene cene</th>
-		  </tr>
-		</thead>
-		<tbody>
- 		  <tr ng-repeat="row in documentChild.rows">
- 		  <tr ng-repeat="(dataIndex,row) in documentChild.rows">
-  			<td ng-repeat="data in row.fields track by $index">{{data}}</td>		  
-  			<td>				
-  				<div class="row-fluid form-inline" style="overflow: hidden;">
-  				   <input type="text" ng-model = "$parent.modelArray[$index]"/>
-  					<button ng-click="apply(row.fields)">Potvrda</button>
-  				</div>
-  			</td>
-  		  </tr>
-  		</tbody>
-	</table>
-	<button ng-click="copyPricelist()" type="button" class="btn btn-primary">Kopiraj cenovnik</button>
-</div></br>
-
-
-

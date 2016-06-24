@@ -52,8 +52,8 @@ public class PreduzeceTransformer implements ITransformer {
 			
 		p.setSifraDelatnosti((SifraDelatnosti)fks.get(TableNames.SIFRA_DELATNOSTI));
 	
-		if(rows.containsKey("Naziv preduzeća")) {
-			p.setNaziv(rows.get("Naziv preduzeća").toString());
+		if(rows.containsKey(FieldNames.PREDUZECE_LOOKUP)) {
+			p.setNaziv(rows.get(FieldNames.PREDUZECE_LOOKUP).toString());
 		}
 		if(rows.containsKey("PIB")) {
 			p.setPib(rows.get("PIB").toString());
@@ -97,27 +97,27 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		fields.put("Id", p.getIdPreduzeca());
 			
-		fields.put("Naziv preduzeća",p.getNaziv());
+		fields.put(FieldNames.PREDUZECE_LOOKUP,p.getNaziv());
 		fields.put("PIB", p.getPib());
 		fields.put("Matični broj", p.getMaticniBroj());
 		
 		if(p.getAdresa() == null ||p.getAdresa().equals("")) {
-			fields.put("Adresa", "Nije uneta adresa");
+			fields.put("Adresa", "");
 		} else {
 			fields.put("Adresa", p.getAdresa());
 		}
 		if(p.getBrojTelefona() == null ||p.getBrojTelefona().equals("")) {
-			fields.put("Broj telefona", "Nije unet broj");
+			fields.put("Broj telefona", "");
 		} else {
 			fields.put("Broj telefona", p.getBrojTelefona());
 		}
 		if(p.getEmail() == null ||p.getEmail().equals("")) {
-			fields.put("Email", "Nije unet email");
+			fields.put("Email", "");
 		} else {
 			fields.put("Email", p.getEmail());
 		}
 		if(p.getBanka() == null ||p.getBanka().equals("")) {
-			fields.put("Banka", "Nije uneta banka");
+			fields.put("Banka", "");
 		} else {
 			fields.put("Banka", p.getBanka());
 		}		
@@ -156,13 +156,13 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO("Naziv preduzeća", false, true, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, true, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(100);
 		fields.add(field);
-		field = new TableFieldDTO("PIB", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("PIB", false, false, false, false, "", DataTypes.CHAR);
 		field.setMaxLength(9);
 		fields.add(field);
-		field = new TableFieldDTO("Matični broj", false, false, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO("Matični broj", false, false, false, false, "", DataTypes.CHAR);
 		field.setMaxLength(8);
 		fields.add(field);
 		field = new TableFieldDTO("Adresa", false, false, false, false, "", DataTypes.TEXT);

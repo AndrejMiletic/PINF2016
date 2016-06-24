@@ -97,7 +97,7 @@ public class CenovnikTransformer implements ITransformer{
 			fields.put(FieldNames.CENOVNIK_LOOKUP, c.getNazivCenovnika());
 		}
 		
-		fields.put(DATUM_PRIMENE, c.getDatumPrimene());
+		fields.put(DATUM_PRIMENE, ConversionHelper.convertDateToSrRsFormat(c.getDatumPrimene()));
 		fields.put(TableNames.PREDUZECE, c.getPreduzece().getIdPreduzeca());
 		fields.put(FieldNames.PREDUZECE_LOOKUP, c.getPreduzece().getNaziv());
 		
@@ -109,7 +109,6 @@ public class CenovnikTransformer implements ITransformer{
 
 	private void fillMetaData(TableDTO table, Cenovnik c) {
 		ArrayList<String> children = new ArrayList<String>();
-		children.add(TableNames.STAVKE_CENOVNIKA);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.PREDUZECE);

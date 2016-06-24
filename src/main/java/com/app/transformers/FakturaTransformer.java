@@ -169,11 +169,11 @@ public class FakturaTransformer implements ITransformer{
 		fields.put(FieldNames.PRIMARY_KEY, c.getIdFaktureOtpremnice());				
 		fields.put(FieldNames.FAKTURA_OTPREMNICA_LOOKUP, c.getFaBroj());
 		fields.put(TIP_FAKTURE, c.getFaTip());
-		fields.put(DATUM_FAKTURE, c.getFaDatum());		
-		fields.put(DATUM_VALUTE, c.getFaDatumValute());
+		fields.put(DATUM_FAKTURE, ConversionHelper.convertDateToSrRsFormat(c.getFaDatum()));		
+		fields.put(DATUM_VALUTE, ConversionHelper.convertDateToSrRsFormat(c.getFaDatumValute()));
 		
 		if(c.getDatumObracuna() != null) {
-			fields.put(DATUM_OBRACUNA, c.getDatumObracuna());
+			fields.put(DATUM_OBRACUNA, ConversionHelper.convertDateToSrRsFormat(c.getDatumObracuna()));
 		} else {
 			fields.put(DATUM_OBRACUNA, "");
 		}
@@ -251,7 +251,6 @@ public class FakturaTransformer implements ITransformer{
 	
 	private void fillMetaData(TableDTO table, FakturaOtpremnica jedinica) {
 		ArrayList<String> children = new ArrayList<String>();
-		children.add(TableNames.STAVKE_FAKTURE_OTPREMNICE);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.NARUDZBA);
@@ -332,17 +331,17 @@ public class FakturaTransformer implements ITransformer{
 		fields.add(field);
 		
 		
-		field = new TableFieldDTO(TableNames.NARUDZBA, false, true, false, false, TableNames.NARUDZBA, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.NARUDZBA, false, true, true, false, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.NARUDZBA_LOOKUP, false, true, false, true, TableNames.NARUDZBA, DataTypes.NUMBER);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, false, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.POSLOVNA_GODINA, false, false, true, false, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POSLOVNA_GODINA_LOOKUP, false, false, false, true, TableNames.POSLOVNA_GODINA, DataTypes.NUMBER);
 		fields.add(field);
 		
-		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, false, false, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
+		field = new TableFieldDTO(TableNames.POSLOVNI_PARTNER, false, false, true, false, TableNames.POSLOVNI_PARTNER, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.POSLOVNI_PARTNER_LOOKUP, false, false, false, true, TableNames.POSLOVNI_PARTNER, DataTypes.TEXT);
 		field.setMaxLength(100);

@@ -11,6 +11,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				alert("Greska");
 			}
 		);
+		$scope.modelArray = [];
 	};
 
 	init();
@@ -54,8 +55,8 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
     $scope.openDocument = function (id) {
         $scope.closeForeignKeyForm();
-        var childName=$scope.requestedTable.children[0];
-        var childCode=tableService.replace(childName);
+       /* var childName=$scope.requestedTable.children[0];
+        var childCode=tableService.replace(childName);*/
 //        if ($scope.requestedTable.documentChildName){
 //          tableService.getTableByName(childCode).then(
 //              function (response) {
@@ -208,7 +209,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
+				//$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
 			}
 			
 			var row =  angular.copy($scope.currentRow);
@@ -422,4 +423,99 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		downloadLink.attr('download', name);
 		downloadLink[0].click();
 	}
+	
+		$scope.setSelectedPricelist = function(row){
+			$scope.selectedPricelistRow = row;
+			$scope.selectedPricelist = row.fields["Naziv cenovnika"];
+			console.log(row)
+			$scope.selectedDataPricelist = row;
+			$scope.openDocumentPriceList();
+		}
+		
+		$scope.openDocumentPriceList = function () {
+			
+			 
+			 if($scope.selectedPricelist){
+						 	 
+				 tableService.getDocChild($scope.requestedTable.tableName, $scope.selectedPricelistRow.fields.Id).then(
+					function (response) {
+						$scope.documentChild = response.data;
+						if($scope.documentChild.rows.length != 0){
+								$scope.parentID = $scope.documentChild.rows[0].fields.cenovnik;
+								$scope.date =  $scope.selectedDataPricelist.fields["Datum primene"];
+								console.log($scope.selectedDataPricelist.fields["Datum primene"])
+						}
+					},
+					function (response) {
+						alert("Neuspesno dobavljanje tabele");
+					}
+				);
+
+				
+			 }else{
+				 alert("Izaberite cenovnik iz liste!");
+			 }
+			 
+	    };
+		
+		$scope.apply = function(row){
+		
+			var isValid;		
+		    var number = /^[0-9.-]+$/;
+			
+			for (var index in $scope.documentChild.rows) {
+				 
+				 if($scope.documentChild.rows[index].fields == row && $scope.modelArray[index]){
+					
+					  if($scope.modelArray[index].match(number)) 
+					  {  
+						 isValid = true;  
+					  } else{
+						 isValid = false;
+						    }
+					 if(isValid){
+						var newPrice = $scope.modelArray[index];
+						var oldPrice = $scope.documentChild.rows[index].fields["Jedinična cena stavke"];
+						
+						$scope.documentChild.rows[index].fields["Jedinična cena stavke"] = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields["Jedinična cena stavke"]*newPrice/100);
+						$scope.modelArray[index] = 0;
+					 }else{
+						 alert("Unesite broj!");
+						 return;
+					      }
+				 }
+				
+			}	
+		}
+		
+		$scope.copyPricelist = function(){
+			
+			if($scope.selectedDataPricelist.fields["Datum primene"] == $scope.date){
+				alert("Promeni datum primene cenovnika.");
+			}else{
+				$scope.selectedDataPricelist.fields["Datum primene"] = $scope.selectedDataPricelist.fields["Datum primene"].toLocaleDateString("sr-rs");
+					var pricelist = {
+						parent :  $scope.selectedDataPricelist,
+						child : $scope.documentChild.rows
+					}
+
+					tableService.addPricelist(pricelist).then(
+							function (response) {
+								 tableService.getTableByName("Cenovnik").then(
+									function (response) {
+										alert("Uspešno kopiran cenovnik");
+										$scope.requestedTable = response.data;
+										document.getElementById('idCenovnik').style.display='none';
+									},
+									function (response) {
+										alert("Greska");
+									}
+								);
+							},
+							function (response) {
+								alert("Greska");
+							}
+						);
+			}
+		};
 }]);
