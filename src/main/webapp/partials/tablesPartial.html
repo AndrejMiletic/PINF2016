@@ -55,7 +55,7 @@
 				<button ng-click="generateCreateForm()" class="btn btn-success centered">
 					<span class="glyphicon glyphicon-plus"></span> Dodaj novi red
 				</button>
-				<button ng-if="requestedTable.children" ng-click="showNextTableSelection()" class="btn btn-primary centered">
+				<button ng-if="requestedTable.children.length>0" ng-click="showNextTableSelection()" class="btn btn-primary centered">
 					<span class="glyphicon glyphicon-arrow-right"></span> Next mehanizam
 				</button>
 			</div>

@@ -498,7 +498,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						parent :  $scope.selectedDataPricelist,
 						child : $scope.documentChild.rows
 					}
-
+					
 					tableService.addPricelist(pricelist).then(
 							function (response) {
 								 tableService.getTableByName("Cenovnik").then(
