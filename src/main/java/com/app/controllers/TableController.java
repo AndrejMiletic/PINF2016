@@ -170,11 +170,11 @@ public class TableController {
 	@RequestMapping(path = "/addPricelist", method = RequestMethod.POST)
 	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDTO pricelist) {
 		TableRowDTO cenovnik = pricelist.getParent();
-		cenovnik.getFields().put("Id", null);
+		cenovnik.getFields().remove("Id");
 		crudService.create(cenovnik);
 		ArrayList<TableRowDTO> stavke = pricelist.getChild();
 		for (TableRowDTO row : stavke){
-			row.getFields().put("Id", null);
+			row.getFields().remove("Id");
 			crudService.create(cenovnik);
 		}
 		/*ArrayList<String> ids = new ArrayList<String>();
