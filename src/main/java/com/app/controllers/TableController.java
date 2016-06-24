@@ -22,6 +22,7 @@ import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
 import com.app.helpers.ConversionHelper;
+import com.app.model.invoice.Faktura;
 import com.app.services.IGenericService;
 
 @RestController
@@ -327,8 +328,13 @@ public class TableController {
 	
 	@RequestMapping(path="/generateXML/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Object> generateXML(@PathVariable String id){
-		System.out.println("Generisanje XML-a za fakturu sa ID " + id);
-		return new ResponseEntity<Object>(HttpStatus.OK);		
+		Long idL=new Long(id);
+		String filePath="src/main/webapp/downloads/faktura.xml";
+		if(crudService.generateXML(idL,filePath)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	private ArrayList<TableDTO> getMockData() {

@@ -28,7 +28,7 @@
 					  <thead>
 					    <tr>
 					      <th class="centered" ng-repeat="field in filteredNextTable.fields">{{field.name}}</th>
-								<th class="centered">Operacije</th>
+						  <th ng-show="filteredNextTable.tableName==='Faktura'" class="centered">Operacije</th>
 					    </tr>
 					  </thead>
 					  <tbody class="centered">
@@ -55,7 +55,7 @@
 				<button ng-click="generateCreateForm()" class="btn btn-success centered">
 					<span class="glyphicon glyphicon-plus"></span> Dodaj novi red
 				</button>
-				<button ng-if="requestedTable.children" ng-click="showNextTableSelection()" class="btn btn-primary centered">
+				<button ng-if="requestedTable.children.length>0" ng-click="showNextTableSelection()" class="btn btn-primary centered">
 					<span class="glyphicon glyphicon-arrow-right"></span> Next mehanizam
 				</button>
 			</div>
@@ -95,7 +95,7 @@
         		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
           		<span class="glyphicon glyphicon-save"></span> XML</button>
           		<button  class="btn btn-primary" ng-click="setSelectedPricelist(row)" onclick="document.getElementById('idCenovnik').style.display='block'" ng-if="requestedTable.tableName==='Cenovnik'">
-          		<span class="glyphicon "></span>Copy cenovnik</button>
+          		<span class="glyphicon "></span>Kopiranje cenovnika</button>
 					</td>
 		    </tr>
 		  </tbody>
@@ -147,15 +147,16 @@
 		<br/><br/>
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
-			<div class="currentRow" ng-repeat="field in currentTable.fields" ng-if="field.name!=='id' || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
+			<div class="currentRow" ng-repeat="field in currentTable.fields" 
+				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
 				<div class="form-inline">
-					<div class="form-group" style="width: 150px; float:left; text-align: left;">
-						<label ng-if="field.name!='Id'">{{field.name}}</label>
+					<div class="form-group" style="width: 250px; float:left; text-align: left;">
+						<label>{{field.name}}</label>
 					</div>
 				</div>
 				<div class="form-inline">
 					<div>
-						<input ng-if="field.type != 'DATE' && field.name!='Id' && field.type!='BOOLEAN' && !field.enumeration" 
+						<input ng-if="field.type != 'DATE' && field.type!='BOOLEAN' && !field.enumeration" 
 							type = "text" ng-readonly="field.fk || field.lookup"
 							ng-model="currentRow.fields[field.name]" class="form-control"
 							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>

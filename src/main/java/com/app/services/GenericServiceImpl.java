@@ -27,6 +27,7 @@ import com.app.model.PoreskaStopa;
 import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
 import com.app.model.StavkeNarudzbe;
+import com.app.model.invoice.Faktura;
 import com.app.repositories.ICenovnikRepository;
 import com.app.repositories.IFakturaOtpremnicaRepository;
 import com.app.repositories.IGrupaProizvodaRepository;
@@ -42,8 +43,10 @@ import com.app.repositories.ISifraDelatnostiRepository;
 import com.app.repositories.IStavkeCenovnikaRepository;
 import com.app.repositories.IStavkeFaktureOtpremniceRepository;
 import com.app.repositories.IStavkeNarudzbeRepository;
+import com.app.repositories.XML_Repository;
 import com.app.transformers.ArtikalTransformer;
 import com.app.transformers.CenovnikTransformer;
+import com.app.transformers.FakturaOtpremnicaToFaktura;
 import com.app.transformers.FakturaTransformer;
 import com.app.transformers.GrupaProizvodaTransformer;
 import com.app.transformers.ITransformer;
@@ -70,6 +73,9 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 @Component
 public class GenericServiceImpl implements IGenericService {
 
+	@Autowired
+	private XML_Repository xmlRepo;
+	
 	@Override
 	public boolean create(TableRowDTO row) {
 		try {
@@ -613,6 +619,25 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		
 		return dto;
+	}
+	
+	public boolean generateXML(Long id,String filePath) {
+		String tableCode="Faktura_i_otpremnica";
+		Object result = null;
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			result = repo.findOne(id);
+		} catch (Exception e) {
+			return false;
+		}
+		if(result!=null && (result instanceof FakturaOtpremnica)){
+			FakturaOtpremnica fo=(FakturaOtpremnica)result;
+			Faktura invoice=FakturaOtpremnicaToFaktura.transform(fo);
+			if(xmlRepo.generateXml(invoice, filePath))
+				return true;
+		}
+		return false;
 	}
 
 }

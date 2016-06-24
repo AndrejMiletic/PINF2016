@@ -3,8 +3,8 @@
     <xs:element name="Faktura">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Datum_izdavanja" type="xs:date"/>
-                <xs:element name="Datum_valute" type="xs:date"/>
+                <xs:element name="Datum_izdavanja" type="xs:string"/>
+                <xs:element name="Datum_valute" type="xs:string"/>
                 <xs:element name="Podaci_o_izdavaocu" type="TPreduzece"/>
                 <xs:element name="Podaci_o_kupcu" type="TPreduzece"/>
                 <xs:element maxOccurs="unbounded" minOccurs="1" name="Stavka_fakture"
@@ -98,7 +98,7 @@
             </xs:element>
             <xs:element name="Kolicina">
                 <xs:simpleType>
-                    <xs:restriction base="xs:int">
+                    <xs:restriction base="xs:decimal">
                         <xs:minInclusive value="0"/>
                     </xs:restriction>
                 </xs:simpleType>
@@ -113,7 +113,7 @@
             </xs:element>
             <xs:element name="Rabat">
                 <xs:simpleType>
-                    <xs:restriction base="xs:int">
+                    <xs:restriction base="xs:decimal">
                         <xs:minExclusive value="-1"/>
                         <xs:maxExclusive value="100"/>
                     </xs:restriction>

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.app.DTO.KifDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
+import com.app.model.invoice.Faktura;
 
 public interface IGenericService {
 	
@@ -20,4 +21,5 @@ public interface IGenericService {
 	TableDTO getFilteredTable(TableRowDTO filterRow);
 	boolean generateKIF(Connection connection, KifDTO info);
 	TableDTO getCompaniesForKIF();
+	boolean generateXML(Long id,String filePath);
 }
