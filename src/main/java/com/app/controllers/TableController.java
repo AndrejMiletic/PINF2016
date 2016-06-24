@@ -145,6 +145,64 @@ public class TableController {
 		return result;
 	}
 
+	@RequestMapping(path = "/addPricelist", method = RequestMethod.POST)
+	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDTO pricelist) {
+		TableRowDTO cenovnik = pricelist.getParent();
+		cenovnik.getFields().put("Id", null);
+		crudService.create(cenovnik);
+		ArrayList<TableRowDTO> stavke = pricelist.getChild();
+		for (TableRowDTO row : stavke){
+			row.getFields().put("Id", null);
+			crudService.create(cenovnik);
+		}
+		/*ArrayList<String> ids = new ArrayList<String>();
+		for (TableRowDTO row : rows1Pricelist) {
+			ids.add(row.getFields().get("Id").toString());
+		}
+		ArrayList<Integer> resultList = getIntegerArray(ids);
+		int max = Collections.max(resultList);
+
+		pricelist.getParent().getFields().put("naziv", "Cenovnik " + (max + 1));
+		pricelist.getParent().getFields().put("Id", (max + 1));
+		
+		addedRowsPricelist.add(pricelist.getParent());
+		for (TableRowDTO row : pricelist.getChild()) {
+			row.getFields().put("cenovnik", (max+1));
+			addedRowsPricelistItem.add(row);
+		}
+		System.out.println("Podaci o cenovniku: \n\n" + pricelist.getParent());
+		System.out.println("Stavke cenovnika: \n");
+		for (TableRowDTO row : pricelist.getChild()) {
+			System.out.println(row);
+		}*/
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/addTableRow", method = RequestMethod.POST)
+	public ResponseEntity<Object> addTableRow(@RequestBody TableRowDTO row) {
+
+		/*ArrayList<String> ids = new ArrayList<String>();
+		for (TableRowDTO roww : rows1PricelistItem) {
+			ids.add(roww.getFields().get("id").toString());
+		}
+		ArrayList<Integer> resultList = getIntegerArray(ids);
+		int max = Collections.max(resultList);
+
+		row.getFields().put("id", (max + 1));
+
+		addedRowsPricelistItem.add(row);
+		System.out.println(row);*/
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/deleteTableRow", method = RequestMethod.POST)
+	public ResponseEntity<Object> deleteTableRow(@RequestBody TableRowDTO row) {
+
+		//deleteRowsPricelist.add(row);
+		System.out.println(row);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
 	@RequestMapping(value = "/getByName/{name}", method = RequestMethod.GET)
 	public ResponseEntity<TableDTO> getByName(@PathVariable String name) {
 		ArrayList<TableDTO> tables = getMockData();
