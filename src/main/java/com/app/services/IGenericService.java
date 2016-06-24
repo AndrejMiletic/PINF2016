@@ -1,5 +1,6 @@
 package com.app.services;
 
+import java.sql.Connection;
 import java.util.HashMap;
 
 import com.app.DTO.TableDTO;
@@ -16,4 +17,5 @@ public interface IGenericService {
 	TableDTO getMetaData(String tableCode);
 	TableDTO getTableByParent(String parentTableCode, String parentId);
 	TableDTO getFilteredTable(TableRowDTO filterRow);
+	boolean generateKIF(Long id, Connection connection);
 }
