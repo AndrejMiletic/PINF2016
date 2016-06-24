@@ -209,7 +209,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				//$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
+				$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
 			}
 			
 			var row =  angular.copy($scope.currentRow);
@@ -331,14 +331,24 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	
 	$scope.openDocumentForeignKey=function(row){
 		$scope.selectedForeignKey=row.fields.Id;
-		for(var field in $scope.currentTable.fields){
-			if($scope.currentTable.fields[field].lookup){
-				var fkTableName=$scope.currentTable.fields[field].fkTableName;
-				if(fkTableName==$scope.foreignKeyField.name){
-					var name=$scope.currentTable.fields[field].name;
-					$scope.selectedForeignKeyName=row.fields[name];
-					console.log(row);
+		if($scope.currentTable.tableCode!="Poslovni_partner"){
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].lookup){
+					var fkTableName=$scope.currentTable.fields[field].fkTableName;
+					if(fkTableName==$scope.foreignKeyField.name){
+						var name=$scope.currentTable.fields[field].name;
+						$scope.selectedForeignKeyName=row.fields[name];
+					}
 				}
+			}
+		}else{
+			if($scope.foreignKeyField.name=="Partner"){
+				$scope.requestedTable.rows[0].fields["Naziv partnera"]=row.fields["Naziv preduzeća"]
+				$scope.selectedForeignKeyName=row.fields["Naziv preduzeća"];
+			}else if($scope.foreignKeyField.name=="Preduzeće"){
+				$scope.requestedTable.rows[0].fields["Naziv preduzeća"]=row.fields["Naziv preduzeća"]
+				$scope.requestedTable.rows[0].fields["Naziv partnera"]=row.fields[""]
+				$scope.selectedForeignKeyName=row.fields["Naziv preduzeća"];
 			}
 		}
         if ($scope.foreignTable && $scope.foreignTable.documentPattern && $scope.foreignTable.documentChildName){
@@ -356,12 +366,22 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	$scope.addForeignKey=function(){
 		if($scope.selectedForeignKey){
 			$scope.currentRow.fields[$scope.foreignKeyField.name]=$scope.selectedForeignKey;
-			for(var field in $scope.currentTable.fields){
-				if($scope.currentTable.fields[field].lookup){
-					var fkTableName=$scope.currentTable.fields[field].fkTableName;
-					if(fkTableName==$scope.foreignKeyField.name){
-						var name=$scope.currentTable.fields[field].name;
-						$scope.currentRow.fields[name]=$scope.selectedForeignKeyName;
+			if($scope.requestedTable.tableCode=="Poslovni_partner"){
+				if($scope.currentRow.fields["Partner"]){
+					$scope.currentRow.fields["Naziv partnera"]=$scope.selectedForeignKeyName;
+				}else if($scope.currentRow.fields["Preduzeće"]){
+					$scope.currentRow.fields["Naziv preduzeća"]=$scope.selectedForeignKeyName;
+					$scope.requestedTable.rows[0].fields["Naziv partnera"]=$scope.selectedForeignKeyName;
+				}
+				console.log($scope.currentRow);
+			}else{
+				for(var field in $scope.currentTable.fields){
+					if($scope.currentTable.fields[field].lookup){
+						var fkTableName=$scope.currentTable.fields[field].fkTableName;
+						if(fkTableName==$scope.foreignKeyField.name){
+							var name=$scope.currentTable.fields[field].name;
+							$scope.currentRow.fields[name]=$scope.selectedForeignKeyName;
+						}
 					}
 				}
 			}

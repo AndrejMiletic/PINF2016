@@ -147,15 +147,16 @@
 		<br/><br/>
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
-			<div class="currentRow" ng-repeat="field in currentTable.fields" ng-if="field.name!=='id' || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
+			<div class="currentRow" ng-repeat="field in currentTable.fields" 
+				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
 				<div class="form-inline">
-					<div class="form-group" style="width: 150px; float:left; text-align: left;">
-						<label ng-if="field.name!='Id'">{{field.name}}</label>
+					<div class="form-group" style="width: 250px; float:left; text-align: left;">
+						<label>{{field.name}}</label>
 					</div>
 				</div>
 				<div class="form-inline">
 					<div>
-						<input ng-if="field.type != 'DATE' && field.name!='Id' && field.type!='BOOLEAN' && !field.enumeration" 
+						<input ng-if="field.type != 'DATE' && field.type!='BOOLEAN' && !field.enumeration" 
 							type = "text" ng-readonly="field.fk || field.lookup"
 							ng-model="currentRow.fields[field.name]" class="form-control"
 							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>

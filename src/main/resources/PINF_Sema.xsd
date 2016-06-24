@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/faktura" xmlns:fa="http://www.ftn.uns.ac.rs/faktura">
+    <xs:element name="FakturaOtpremnica">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="fa:StavkaFaktureOtpremnice"/>
+                <xs:element name="idNarudzbe" type="xs:long"/>
+                <xs:element name="idPoslovneGodine" type="xs:long"/>
+                <xs:element name="poslovnaGodina" type="xs:short"/>
+                <xs:element name="idPartnerstva" type="xs:long"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="fa:faAttributes"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="faAttributes">
+        <xs:attribute name="idFaktureOtpremnice" type="xs:long"/>
+        <xs:attribute name="faBroj" type="xs:int"/>
+        <xs:attribute name="faTip" type="xs:string"/>
+        <xs:attribute name="faDatum" type="xs:string"/>
+        <xs:attribute name="faDatumValute" type="xs:string"/>
+        <xs:attribute name="faDatumObracuna" type="xs:string"/>
+        <xs:attribute name="faUkupno" type="xs:decimal"/>
+        <xs:attribute name="faRabat" type="xs:decimal"/>
+        <xs:attribute name="faPorez" type="xs:decimal"/>
+        <xs:attribute name="faIznos" type="xs:decimal"/>
+        <xs:attribute name="faTekuciracun" type="xs:string"/>
+        <xs:attribute name="faPoziv" type="xs:string"/>
+        <xs:attribute name="statusFakture" type="xs:string"/>
+        <xs:attribute name="dodatneNapomene" type="xs:string"/>
+        <xs:attribute name="adresaIsporuke" type="xs:string"/>
+        <xs:attribute name="brojKamiona" type="xs:string"/>
+        <xs:attribute name="prevoznik" type="xs:string"/>
+        <xs:attribute name="robuIRacunIzdao" type="xs:string"/>
+        <xs:attribute name="robuIRacunPreuzeo" type="xs:string"/>
+    </xs:attributeGroup>
+    <xs:element name="StavkaFaktureOtpremnice">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="idFaktureOtpremnice" type="xs:long"/>
+                <xs:element name="Artikal">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="idArtikla" type="xs:long"/>
+                            <xs:element name="sifraArtikla" type="xs:string"/>
+                            <xs:element name="nazivArtikla" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="fa:stavkeAttributes"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="stavkeAttributes">
+        <xs:attribute name="idStavkeFakture" type="xs:long"/>
+        <xs:attribute name="kolicina" type="xs:decimal"/>
+        <xs:attribute name="rabat" type="xs:decimal"/>
+        <xs:attribute name="osnovicaPDV" type="xs:decimal"/>
+        <xs:attribute name="jedinicnaCenaStavkeFakture" type="xs:decimal"/>
+    </xs:attributeGroup>
+</xs:schema>
