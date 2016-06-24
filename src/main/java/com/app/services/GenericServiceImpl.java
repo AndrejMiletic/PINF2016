@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -18,6 +19,10 @@ import com.app.DTO.TableRowDTO;
 import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
+import com.app.model.FakturaOtpremnica;
+import com.app.model.PoreskaStopa;
+import com.app.model.StavkeFaktureOtpremnice;
+import com.app.model.StavkeNarudzbe;
 import com.app.repositories.ICenovnikRepository;
 import com.app.repositories.IFakturaOtpremnicaRepository;
 import com.app.repositories.IGrupaProizvodaRepository;
@@ -61,7 +66,17 @@ public class GenericServiceImpl implements IGenericService {
 			ITransformer transformer = getTransformer(row.getTableName());
 			HashMap<String, Object> fks = getFKs(row);
 			Object entity = transformer.transformFromDTO(row, fks);
+			
+			if(row.getTableName().equals(TableNames.STAVKE_NARUDZBE)) {
+				calculateOrderItemValue((StavkeNarudzbe)entity);
+			} else if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
+				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
+			}
 			repo.save(entity);
+			
+			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true);
+			}
 		} catch (Exception e) {
 			return false;
 		}
@@ -69,13 +84,24 @@ public class GenericServiceImpl implements IGenericService {
 	}
 
 	@Override
-	public boolean update(TableRowDTO row) {
+	public boolean update(TableRowDTO row) { 
 		try {
 			CrudRepository repo = getTableRepo(row.getTableName());
 			ITransformer transformer = getTransformer(row.getTableName());
 			HashMap<String, Object> fks = getFKs(row);
 			Object entity = transformer.transformFromDTO(row, fks);
+			
+			if(row.getTableName().equals(TableNames.STAVKE_NARUDZBE)) {
+				calculateOrderItemValue((StavkeNarudzbe)entity);
+			} else if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
+				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
+			}
+			
 			repo.save(entity);
+			
+			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true);
+			}
 		} catch (Exception e) {
 			return false;
 		}
@@ -84,15 +110,29 @@ public class GenericServiceImpl implements IGenericService {
 
 	@Override
 	public boolean delete(Long id, String tableCode) {
+		FakturaOtpremnica faktura = null;
 		try {
 			String tableName = ConversionHelper.getTableName(tableCode);
 			CrudRepository repo = getTableRepo(tableName);
+			
+
+			if(tableName.equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
+				faktura = calculateInvoiceValue(id, false);
+			}
+			
 			repo.delete(id);
+			
+
+			if(tableName.equals(TableNames.STAVKE_FAKTURE_OTPREMNICE) && faktura != null) {
+				update(getTransformer(TableNames.FAKTURA_OTPREMNICA).transformToDTO(faktura).getRows().get(0));
+			}
+			
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
+	
 
 	@Override
 	public TableDTO getById(Long id, String tableCode) {
@@ -382,6 +422,96 @@ public class GenericServiceImpl implements IGenericService {
 		return null;
 	}
 
+	private void calculateOrderItemValue(StavkeNarudzbe orderItem) {
+		double iznos;
+		
+		iznos = orderItem.getCenaBezPdvAStavkeNarudzbenice().doubleValue() * orderItem.getKolicinaStavkeNarudzbenice();
+		
+		orderItem.setIznosStavkeNarudzbenice(new BigDecimal(iznos));
+	}
+	
+
+	private void calculateInvoiceItemValue(StavkeFaktureOtpremnice invoiceItem) {
+		double vrednost = invoiceItem.getJedinicnaCenaStavkeFakture().intValue() * invoiceItem.getKolicina().intValue();
+		
+		//ako postoji rabat, osnovica je kad se od vrednosti oduzme rabat
+		if(invoiceItem.getRabat() != null && invoiceItem.getRabat().intValue() > 0) {
+			double osnovicaPDV = vrednost * (1 - invoiceItem.getRabat().intValue()/100);
+			invoiceItem.setOsnovicaPdv(new BigDecimal(osnovicaPDV));
+		} else {	//ako nema rabat, PDV se racuna na cistu vrednost
+			invoiceItem.setOsnovicaPdv(new BigDecimal(vrednost));
+		}
+	}
+	
+	private FakturaOtpremnica calculateInvoiceValue(Long id, boolean shouldUpdate) throws Exception {
+		FakturaOtpremnica faktura;
+		double ukupno = 0, iznos = 0, rabat = 0, porez = 0, jedCenaStavke, rabatStavke, kolicina, porezStavke;
+		faktura = fakturaRepo.findOne(id);
+		
+		//to znaci da je delete zvao i da je prosledjeni ID ustvari ID stavke, a ne fakture
+		if(!shouldUpdate) {
+			if(stavkeFaktureRepo.findOne(id) != null) {
+				faktura = stavkeFaktureRepo.findOne(id).getFakturaOtpremnica();
+			} else {
+				faktura = null;
+			}
+		}
+		
+		if(faktura != null) {
+			for (StavkeFaktureOtpremnice stavka : faktura.getStavkeFaktureOtpremnices()) {
+				//ako je brisanje, preskoci stavku koja treba da se brise - ako je brisanje i ako se ID poklapa
+				if(!(!shouldUpdate && stavka.getIdStavkeFakture().equals(id))) {
+					jedCenaStavke = stavka.getJedinicnaCenaStavkeFakture().doubleValue();
+					kolicina = stavka.getKolicina().doubleValue();
+					
+					ukupno += jedCenaStavke * kolicina;
+					
+					rabatStavke = jedCenaStavke*kolicina*stavka.getRabat().doubleValue()/100;
+					rabat += rabatStavke;
+					
+					porezStavke = getCurrentTaxAmmount(stavka) * stavka.getOsnovicaPdv().doubleValue()/100;
+					porez += porezStavke;
+				}
+			}
+			iznos = ukupno - rabat + porez;
+			faktura.setFaIznos(new BigDecimal(iznos));
+			faktura.setFaUkupno(new BigDecimal(ukupno));
+			faktura.setFaRabat(new BigDecimal(rabat));
+			faktura.setFaPorez(new BigDecimal(porez));
+			if(shouldUpdate) {
+				fakturaRepo.save(faktura);
+			}
+		} else {
+			throw new Exception("Ne postoji faktura za preracunavanje vrednosti u odnosu na izmenu stavke!");
+		}
+		
+		
+		return faktura;
+	}
+	
+	private double getCurrentTaxAmmount(StavkeFaktureOtpremnice stavka) {
+		BigDecimal iznosPoreza = new BigDecimal(0);
+		Date datum = new Date();
+		Set<PoreskaStopa> stope = stavka.getKatalogRobeIUsluga().getGrupaProizvoda().getPorez().getPoreskaStopas();
+		int i = 0;
+		
+		if(stope.size() > 0) {
+			for (PoreskaStopa stopa : stope) {
+				if(i == 0) {
+					i++;
+					iznosPoreza = stopa.getIznosStope();
+					datum = stopa.getDatumVazenja();
+				} else {
+					if(stopa.getDatumVazenja().compareTo(datum) > 0) {
+						iznosPoreza = stopa.getIznosStope();
+					}
+				}
+			}
+		}
+		
+		return iznosPoreza.doubleValue();
+	}
+	
 	@Autowired
 	private ICenovnikRepository cenovnikRepo;
 
