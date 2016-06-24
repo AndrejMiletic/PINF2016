@@ -1,5 +1,6 @@
 package com.app.services;
 
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.text.DateFormat;
@@ -10,12 +11,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
+import com.app.DTO.KifDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
@@ -24,6 +24,7 @@ import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
 import com.app.model.FakturaOtpremnica;
 import com.app.model.PoreskaStopa;
+import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
 import com.app.model.StavkeNarudzbe;
 import com.app.repositories.ICenovnikRepository;
@@ -58,7 +59,12 @@ import com.app.transformers.StavkeCenovnikaTransformer;
 import com.app.transformers.StavkeFaktureTransformer;
 import com.app.transformers.StavkeNarudzbeTransformer;
 
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
@@ -137,7 +143,6 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		return true;
 	}
-	
 
 	@Override
 	public TableDTO getById(Long id, String tableCode) {
@@ -434,7 +439,6 @@ public class GenericServiceImpl implements IGenericService {
 		
 		orderItem.setIznosStavkeNarudzbenice(new BigDecimal(iznos));
 	}
-	
 
 	private void calculateInvoiceItemValue(StavkeFaktureOtpremnice invoiceItem) {
 		double vrednost = invoiceItem.getJedinicnaCenaStavkeFakture().intValue() * invoiceItem.getKolicina().intValue();
@@ -517,12 +521,38 @@ public class GenericServiceImpl implements IGenericService {
 		return iznosPoreza.doubleValue();
 	}
 	
-	public boolean generateKIF(Long id, Connection connection) {
-		/*
-		JasperFillManager.fillReportToFile(new jas,
-                java.lang.String destFileName,
-                java.util.Map<java.lang.String,java.lang.Object> parameters,
-                java.sql.Connection connection)*/
+	public boolean generateKIF(Connection connection, KifDTO info) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("ID_preduzeca", info.getCompanyId());
+		params.put("Datum_od", ConversionHelper.convertToDate(info.getDateFrom()));
+		params.put("Datum_do", ConversionHelper.convertToDate(info.getDateTo()));
+		params.put("Naziv_preduzeca", info.getCompanyName());
+		params.put("DTOd", info.getDateFrom());
+		params.put("DTDo", info.getDateTo());
+		
+		try {
+			
+			String reportName = "src/main/resources/jasper_reports/KIF";
+			String outputName = "src/main/webapp/downloads/KIF";
+
+			// compiles jrxml
+			JasperCompileManager.compileReportToFile(reportName + ".jrxml");
+			// fills compiled report with parameters and a connection
+			JasperPrint print = JasperFillManager.fillReport(reportName + ".jasper", params, connection);
+			// exports report to pdf
+			JRExporter exporter = new JRPdfExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(outputName + ".pdf")); // your output goes here
+			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+			
+			exporter.exportReport();
+			((FileOutputStream)(exporter.getParameter(JRExporterParameter.OUTPUT_STREAM))).close();
+
+		} catch (Exception e) {
+			throw new RuntimeException("It's not possible to generate the pdf report.", e);
+		} finally {
+		}		
+		
 		return true;
 	}
 	
@@ -570,5 +600,19 @@ public class GenericServiceImpl implements IGenericService {
 
 	@Autowired
 	private IStavkeNarudzbeRepository stavkeNarudzbeRepo;
+
+	@Override
+	public TableDTO getCompaniesForKIF() {
+		TableDTO dto = null;
+		
+		ArrayList<Preduzece> companies = new ArrayList<Preduzece>();
+		companies.addAll(preduzeceRepo.getCompaniesForKIF());
+		
+		if(companies.size() > 0) {
+			dto = new PreduzeceTransformer().transformToDTO(companies);
+		}
+		
+		return dto;
+	}
 
 }

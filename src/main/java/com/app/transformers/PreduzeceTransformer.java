@@ -12,7 +12,6 @@ import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
-import com.app.model.Cenovnik;
 import com.app.model.Preduzece;
 import com.app.model.SifraDelatnosti;
 
@@ -20,13 +19,19 @@ public class PreduzeceTransformer implements ITransformer {
 	
 	@Override
 	public TableDTO transformToDTO(Object entity) {
-		Preduzece p = (Preduzece) entity;
 		TableDTO table = new TableDTO();
-		
-		fillMetaData(table, p);
-		
-		table.setRows(new ArrayList<TableRowDTO>());		
-		fillData(table, p);
+		if(entity instanceof ArrayList){
+			ArrayList<Object> forward = (ArrayList<Object>)entity;
+			table = this.transformToDTO(forward);
+		} else {
+			
+			Preduzece p = (Preduzece) entity;			
+			
+			fillMetaData(table, p);
+			
+			table.setRows(new ArrayList<TableRowDTO>());		
+			fillData(table, p);
+		}
 		
 		return table;
 	}

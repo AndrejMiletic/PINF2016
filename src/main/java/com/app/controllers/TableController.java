@@ -3,6 +3,7 @@ package com.app.controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -129,11 +130,23 @@ public class TableController {
 		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
 		try {
 			Connection c = ds.getConnection();
-			crudService.generateKIF(new Long(1), c);
+			crudService.generateKIF(c, info);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<Object>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/companiesForKIF", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getCompaniesForKIF() {
+		
+		TableDTO requestedTable = crudService.getCompaniesForKIF();
+		
+		if(requestedTable == null) {
+			return new ResponseEntity<>(requestedTable, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+		}		
 	}
 	
 //------------------------------------------------------------------------------------------------------------------
