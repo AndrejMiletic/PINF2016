@@ -124,7 +124,6 @@ public class TableController {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
 	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
 		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
@@ -175,7 +174,7 @@ public class TableController {
 		ArrayList<TableRowDTO> stavke = pricelist.getChild();
 		for (TableRowDTO row : stavke){
 			row.getFields().remove("Id");
-			crudService.create(cenovnik);
+			crudService.create(row);
 		}
 		/*ArrayList<String> ids = new ArrayList<String>();
 		for (TableRowDTO row : rows1Pricelist) {
