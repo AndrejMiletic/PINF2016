@@ -28,7 +28,7 @@
 					  <thead>
 					    <tr>
 					      <th class="centered" ng-repeat="field in filteredNextTable.fields">{{field.name}}</th>
-								<th class="centered">Operacije</th>
+						  <th ng-show="filteredNextTable.tableName==='Faktura'" class="centered">Operacije</th>
 					    </tr>
 					  </thead>
 					  <tbody class="centered">
@@ -95,7 +95,7 @@
         		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
           		<span class="glyphicon glyphicon-save"></span> XML</button>
           		<button  class="btn btn-primary" ng-click="setSelectedPricelist(row)" onclick="document.getElementById('idCenovnik').style.display='block'" ng-if="requestedTable.tableName==='Cenovnik'">
-          		<span class="glyphicon "></span>Copy cenovnik</button>
+          		<span class="glyphicon "></span>Kopiranje cenovnika</button>
 					</td>
 		    </tr>
 		  </tbody>

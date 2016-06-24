@@ -509,11 +509,15 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 		
 		$scope.copyPricelist = function(){
-			
-			if($scope.selectedDataPricelist.fields["Datum primene"] == $scope.date){
+			console.log($scope.priceListNaziv)
+			if (!$scope.priceListNaziv){
+				alert("Unesite naziv cenovnika");
+			}
+			else if($scope.selectedDataPricelist.fields["Datum primene"] == $scope.date){
 				alert("Promeni datum primene cenovnika.");
 			}else{
 				$scope.selectedDataPricelist.fields["Datum primene"] = $scope.selectedDataPricelist.fields["Datum primene"].toLocaleDateString("sr-rs");
+				$scope.selectedDataPricelist.fields["Naziv cenovnika"] = $scope.priceListNaziv;
 					var pricelist = {
 						parent :  $scope.selectedDataPricelist,
 						child : $scope.documentChild.rows
