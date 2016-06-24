@@ -94,11 +94,25 @@
           		<span class="glyphicon glyphicon-save"></span> PDF</button>
         		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
           		<span class="glyphicon glyphicon-save"></span> XML</button>
+          		<span class="glyphicon "></span>Copy cenovnik</button>
 					</td>
 		    </tr>
 		  </tbody>
 		</table>
 		<br/><br/>
+
+		<div id="idCenovnik" class="w3-modal">
+			<div class="w3-modal-content">
+				<header class="w3-container w3-blue">
+		      			class="w3-closebtn">&times;</span>
+		    	</header>
+		    	<div class="w3-container">
+					<div class="form-inline">
+					</div>
+					 <div ng-include="'partials/copyPricelistPartial.html'"></div>
+				</div>
+			</div>
+		</div>
 
 		<div ng-if="requestedTable.documentPattern && requestedTable.documentChildName && documentChild">
 			<button ng-click="generateCreateSubForm()" class="btn btn-success centered" ng-if="documentChild.fields.length">
