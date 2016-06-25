@@ -17,7 +17,20 @@
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	color:white;
+	overflow-x: overlay;
 }
+
+.myOverflow {
+	overflow-x: overlay
+}
+
+html,body{
+  height:100vh;
+  width:100vw;
+  margin: 0;
+  padding: 0;
+}
+
 div, h{
 	color: #337ab7;
 }

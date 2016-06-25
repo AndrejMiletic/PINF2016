@@ -95,10 +95,10 @@ public class PoslovniPartnerTransformer implements ITransformer {
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.PREDUZECE, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(TableNames.PARTNER, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
-		fields.add(field);
 		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP_PREDUZECE, false, false, false, true, TableNames.PREDUZECE, DataTypes.TEXT);
 		field.setMaxLength(100);
+		fields.add(field);
+		field = new TableFieldDTO(TableNames.PARTNER, false, false, true, false, TableNames.PREDUZECE, DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP_PARTNER, false, false, false, true, TableNames.PREDUZECE, DataTypes.TEXT);
 		field.setMaxLength(100);
