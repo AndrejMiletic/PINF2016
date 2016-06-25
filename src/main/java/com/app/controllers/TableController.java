@@ -147,6 +147,17 @@ public class TableController {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
 	}
+	@RequestMapping(path="/generatePDF/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> generatePDF(@PathVariable String id){
+		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
+		try {
+			Connection c = ds.getConnection();
+			crudService.generatePDF(c, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Object>(HttpStatus.OK);		
+	}	
 	
 	@RequestMapping(value = "/maxId/{tableCode}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getMaxID(@PathVariable String tableCode) {
@@ -368,11 +379,7 @@ public class TableController {
 		System.out.println("---------------------");
 	}
 	
-	@RequestMapping(path="/generatePDF/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Object> generatePDF(@PathVariable String id){
-		System.out.println("Generisanje PDF-a za fakturu sa ID " + id);
-		return new ResponseEntity<Object>(HttpStatus.OK);		
-	}
+
 	
 	@RequestMapping(path="/generateXML/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Object> generateXML(@PathVariable String id){

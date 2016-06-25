@@ -19,8 +19,9 @@ public interface IGenericService {
 	TableDTO getTableByParent(String parentTableCode, String parentId);
 	TableDTO getFilteredTable(TableRowDTO filterRow);
 	boolean generateKIF(Connection connection, KifDTO info);
+	boolean generatePDF(Connection connection, String id);
 	TableDTO getCompaniesForKIF();
 	boolean generateXML(Long id,String filePath);
-	
 	double getTax(String tableCode, Long id);
+
 }

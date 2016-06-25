@@ -119,8 +119,7 @@ private final String VAZI = "Važi";
 		field.setMaxLength(120);
 		fields.add(field);
 		field = new TableFieldDTO(VAZI, false, false, false, false, "", DataTypes.BOOLEAN);
-		fields.add(field);
-		
+		fields.add(field);		
 		table.setFields(fields);
 	}
 	
