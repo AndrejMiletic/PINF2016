@@ -46,8 +46,8 @@
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 	<br/><br/>
 	<div ng-show="requestedTable">
 		<div class="form-inline">
@@ -105,7 +105,7 @@
 		<div id="idCenovnik" class="w3-modal">
 			<div class="w3-modal-content">
 				<header class="w3-container w3-blue">
-					<span onclick="document.getElementById('idCenovnik').style.display='none'" 
+					<span onclick="document.getElementById('idCenovnik').style.display='none'"
 		      			class="w3-closebtn">&times;</span>
 		      		<h2>{{selectedPricelist}}</h2>
 		    	</header>
@@ -147,7 +147,7 @@
 		<br/><br/>
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
-			<div class="currentRow" ng-repeat="field in currentTable.fields" 
+			<div class="currentRow" ng-repeat="field in currentTable.fields"
 				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
 				<div class="form-inline">
 					<div class="form-group" style="width: 250px; float:left; text-align: left;">
@@ -156,7 +156,7 @@
 				</div>
 				<div class="form-inline">
 					<div>
-						<input ng-if="field.type != 'DATE' && field.type!='BOOLEAN' && !field.enumeration" 
+						<input ng-if="field.type != 'DATE' && field.type!='BOOLEAN' && !field.enumeration"
 							type = "text" ng-readonly="field.fk || field.lookup"
 							ng-model="currentRow.fields[field.name]" class="form-control"
 							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>
@@ -175,7 +175,7 @@
 						</select>
 					</div>
 				</div>
-				
+
 			</div>
 			<br/>
 			<button ng-click="submitForm()" class="btn btn-success">
@@ -187,7 +187,7 @@
 			<br/><br/><br/>
 		</div>
 	</div>
-	
+
 	<div id="idZoom" class="w3-modal" >
 		<div class="w3-modal-content">
 			<header class="w3-container w3-blue">
@@ -215,7 +215,7 @@
 				<button onclick="document.getElementById('idZoom').style.display='none'" ng-click="closeForeignKeyForm()" class="btn btn-danger">
 					<span class="glyphicon glyphicon-remove"></span> Poništi
 				</button><br/><br/>
-		
+
 				<div ng-if="foreignTable.documentPattern && documentForeignChild && selectedForeignKey">
 					<table class="table table-hover table-bordered">
 					  <thead>
