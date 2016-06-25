@@ -336,7 +336,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.getMaxId=function(){
-			return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
+			if($scope.currentTable.rows.length > 0) {
+				return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
+			} else {
+				return 1;
+			}
 		}
 
 		$scope.closeForm = function() {
