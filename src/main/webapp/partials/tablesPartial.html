@@ -55,6 +55,9 @@
 				<button ng-click="generateCreateForm()" class="btn btn-success centered">
 					<span class="glyphicon glyphicon-plus"></span> Dodaj novi red
 				</button>
+				<button ng-click="filterForm()" class="btn btn-success centered">
+					<span class="glyphicon glyphicon-search"></span> Filtriranje tabele
+				</button>
 				<button ng-if="requestedTable.children.length>0" ng-click="showNextTableSelection()" class="btn btn-primary centered">
 					<span class="glyphicon glyphicon-arrow-right"></span> Next mehanizam
 				</button>
@@ -95,7 +98,7 @@
         		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
           		<span class="glyphicon glyphicon-save"></span> XML</button>
           		<button  class="btn btn-primary" ng-click="setSelectedPricelist(row)" onclick="document.getElementById('idCenovnik').style.display='block'" ng-if="requestedTable.tableName==='Cenovnik'">
-          		<span class="glyphicon "></span>Kopiranje cenovnika</button>
+          		<span class="glyphicon glyphicon-folder-open"></span>  Kopiranje cenovnika</button>
 					</td>
 		    </tr>
 		  </tbody>
@@ -148,7 +151,7 @@
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
 			<div class="currentRow" ng-repeat="field in currentTable.fields"
-				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create'">
+				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create' && operation!=='filter'">
 				<div class="form-inline">
 					<div class="form-group" style="width: 250px; float:left; text-align: left;">
 						<label>{{field.name}}</label>
@@ -178,7 +181,10 @@
 
 			</div>
 			<br/>
-			<button ng-click="submitForm()" class="btn btn-success">
+			<button ng-show="operation!=='filter'" ng-click="submitForm()" class="btn btn-success">
+				<span class="glyphicon glyphicon-ok"></span> {{formText}}
+			</button>
+			<button ng-show="operation==='filter'" ng-click="submitFilterForm()" class="btn btn-success">
 				<span class="glyphicon glyphicon-ok"></span> {{formText}}
 			</button>
 			<button ng-click="closeForm()" class="btn btn-danger">

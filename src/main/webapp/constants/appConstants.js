@@ -5,7 +5,8 @@ app.service('appConstants', function(){
     EDIT : "edit",
     CREATE : "create",
     SUB_EDIT: "sub_edit",
-    SUB_CREATE: "sub_create"
+    SUB_CREATE: "sub_create",
+    FILTER: "filter"
   };
 
 	this.types = {

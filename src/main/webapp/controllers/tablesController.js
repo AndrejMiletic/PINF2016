@@ -205,6 +205,43 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.currentTable = angular.copy($scope.documentChild);
 		}
 
+		$scope.filterForm = function(){
+			$scope.closeForeignKeyForm();
+			$scope.currentRow = {fields:{}};
+			$scope.formText = "Filtriraj";
+			$scope.operation = appConstants.operations.FILTER;
+			$scope.currentTable = angular.copy($scope.requestedTable);
+		}
+		
+		$scope.submitFilterForm = function(){
+			$scope.closeForeignKeyForm();
+			var row =  angular.copy($scope.currentRow);
+			
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].type=='DATE'){
+					var name=$scope.currentTable.fields[field].name;
+					var dateField=$scope.currentRow.fields[name];
+					if(dateField!=null){
+						var date=dateField.toLocaleDateString("sr-rs");
+						row.fields[name]=date;
+					}
+				}
+			}
+			
+			if(tableService.isValidFilter($scope.currentTable, row)) {
+				tableService.filter($scope.requestedTable.tableName, row).then(
+						function(response){
+							$scope.requestedTable = response.data;
+						},
+						function(response){
+							alert("Nema rezultata");
+						}
+				);
+			}else{
+				alert("Forma nije validna, tabela je neizmenjena");
+			}
+		}
+		
 		$scope.submitForm = function() {
 	        $scope.closeForeignKeyForm();
 
