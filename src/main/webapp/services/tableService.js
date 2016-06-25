@@ -13,8 +13,18 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getAll = function(){
 		return $http.get(url + "/getAllNames");
 	}
+	
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
+	}
+	
+	this.getAllOrders=function(){
+		return $http.get(url + "/getAllOrders");
+	}
+	
+	this.getMaxId=function(tableName){
+		var tableCode=this.replace(tableName);
+		return $http.get(url+ "/maxId/"+tableCode);
 	}
 
 	this.getTableById=function(tableName,Id){
@@ -164,8 +174,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	
 	this.isValid = function(table, row) {
 
-		console.log(table);
-		console.log(row);
 		var currentValue;
 		var isValid = true;
 

@@ -1,70 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Faktura Broj="110000">
-    <Datum_izdavanja>2015-11-24</Datum_izdavanja>
-    <Datum_valute>2015-11-24</Datum_valute>
+<Faktura Broj="34">
+    <Datum_izdavanja>2016-06-24</Datum_izdavanja>
+    <Datum_valute>2016-06-24</Datum_valute>
     <Podaci_o_izdavaocu>
-        <Naziv>Preduzeće1</Naziv>
-        <Adresa>Gundulićeva 2</Adresa>
-        <Tekuci_racun>822-193-25</Tekuci_racun>
-        <Maticni_broj>12345678</Maticni_broj>
-        <PIB>123456789</PIB>
+        <Naziv>Neoplanta</Naziv>
+        <Adresa>Adresa br. 5</Adresa>
+        <Tekuci_racun>86549634456252</Tekuci_racun>
+        <Maticni_broj>256896</Maticni_broj>
+        <PIB>568956845</PIB>
     </Podaci_o_izdavaocu>
     <Podaci_o_kupcu>
-        <Naziv>Preduzeće2</Naziv>
-        <Adresa>Gundulićeva 21</Adresa>
-        <Tekuci_racun>821-193-25</Tekuci_racun>
-        <Maticni_broj>12311228</Maticni_broj>
-        <PIB>123454489</PIB>
+        <Naziv>Neoplanta</Naziv>
+        <Adresa>Adresa br. 5</Adresa>
+        <Tekuci_racun>86549634456252</Tekuci_racun>
+        <Maticni_broj>256896</Maticni_broj>
+        <PIB>568956845</PIB>
     </Podaci_o_kupcu>
     <Stavka_fakture>
-        <Sifra_robe>1189667885</Sifra_robe>
-        <Naziv_robe>Mikrofon</Naziv_robe>
-        <Jedinica_mere>komad</Jedinica_mere>
-        <Kolicina>10.00</Kolicina>
-        <Jedinicna_cena>1000.00</Jedinicna_cena>
-        <Rabat>12.00</Rabat>
-        <Vrednost_stavke>10000.00</Vrednost_stavke>
-        <Poreska_osnovica>8800.00</Poreska_osnovica>
-        <Stopa_PDV>18</Stopa_PDV>
-        <Iznos_PDV>1800.00</Iznos_PDV>
-        <Prodajna_vrednost>11680.00</Prodajna_vrednost>
+        <Sifra_robe>58659548569</Sifra_robe>
+        <Naziv_robe>Artikal 2</Naziv_robe>
+        <Jedinica_mere>Metar</Jedinica_mere>
+        <Kolicina>4.00</Kolicina>
+        <Jedinicna_cena>89.00</Jedinicna_cena>
+        <Rabat>4.00</Rabat>
+        <Vrednost_stavke>356.00</Vrednost_stavke>
+        <Poreska_osnovica>341.76</Poreska_osnovica>
+        <Stopa_PDV>23</Stopa_PDV>
+        <Iznos_PDV>81.88</Iznos_PDV>
+        <Prodajna_vrednost>434.32</Prodajna_vrednost>
     </Stavka_fakture>
     <Stavka_fakture>
-        <Sifra_robe>1115766485</Sifra_robe>
-        <Naziv_robe>Majica</Naziv_robe>
-        <Jedinica_mere>komad</Jedinica_mere>
-        <Kolicina>5.00</Kolicina>
-        <Jedinicna_cena>30.00</Jedinicna_cena>
-        <Rabat>10.00</Rabat>
-        <Vrednost_stavke>150.00</Vrednost_stavke>
-        <Poreska_osnovica>135.00</Poreska_osnovica>
-        <Stopa_PDV>18</Stopa_PDV>
-        <Iznos_PDV>27.00</Iznos_PDV>
-        <Prodajna_vrednost>174.00</Prodajna_vrednost>
+        <Sifra_robe>45486451215</Sifra_robe>
+        <Naziv_robe>Artikal1</Naziv_robe>
+        <Jedinica_mere>Litar</Jedinica_mere>
+        <Kolicina>4.00</Kolicina>
+        <Jedinicna_cena>55.00</Jedinicna_cena>
+        <Rabat>4.00</Rabat>
+        <Vrednost_stavke>220.00</Vrednost_stavke>
+        <Poreska_osnovica>211.20</Poreska_osnovica>
+        <Stopa_PDV>23</Stopa_PDV>
+        <Iznos_PDV>50.60</Iznos_PDV>
+        <Prodajna_vrednost>268.40</Prodajna_vrednost>
     </Stavka_fakture>
-    <Stavka_fakture>
-        <Sifra_robe>1115766485</Sifra_robe>
-        <Naziv_robe>Majica</Naziv_robe>
-        <Jedinica_mere>komad</Jedinica_mere>
-        <Kolicina>5.00</Kolicina>
-        <Jedinicna_cena>30.00</Jedinicna_cena>
-        <Rabat>10.00</Rabat>
-        <Vrednost_stavke>150.00</Vrednost_stavke>
-        <Poreska_osnovica>135.00</Poreska_osnovica>
-        <Stopa_PDV>18</Stopa_PDV>
-        <Iznos_PDV>27.00</Iznos_PDV>
-        <Prodajna_vrednost>174.00</Prodajna_vrednost>
-    </Stavka_fakture>
-    <Iznos>11233.00</Iznos>
-    <Ukupan_rabat>126.00</Ukupan_rabat>
-    <Ukupna_poreska_osnova>9070.00</Ukupna_poreska_osnova>
-    <Ukupan_PDV>1854.00</Ukupan_PDV>
-    <Ukupno_za_uplatu>10300.00</Ukupno_za_uplatu>
-    <Dodatne_napomene>Dodatna napomena 2</Dodatne_napomene>
-    <Racun_i_robu_izdao>000123</Racun_i_robu_izdao>
-    <Racun_i_robu_primio>000102</Racun_i_robu_primio>
+    <Iznos>1500.20</Iznos>
+    <Ukupan_rabat>5.76</Ukupan_rabat>
+    <Ukupna_poreska_osnova>552.96</Ukupna_poreska_osnova>
+    <Ukupan_PDV>132.48</Ukupan_PDV>
+    <Ukupno_za_uplatu>3.00</Ukupno_za_uplatu>
+    <Dodatne_napomene>dodatne napomene</Dodatne_napomene>
+    <Racun_i_robu_izdao>izdao</Racun_i_robu_izdao>
+    <Racun_i_robu_primio>preuzeo</Racun_i_robu_primio>
     <Podaci_o_prevozniku>
-        <Naziv_prevoznika>Prevoznik2</Naziv_prevoznika>
-        <Broj_kamiona>2</Broj_kamiona>
+        <Naziv_prevoznika>prevoznik</Naziv_prevoznika>
+        <Broj_kamiona>kamion</Broj_kamiona>
     </Podaci_o_prevozniku>
 </Faktura>

@@ -35,9 +35,9 @@
 					    <tr ng-repeat="row in filteredNextTable.rows track by $index">
 					      <td ng-repeat="data in row.fields track by $index">{{row.fields[filteredNextTable.fields[$index].name]}}</td>
 								<td>
-									<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
+									<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura i otpremnica'">
 			          		<span class="glyphicon glyphicon-save"></span> PDF</button>
-			        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura'">
+			        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="filteredNextTable.tableName==='Faktura i otpremnica'">
 			          		<span class="glyphicon glyphicon-save"></span> XML</button>
 								</td>
 					    </tr>
@@ -88,14 +88,14 @@
 		      <td ng-repeat="data in row.fields track by $index">{{row.fields[requestedTable.fields[$index].name]}}</td>
 					<td>
 						<button ng-click="generateEditForm($index, row, $event)" class="btn btn-warning">
-	          	<span class="glyphicon glyphicon-edit"></span> Uredi
+	          				<span class="glyphicon glyphicon-edit"></span> Uredi
 						</button>
 						<button ng-click="deleteRow($index, row, $event)" class="btn btn-danger">
-	          	<span class="glyphicon glyphicon-trash"></span> Obriši
+	          				<span class="glyphicon glyphicon-trash"></span> Obriši
 						</button>
-						<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
+						<button ng-click="downloadPDF(row, $event)" class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura i otpremnica'">
           		<span class="glyphicon glyphicon-save"></span> PDF</button>
-        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura'">
+        		<button ng-click="downloadXML(row, $event)"  class="btn btn-primary" ng-if="requestedTable.tableName==='Faktura i otpremnica'">
           		<span class="glyphicon glyphicon-save"></span> XML</button>
           		<button  class="btn btn-primary" ng-click="setSelectedPricelist(row)" onclick="document.getElementById('idCenovnik').style.display='block'" ng-if="requestedTable.tableName==='Cenovnik'">
           		<span class="glyphicon glyphicon-folder-open"></span>  Kopiranje cenovnika</button>

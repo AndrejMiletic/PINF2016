@@ -9,6 +9,12 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 		
 		$scope.addedInvoice=[];
 		
+//		tableService.getAllOrders().then(
+//				function(response){
+//					$scope.allOrderForms=response.data;
+//				}
+//		);
+		
 		tableService.getTableByName("Narudzba").then(
 				function(response){
 					$scope.allOrderForms=[];
@@ -17,15 +23,8 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 						var Id=response.data.rows[rowIndex].fields.Id;
 				        $scope.allOrderForms.push(Id);
 					}
-					console.log($scope.allOrderForms);
 				}
 		);
-		
-//		tableService.getTableRows("Narudzba").then(
-//			function(response){
-//				$scope.allOrderForms=response.data;
-//			}
-//		);
 	}
 	
 	init();
@@ -56,34 +55,56 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	$scope.createInvoice=function(){
-		tableService.getTableByName('Faktura_otpremnica').then(
+		var tableName="Faktura i otpremnica";
+		tableService.getTableByName('Faktura_i_otpremnica').then(
 			function(response) {
 				$scope.invoice= response.data;
 				var fields = {};
 				var rowFieldsFromOrderForm={};
 				for(var row in $scope.orderForm.rows){
-					var id=$scope.orderForm.rows[row].fields.id;
+					var id=$scope.orderForm.rows[row].fields.Id;
 					if(id==$scope.selectedOrderForm){
 						rowFieldsFromOrderForm=$scope.orderForm.rows[row].fields;
 						break;
 					}
 				}
-				//id
-				fields["id"]="5";
-				fields["narudzba"]=rowFieldsFromOrderForm.id;
-				fields["godina"]=rowFieldsFromOrderForm.godina;
-				fields["broj_fakture"]=rowFieldsFromOrderForm.broj_narudzbe;
-				fields["datum_narucivanja"]=rowFieldsFromOrderForm.datum_narucivanja;
-				fields["datum_valute"]=$scope.currentDate;
-				fields["datum_obracuna"]=$scope.currentDate;
-				fields["partner"]=rowFieldsFromOrderForm.partner;
-				fields["adresa_isporuke"]=rowFieldsFromOrderForm.adresa_isporuke;
-				fields["tekuci_racun"]=rowFieldsFromOrderForm.tekuci_racun;
-				fields["poziv_na_broj"] = rowFieldsFromOrderForm.poziv_na_broj;
-				fields["status_fakture"]="U_procesu";
-				fields["dodatne_napomene"]="";
-				fields["ukupno"] = 0;
-				
+				fields["Id"]=0;
+				tableService.getMaxId(tableName).then(
+						function(response){
+							fields["Id"]=response.data;
+						}
+				);
+				fields["Broj fakture/otpremnice"]=rowFieldsFromOrderForm["Broj narudžbe"];
+				fields["Tip"]="R";
+				fields["Datum fakture"]=rowFieldsFromOrderForm["Datum naručivanja"];
+				fields["Datum valute"]=$scope.currentDate;
+				fields["Datum obračuna"]=$scope.currentDate;
+				fields["Ukupno"]=$scope.ukupnoZaNaplatu;
+				fields["Rabat"]=$scope.ukupanRabat;
+				fields["Porez"]=$scope.ukupanPDV;
+				fields["Iznos"]=$scope.ukupanIznos;
+				var preduzece={};
+				tableService.getTableById('Preduzeće', rowFieldsFromOrderForm["Poslovni partner"]).then(
+						function(response) {
+							preduzece= response.data;
+							fields["Tekući račun"]=preduzece.rows[0].fields["Tekući račun"];
+							fields["Poziv na broj"]=preduzece.rows[0].fields["PIB"];
+							fields["Adresa isporuke"]=preduzece.rows[0].fields["Adresa"];
+							fields["Broj kamiona"]="";
+							fields["Prevoznik"]="";
+							fields["Status"]="O";
+							fields["Dodatne napomene"]="";
+							fields["Izdao robu"]="";
+							fields["Preuzeo robu"]="";
+							fields["Narudžba"]=rowFieldsFromOrderForm["Id"];
+							fields["Broj narudžbe"]=rowFieldsFromOrderForm["Broj narudžbe"];
+							fields["Poslovna godina"]=rowFieldsFromOrderForm["Poslovna godina"];
+							fields["Godina poslovanja"]=rowFieldsFromOrderForm["Godina poslovanja"];
+							fields["Poslovni partner"]=rowFieldsFromOrderForm["Poslovni partner"];
+							fields["Naziv partnera"]=rowFieldsFromOrderForm["Naziv partnera"];
+						}
+				);
+				console.log(fields);
 				$scope.invoice.rows=[{"fields":fields}];
 			},
 			function(response){
@@ -93,7 +114,8 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 	}
 	
 	$scope.createInvoiceItems=function(){
-		tableService.getTableByName('Stavke_fakture_otpremnice').then(
+		var tableName="Stavke fakture i otpremnice";
+		tableService.getTableByName('Stavke_fakture_i_otpremnice').then(
 			function(response) {
 				$scope.ukupanIznos=0;
 				$scope.ukupanRabat=0;
@@ -103,54 +125,50 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 				
 				$scope.invoiceItems= response.data;
 				var rowFieldsFromOrderFormItems={};
-				var counter=5;
 				$scope.invoiceItems.rows=[];
-				for(var row in $scope.orderFormItems.rows){
-					var narudzba=$scope.orderFormItems.rows[row].fields.narudzba;
-					if(narudzba==$scope.selectedOrderForm){
-						rowFieldsFromOrderFormItems=$scope.orderFormItems.rows[row].fields;
-						counter++;
-						var fields = {};
-						//id
-						fields["id"]=counter;
-						fields["faktura"]=$scope.invoice ? $scope.invoice.rows[0].fields.id : "";
-						fields["naziv_artikla"]=rowFieldsFromOrderFormItems.naziv_artikla;
-						fields["sifra_artikla"]=rowFieldsFromOrderFormItems.sifra_artikla;
-						fields["jedinica_mere"]=rowFieldsFromOrderFormItems.jedinica_mere;
-						fields["kolicina"]=rowFieldsFromOrderFormItems.kolicina;
-						fields["jedinicna_cena"]=rowFieldsFromOrderFormItems.jedinicna_cena;
-						fields["rabat"]=rowFieldsFromOrderFormItems.rabat;
-						fields["pdv"]=rowFieldsFromOrderFormItems.pdv;
-						fields["cena_pdv"]=rowFieldsFromOrderFormItems.cena_pdv;
-						fields["ukupno"] = rowFieldsFromOrderFormItems.ukupno;
-						$scope.invoiceItems.rows.push({"fields":fields});
-						
-						$scope.ukupanIznos+=fields["kolicina"] * fields["jedinicna_cena"];
-						$scope.ukupanRabat+=(fields["rabat"]/100 * fields["jedinicna_cena"]) * fields["kolicina"];
-						$scope.ukupanPDV+=(fields["pdv"]/100 * fields["jedinicna_cena"]) * fields["kolicina"];
-					}
-				}
-				$scope.cenaSaRabatom=$scope.ukupanIznos-$scope.ukupanRabat;
-				$scope.ukupnoZaNaplatu=$scope.cenaSaRabatom+$scope.ukupanPDV;
-				$scope.ukupanPDV=($scope.ukupanPDV).toFixed(2);
-				$scope.ukupanRabat=($scope.ukupanRabat).toFixed(2);
-				$scope.ukupanIznos=($scope.ukupanIznos).toFixed(2);
-				$scope.cenaSaRabatom=($scope.cenaSaRabatom).toFixed(2);
-				
-				$scope.invoice.rows[0].fields.ukupno=$scope.ukupnoZaNaplatu;
+				tableService.getMaxId(tableName).then(
+						function(response){
+							var counter=response.data;
+							for(var row in $scope.orderFormItems.rows){
+								var narudzba=$scope.orderFormItems.rows[row].fields["Narudžba"];
+								if(narudzba==$scope.selectedOrderForm){
+									rowFieldsFromOrderFormItems=$scope.orderFormItems.rows[row].fields;
+									var fields = {};
+									fields["Id"]=counter;
+									fields["Faktura i otpremnica"]=$scope.invoice ? $scope.invoice.rows[0].fields.Id : "";
+									fields["Broj fakture/otpremnice"]=$scope.invoice ? $scope.invoice.rows[0].fields["Broj fakture/otpremnice"] : "";
+									fields["Katalog robe i usluga"]=rowFieldsFromOrderFormItems["Katalog robe i usluga"];
+									fields["Naziv artikla"]=rowFieldsFromOrderFormItems["Naziv artikla"];
+									fields["Količina"]=rowFieldsFromOrderFormItems["Količina stavke"];
+									fields["Rabat"]=5;
+									fields["Osnovica pdv"]=fields["Količina"] * rowFieldsFromOrderFormItems["Cena bez pdv"]-fields["Rabat"];
+									fields["Jedinična cena stavke"]=rowFieldsFromOrderFormItems["Cena bez pdv"];
+									$scope.invoiceItems.rows.push({"fields":fields});
+									var pdv="18";
+									$scope.ukupanIznos+=fields["Količina"] * rowFieldsFromOrderFormItems["Cena bez pdv"];
+									$scope.ukupanRabat+=(fields["Rabat"]/100 * rowFieldsFromOrderFormItems["Cena bez pdv"]) * fields["Količina"];
+									$scope.ukupanPDV+=(pdv/100 * rowFieldsFromOrderFormItems["Cena bez pdv"]) * fields["Količina"];
+								}
+								counter++;
+							}
+							$scope.cenaSaRabatom=$scope.ukupanIznos-$scope.ukupanRabat;
+							$scope.ukupnoZaNaplatu=$scope.cenaSaRabatom+$scope.ukupanPDV;
+							$scope.ukupanPDV=($scope.ukupanPDV).toFixed(2);
+							$scope.ukupanRabat=($scope.ukupanRabat).toFixed(2);
+							$scope.ukupanIznos=($scope.ukupanIznos).toFixed(2);
+							$scope.cenaSaRabatom=($scope.cenaSaRabatom).toFixed(2);
+							
+							$scope.invoice.rows[0].fields["Ukupno"]=$scope.ukupnoZaNaplatu;
+							$scope.invoice.rows[0].fields["Rabat"]=$scope.ukupanRabat;
+							$scope.invoice.rows[0].fields["Porez"]=$scope.ukupanPDV;
+							$scope.invoice.rows[0].fields["Iznos"]=$scope.ukupanIznos;
+						}
+				);
 			},
 			function(response){
 				alert("Doslo je do greske prilikom preuzimanja tabele 'Faktura'.");
 			}
 		);
-	}
-	
-	
-	$scope.isFormValid=function(){
-		return $scope.invoice.broj_fakture && $scope.invoice.tip_fakture && 
-			$scope.invoice.tekuci_racun && $scope.invoice.poziv_na_broj && 
-			$scope.invoice.adresa_isporuke && $scope.invoice.broj_kamiona &&
-			$scope.invoice.prevoznik && $scope.selectedOrderForm;
 	}
 	
 	$scope.addInvoice=function(additionalNotes){
