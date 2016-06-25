@@ -3,11 +3,6 @@ package com.app.controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
-import java.util.Date;
-import java.util.HashMap;
->>>>>>> f3f9320d81097ed89e58e96265009d4583d6972b
 
 import javax.sql.DataSource;
 
