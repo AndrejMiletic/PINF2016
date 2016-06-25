@@ -241,7 +241,7 @@ public class FakturaTransformer implements ITransformer{
 		fields.put(FieldNames.POSLOVNA_GODINA_LOOKUP, c.getPoslovnaGodina().getPgGodina2());
 		
 		fields.put(TableNames.POSLOVNI_PARTNER, c.getPoslovniPartner().getIdPartnerstva());
-		fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getIdPreduzeca());
+		fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getNaziv());
 		
 		row.setFields(fields);
 		row.setTableName(TableNames.FAKTURA_OTPREMNICA);
