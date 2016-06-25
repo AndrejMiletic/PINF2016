@@ -349,7 +349,7 @@ public class GenericServiceImpl implements IGenericService {
 		Long id;
 
 		for (String fieldName : row.getFields().keySet()) {
-			if (tableNames.contains(fieldName)) {
+			if (tableNames.contains(fieldName) && !row.getFields().get(fieldName).toString().equals("")) {
 				repo = getTableRepo(fieldName);
 				id = Long.parseLong(row.getFields().get(fieldName).toString());
 				fk = repo.findOne(id);

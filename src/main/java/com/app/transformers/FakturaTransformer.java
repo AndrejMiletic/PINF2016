@@ -26,7 +26,7 @@ public class FakturaTransformer implements ITransformer{
 	private final String DATUM_OBRACUNA = "Datum obračuna";
 	private final String UKUPNO = "Ukupno";
 	private final String RABAT = "Rabat";
-	private final String POREZ = "Porez";
+	private final String POREZ = "Iznos poreza";
 	private final String IZNOS = "Iznos";
 	private final String TEKUCI_RACUN = "Tekući račun";
 	private final String POZIV_NA_BROJ = "Poziv na broj";
