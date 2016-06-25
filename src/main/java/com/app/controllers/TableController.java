@@ -3,7 +3,6 @@ package com.app.controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -22,7 +21,6 @@ import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
 import com.app.helpers.ConversionHelper;
-import com.app.model.invoice.Faktura;
 import com.app.services.IGenericService;
 
 @RestController
@@ -149,7 +147,17 @@ public class TableController {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
 	}
-	
+	@RequestMapping(path="/generatePDF/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> generatePDF(@PathVariable String id){
+		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
+		try {
+			Connection c = ds.getConnection();
+			crudService.generatePDF(c, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Object>(HttpStatus.OK);		
+	}	
 //------------------------------------------------------------------------------------------------------------------
 	
 	
@@ -320,11 +328,7 @@ public class TableController {
 		System.out.println("---------------------");
 	}
 	
-	@RequestMapping(path="/generatePDF/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Object> generatePDF(@PathVariable String id){
-		System.out.println("Generisanje PDF-a za fakturu sa ID " + id);
-		return new ResponseEntity<Object>(HttpStatus.OK);		
-	}
+
 	
 	@RequestMapping(path="/generateXML/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Object> generateXML(@PathVariable String id){

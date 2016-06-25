@@ -24,6 +24,7 @@ import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
 import com.app.model.FakturaOtpremnica;
 import com.app.model.PoreskaStopa;
+import com.app.model.PoslovniPartner;
 import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
 import com.app.model.StavkeNarudzbe;
@@ -68,6 +69,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRProperties;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
@@ -220,7 +222,9 @@ public class GenericServiceImpl implements IGenericService {
 			
 			if(rowsOfDocTable.size() != 0){
 				 retVal = tr1.transformToDTO(rowsOfDocTable);
-			}		
+			}else{
+				retVal = tr1.getMetaData();
+			}	
 			return retVal;
 
 		} catch (Exception e) {
@@ -549,6 +553,7 @@ public class GenericServiceImpl implements IGenericService {
 			JRExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(outputName + ".pdf")); // your output goes here
+			JRProperties.setProperty("net.sf.jasperreports.default.pdf.encoding", "Cp1250");
 			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			
 			exporter.exportReport();
@@ -638,6 +643,48 @@ public class GenericServiceImpl implements IGenericService {
 				return true;
 		}
 		return false;
+	}
+	public boolean generatePDF(Connection connection, String id) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		
+		ArrayList<Preduzece> companies = new ArrayList<Preduzece>();
+		companies.addAll(preduzeceRepo.getCompaniesForKIF());
+		Long idFakture = Long.parseLong(id);
+		FakturaOtpremnica faktura = fakturaRepo.findOne(idFakture);
+		PoslovniPartner pp = faktura.getPoslovniPartner();
+		Preduzece p = pp.getPreduzeceByIdPartnera();
+		
+		params.put("naziv", p.getNaziv());
+		params.put("adresa", p.getAdresa());
+		params.put("pib", p.getPib());
+		params.put("maticni_broj", p.getMaticniBroj());
+		params.put("tekuci_racun", p.getTekuciRacun());
+		
+		try {
+			
+			String reportName = "src/main/resources/jasper_reports/Faktura";
+			String outputName = "src/main/webapp/downloads/Faktura";
+
+			// compiles jrxml
+			JasperCompileManager.compileReportToFile(reportName + ".jrxml");
+			// fills compiled report with parameters and a connection
+			JasperPrint print = JasperFillManager.fillReport(reportName + ".jasper", params, connection);
+			// exports report to pdf
+			JRExporter exporter = new JRPdfExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(outputName + ".pdf")); // your output goes here
+			JRProperties.setProperty("net.sf.jasperreports.default.pdf.encoding", "Cp1250");
+			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+					
+			exporter.exportReport();
+			((FileOutputStream)(exporter.getParameter(JRExporterParameter.OUTPUT_STREAM))).close();
+
+		} catch (Exception e) {
+			throw new RuntimeException("It's not possible to generate the pdf report.", e);
+		} finally {
+		}		
+		
+		return true;
 	}
 
 }
