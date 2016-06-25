@@ -109,7 +109,6 @@ public class CenovnikTransformer implements ITransformer{
 
 	private void fillMetaData(TableDTO table, Cenovnik c) {
 		ArrayList<String> children = new ArrayList<String>();
-		children.add(TableNames.STAVKE_CENOVNIKA);
 		
 		ArrayList<String> parents = new ArrayList<String>();
 		parents.add(TableNames.PREDUZECE);

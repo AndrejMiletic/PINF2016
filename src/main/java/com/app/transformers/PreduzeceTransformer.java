@@ -12,7 +12,6 @@ import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
-import com.app.model.Cenovnik;
 import com.app.model.Preduzece;
 import com.app.model.SifraDelatnosti;
 
