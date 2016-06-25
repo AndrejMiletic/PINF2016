@@ -1,11 +1,13 @@
 package com.app.services;
 
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
+import com.app.DTO.KifDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableFieldDTO;
 import com.app.DTO.TableRowDTO;
@@ -21,8 +24,10 @@ import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
 import com.app.model.FakturaOtpremnica;
 import com.app.model.PoreskaStopa;
+import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
 import com.app.model.StavkeNarudzbe;
+import com.app.model.invoice.Faktura;
 import com.app.repositories.ICenovnikRepository;
 import com.app.repositories.IFakturaOtpremnicaRepository;
 import com.app.repositories.IGrupaProizvodaRepository;
@@ -38,8 +43,10 @@ import com.app.repositories.ISifraDelatnostiRepository;
 import com.app.repositories.IStavkeCenovnikaRepository;
 import com.app.repositories.IStavkeFaktureOtpremniceRepository;
 import com.app.repositories.IStavkeNarudzbeRepository;
+import com.app.repositories.XML_Repository;
 import com.app.transformers.ArtikalTransformer;
 import com.app.transformers.CenovnikTransformer;
+import com.app.transformers.FakturaOtpremnicaToFaktura;
 import com.app.transformers.FakturaTransformer;
 import com.app.transformers.GrupaProizvodaTransformer;
 import com.app.transformers.ITransformer;
@@ -55,10 +62,20 @@ import com.app.transformers.StavkeCenovnikaTransformer;
 import com.app.transformers.StavkeFaktureTransformer;
 import com.app.transformers.StavkeNarudzbeTransformer;
 
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class GenericServiceImpl implements IGenericService {
 
+	@Autowired
+	private XML_Repository xmlRepo;
+	
 	@Override
 	public boolean create(TableRowDTO row) {
 		try {
@@ -132,7 +149,6 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		return true;
 	}
-	
 
 	@Override
 	public TableDTO getById(Long id, String tableCode) {
@@ -429,7 +445,6 @@ public class GenericServiceImpl implements IGenericService {
 		
 		orderItem.setIznosStavkeNarudzbenice(new BigDecimal(iznos));
 	}
-	
 
 	private void calculateInvoiceItemValue(StavkeFaktureOtpremnice invoiceItem) {
 		double vrednost = invoiceItem.getJedinicnaCenaStavkeFakture().intValue() * invoiceItem.getKolicina().intValue();
@@ -512,6 +527,41 @@ public class GenericServiceImpl implements IGenericService {
 		return iznosPoreza.doubleValue();
 	}
 	
+	public boolean generateKIF(Connection connection, KifDTO info) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("ID_preduzeca", info.getCompanyId());
+		params.put("Datum_od", ConversionHelper.convertToDate(info.getDateFrom()));
+		params.put("Datum_do", ConversionHelper.convertToDate(info.getDateTo()));
+		params.put("Naziv_preduzeca", info.getCompanyName());
+		params.put("DTOd", info.getDateFrom());
+		params.put("DTDo", info.getDateTo());
+		
+		try {
+			
+			String reportName = "src/main/resources/jasper_reports/KIF";
+			String outputName = "src/main/webapp/downloads/KIF";
+
+			// compiles jrxml
+			JasperCompileManager.compileReportToFile(reportName + ".jrxml");
+			// fills compiled report with parameters and a connection
+			JasperPrint print = JasperFillManager.fillReport(reportName + ".jasper", params, connection);
+			// exports report to pdf
+			JRExporter exporter = new JRPdfExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(outputName + ".pdf")); // your output goes here
+			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+			
+			exporter.exportReport();
+			((FileOutputStream)(exporter.getParameter(JRExporterParameter.OUTPUT_STREAM))).close();
+
+		} catch (Exception e) {
+			throw new RuntimeException("It's not possible to generate the pdf report.", e);
+		} finally {
+		}		
+		
+		return true;
+	}
+	
 	@Autowired
 	private ICenovnikRepository cenovnikRepo;
 
@@ -556,5 +606,38 @@ public class GenericServiceImpl implements IGenericService {
 
 	@Autowired
 	private IStavkeNarudzbeRepository stavkeNarudzbeRepo;
+
+	@Override
+	public TableDTO getCompaniesForKIF() {
+		TableDTO dto = null;
+		
+		ArrayList<Preduzece> companies = new ArrayList<Preduzece>();
+		companies.addAll(preduzeceRepo.getCompaniesForKIF());
+		
+		if(companies.size() > 0) {
+			dto = new PreduzeceTransformer().transformToDTO(companies);
+		}
+		
+		return dto;
+	}
+	
+	public boolean generateXML(Long id,String filePath) {
+		String tableCode="Faktura_i_otpremnica";
+		Object result = null;
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			result = repo.findOne(id);
+		} catch (Exception e) {
+			return false;
+		}
+		if(result!=null && (result instanceof FakturaOtpremnica)){
+			FakturaOtpremnica fo=(FakturaOtpremnica)result;
+			Faktura invoice=FakturaOtpremnicaToFaktura.transform(fo);
+			if(xmlRepo.generateXml(invoice, filePath))
+				return true;
+		}
+		return false;
+	}
 
 }

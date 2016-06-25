@@ -3,13 +3,8 @@ package com.app.helpers;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import com.app.DTO.TableDTO;
-import com.app.DTO.TableFieldDTO;
-import com.app.DTO.TableRowDTO;
-import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.TableNames;
 
 public class ConversionHelper {
@@ -70,30 +65,4 @@ public class ConversionHelper {
 		}
 		return null;
 	}
-
-	/*
-	public static void convertDatesToSrRs(TableDTO dto) throws ParseException {
-		ArrayList<String> fieldNames = new ArrayList<String>();
-		Date date;
-		String dateString, result;
-		SimpleDateFormat formatter;
-		
-		for (TableFieldDTO field : dto.getFields()) {
-			if(field.getType().equals(DataTypes.DATE)) {
-				fieldNames.add(field.getName());
-			}			
-		}
-		
-		for (TableRowDTO row : dto.getRows()) {
-			for (String fieldName : fieldNames) {
-				if(row.getFields().containsKey(fieldName)) {
-					dateString = row.getFields().get(fieldName).toString();
-					date = ConversionHelper.convertInternationalToDate(dateString);
-					formatter = new SimpleDateFormat("dd.MM.yyyy");
-					result = formatter.format(date);
-					row.getFields().put(fieldName, result); 
-				}
-			}
-		}
-	}*/
 }

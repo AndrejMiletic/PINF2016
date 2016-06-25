@@ -1,9 +1,14 @@
 package com.app.controllers;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +22,7 @@ import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
 import com.app.helpers.ConversionHelper;
+import com.app.model.invoice.Faktura;
 import com.app.services.IGenericService;
 
 @RestController
@@ -26,6 +32,9 @@ public class TableController {
 	
 	@Autowired
 	private IGenericService crudService;
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 		
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
@@ -105,6 +114,7 @@ public class TableController {
 			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
 		}		
 	}
+	
 	@RequestMapping(path = "/filter", method = RequestMethod.POST)
 	public ResponseEntity<Object> filter(@RequestBody TableRowDTO filterRow) {
 	TableDTO requestedTable = crudService.getFilteredTable(filterRow);
@@ -115,6 +125,31 @@ public class TableController {
 			return new ResponseEntity<Object>(requestedTable, HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
+	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
+		DataSource ds = (DataSource)applicationContext.getBean("dataSource");
+		try {
+			Connection c = ds.getConnection();
+			crudService.generateKIF(c, info);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Object>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/companiesForKIF", method = RequestMethod.GET)
+	public ResponseEntity<TableDTO> getCompaniesForKIF() {
+		
+		TableDTO requestedTable = crudService.getCompaniesForKIF();
+		
+		if(requestedTable == null) {
+			return new ResponseEntity<>(requestedTable, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(requestedTable, HttpStatus.OK);
+		}		
+	}
+	
 //------------------------------------------------------------------------------------------------------------------
 	
 	
@@ -148,12 +183,12 @@ public class TableController {
 	@RequestMapping(path = "/addPricelist", method = RequestMethod.POST)
 	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDTO pricelist) {
 		TableRowDTO cenovnik = pricelist.getParent();
-		cenovnik.getFields().put("Id", null);
+		cenovnik.getFields().remove("Id");
 		crudService.create(cenovnik);
 		ArrayList<TableRowDTO> stavke = pricelist.getChild();
 		for (TableRowDTO row : stavke){
-			row.getFields().put("Id", null);
-			crudService.create(cenovnik);
+			row.getFields().remove("Id");
+			crudService.create(row);
 		}
 		/*ArrayList<String> ids = new ArrayList<String>();
 		for (TableRowDTO row : rows1Pricelist) {
@@ -293,14 +328,13 @@ public class TableController {
 	
 	@RequestMapping(path="/generateXML/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Object> generateXML(@PathVariable String id){
-		System.out.println("Generisanje XML-a za fakturu sa ID " + id);
-		return new ResponseEntity<Object>(HttpStatus.OK);		
-	}
-	
-	@RequestMapping(path="/generateKIF", method=RequestMethod.POST)
-	public ResponseEntity<Object> generateKIF(@RequestBody KifDTO info){
-		System.out.println("KIF od " + info.getDateFrom() + " do " + info.getDateTo());
-		return new ResponseEntity<Object>(HttpStatus.OK);
+		Long idL=new Long(id);
+		String filePath="src/main/webapp/downloads/faktura.xml";
+		if(crudService.generateXML(idL,filePath)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	private ArrayList<TableDTO> getMockData() {

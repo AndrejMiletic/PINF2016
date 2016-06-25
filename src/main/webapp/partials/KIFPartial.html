@@ -3,15 +3,21 @@
 <div class="col-sm-6">
   <div class="col-sm-6">
     <label class="centered">Od: </label>
-    <input type = "text"  ng-model="dateFrom" class="form-control"  placeholder="'mm/dd/yyyy ili mm-dd-yyyy'"/>
+    <date-picker ng-model="dateFrom"/>
   </div>
   <div class="col-sm-6">
     <label class="centered">Do: </label>
-    <input type = "text"  ng-model="dateTo" class="form-control"  placeholder="'mm/dd/yyyy ili mm-dd-yyyy'"/>
+    <date-picker ng-model="dateTo"/>
   </div>
   <br/><br/><br/><br/>
-  <div class="col-sm-4"></div>
-  <div class="col-sm-4">
+  <div>
+    <select name="repeatSelect" ng-model="company" class="form-control"
+      ng-options="c.fields['Naziv preduzeća'] for c in companies track by c.fields.Id">
+      <option></option>
+    </select>
+  </div>
+  <br/><br/>
+  <div class="centered">
     <button ng-click="downloadKIF(row, $event)"  class="btn btn-primary">
       <span class="glyphicon glyphicon-save"></span> Preuzmi KIF </button>
   </div>

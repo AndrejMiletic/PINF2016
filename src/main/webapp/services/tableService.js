@@ -7,7 +7,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
 	}
-	
+
 	this.getTableById=function(tableName,Id){
 		var tableCode=this.replace(tableName);
 		return $http.get(url + "/getById/" + tableCode + "/" + Id);
@@ -22,10 +22,10 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return $http.post(url + "/create", payload);
 	}
-	
+
 	this.edit = function(parent, entity) {
 		var code=this.replace(parent);
-		
+
 		var payload = {
 			tableName: parent,
 			tableCode: code,
@@ -46,7 +46,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 					.replace("ć", "c")
 					.replace("ž", "z")
 					.replace("š", "s");
-		
+
 		tableCode=tableCode.replace(" ", "_")
 					.replace("ć", "c")
 					.replace("ž", "z")
@@ -69,13 +69,13 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
     }
 
   	this.getByNameFiltered = function(parentTable, childTable, parentId){
-  		
+
   		var childTableCode= this.replace(childTable);
   		var parentTableCode= this.replace(parentTable);
-  		
+
   		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
   	}
-  
+
 	this.generatePDF = function(id) {
 		return $http.get(url + "/generatePDF/" + id);
 	}
@@ -84,10 +84,12 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/generateXML/" + id);
 	}
 
-	this.generateKIF = function(dateFrom, dateTo) {
+	this.generateKIF = function(dateFrom, dateTo, company) {
 		var payload = {
-			dateFrom : new Date(dateFrom),
-			dateTo : new Date(dateTo)
+			dateFrom : dateFrom.toLocaleDateString("sr-rs"),
+			dateTo : dateTo.toLocaleDateString("sr-rs"),
+			companyId : company.fields.Id,
+			companyName : company.fields["Naziv preduzeća"]
 		}
 		return $http.post(url + "/generateKIF", payload);
 	}
@@ -162,14 +164,9 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return isValid;
 	}
 
-	this.isKIFFormValid = function(dateFrom, dateTo) {
-		var d1, d2;
-		if(dateFrom && dateTo && isDate(dateFrom) && isDate(dateTo)) {
-			d1= new Date(dateFrom);
-			d2= new Date(dateTo);
-			if(d1 < d2) {
+	this.isKIFFormValid = function(dateFrom, dateTo, company) {
+		if(company && dateFrom && dateTo && dateFrom < dateTo) {
 				return true;
-			}
 		}
 		return false;
 	}
@@ -188,37 +185,37 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				alert("Unesite datum u formatu mm/dd/yyyy.");
 				return false;
 			}
-			
+
 		}
 	};
-	
+
 	isDate = function(dateStr) {
 
 	    var datePat = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
 	    var matchArray = dateStr.match(datePat); // is the format ok?
-	
+
 	    if (matchArray == null) {
 	        // alert("Unesite datum u formatu mm/dd/yyyy ili mm-dd-yyyy.");
 	        return false;
 	    }
-	
+
 	    month = matchArray[1]; // p@rse date into variables
 	    day = matchArray[3];
 	    year = matchArray[5];
-		
-	
+
+
 	    if (month < 1 || month > 12) { // check month range
 	        return false;
 	    }
-	
+
 	    if (day < 1 || day > 31) {
 	        return false;
 	    }
-	
+
 	    if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
 	        return false;
 	    }
-	
+
 	    if (month == 2) { // check for february 29th
 	        var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
 	        if (day > 29 || (day == 29 && !isleap)) {
@@ -227,14 +224,17 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	    }
 	    return true; // date is valid
 	}
-	
+
 	this.getTableRows=function(tableName){
 		return $http.get(url+"/getTableRows/"+tableName);
 	}
-	
+
 	this.addTableRow=function(tableName, rows){
 		return $http.post(url+"/addRow/"+tableName,rows);
 	}
-	
-	
+
+	this.getCompaniesForKIF = function() {
+		return $http.get(url+"/companiesForKIF");
+	}
+
 }]);

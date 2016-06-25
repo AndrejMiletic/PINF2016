@@ -9,12 +9,13 @@ app.controller('copyPricelistController', ['$scope', '$window', 'tableService', 
 				alert("Greska");
 			}
 		);
+		 	
 			$scope.modelArray = [];
 	}
 
 	init();
 	
-	 $scope.openDocument = function () {
+	 $scope.openDocumentPriceList = function () {
 		
 		 
 		 if($scope.selectedPricelist){
