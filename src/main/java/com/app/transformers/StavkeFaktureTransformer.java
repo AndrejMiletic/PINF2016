@@ -161,13 +161,16 @@ public class StavkeFaktureTransformer implements ITransformer {
 		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("Količina", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,6}");
 		fields.add(field);
 		field = new TableFieldDTO("Rabat", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,14}(\\.\\d{2})?");
 		fields.add(field);
 		field = new TableFieldDTO("Osnovica pdv", false, false, false, false, "", DataTypes.NUMBER);
 		field.setCalculated(true);
 		fields.add(field);
 		field = new TableFieldDTO("Jedinična cena stavke", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,14}(\\.\\d{2})?");
 		fields.add(field);
 		
 		table.setFields(fields);

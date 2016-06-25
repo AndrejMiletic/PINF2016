@@ -134,8 +134,10 @@ public class StavkeNarudzbeTransformer implements ITransformer {
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO("Količina stavke", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,6}");
 		fields.add(field);
 		field = new TableFieldDTO("Cena bez pdv", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,14}(\\.\\d{2})?");
 		fields.add(field);
 		field = new TableFieldDTO("Iznos stavke", false, false, false, false, "", DataTypes.NUMBER);
 		field.setCalculated(true);		

@@ -17,6 +17,7 @@ import com.app.model.SifraDelatnosti;
 
 public class PreduzeceTransformer implements ITransformer {
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public TableDTO transformToDTO(Object entity) {
 		TableDTO table = new TableDTO();
@@ -184,6 +185,7 @@ public class PreduzeceTransformer implements ITransformer {
 		fields.add(field);
 		field = new TableFieldDTO("Tekući račun", false, false, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(100);
+		field.setRegExp("\\d{3}\\-\\d{13}\\-\\d{2}");
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.SIFRA_DELATNOSTI, false, false, true, false, TableNames.SIFRA_DELATNOSTI, DataTypes.NUMBER);
 		fields.add(field);

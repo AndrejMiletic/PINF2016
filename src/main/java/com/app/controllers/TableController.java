@@ -3,6 +3,11 @@ package com.app.controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.Date;
+import java.util.HashMap;
+>>>>>>> f3f9320d81097ed89e58e96265009d4583d6972b
 
 import javax.sql.DataSource;
 
@@ -158,6 +163,47 @@ public class TableController {
 		}
 		return new ResponseEntity<Object>(HttpStatus.OK);		
 	}	
+	
+	@RequestMapping(value = "/maxId/{tableCode}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getMaxID(@PathVariable String tableCode) {
+		
+		TableDTO requestedTable = crudService.getAll(tableCode);
+		
+		if(requestedTable != null) {
+			Long id=(Long)requestedTable.getRows().get(requestedTable.getRows().size()-1).getFields().get("Id")+1;
+			return new ResponseEntity<Object>(id, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}		
+	}
+	
+	@RequestMapping(path = "/getAllOrders", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAll() {	
+		String invoiceCode="Faktura_i_otpremnica";
+		String orderCode="Narudzba";
+		ArrayList<Long> result=new ArrayList<>();
+		TableDTO invoiceTable= crudService.getAll(invoiceCode);
+		TableDTO orderTable= crudService.getAll(orderCode);
+		if (invoiceTable != null && orderTable!=null){
+			for(int i=0;i<orderTable.getRows().size();i++){
+				Long id=(Long)orderTable.getRows().get(i).getFields().get("Id");
+				boolean equals=false;
+				for(int j=0;j<invoiceTable.getRows().size();j++){
+					Long orderId=(Long)invoiceTable.getRows().get(i).getFields().get("Narudžba");
+					if(id.equals(orderId)){
+						equals=true;
+					}
+				}
+				if(!equals){
+					result.add(id);
+				}
+			}
+
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+	}
+	
 //------------------------------------------------------------------------------------------------------------------
 	
 	

@@ -17,6 +17,32 @@
         <PIB>123454489</PIB>
     </Podaci_o_kupcu>
     <Stavka_fakture>
+        <Sifra_robe>1115766485</Sifra_robe>
+        <Naziv_robe>Majica</Naziv_robe>
+        <Jedinica_mere>komad</Jedinica_mere>
+        <Kolicina>5.00</Kolicina>
+        <Jedinicna_cena>30.00</Jedinicna_cena>
+        <Rabat>10.00</Rabat>
+        <Vrednost_stavke>150.00</Vrednost_stavke>
+        <Poreska_osnovica>135.00</Poreska_osnovica>
+        <Stopa_PDV>18</Stopa_PDV>
+        <Iznos_PDV>27.00</Iznos_PDV>
+        <Prodajna_vrednost>174.00</Prodajna_vrednost>
+    </Stavka_fakture>
+    <Stavka_fakture>
+        <Sifra_robe>1115766485</Sifra_robe>
+        <Naziv_robe>Majica</Naziv_robe>
+        <Jedinica_mere>komad</Jedinica_mere>
+        <Kolicina>5.00</Kolicina>
+        <Jedinicna_cena>30.00</Jedinicna_cena>
+        <Rabat>10.00</Rabat>
+        <Vrednost_stavke>150.00</Vrednost_stavke>
+        <Poreska_osnovica>135.00</Poreska_osnovica>
+        <Stopa_PDV>18</Stopa_PDV>
+        <Iznos_PDV>27.00</Iznos_PDV>
+        <Prodajna_vrednost>174.00</Prodajna_vrednost>
+    </Stavka_fakture>
+    <Stavka_fakture>
         <Sifra_robe>1189667885</Sifra_robe>
         <Naziv_robe>Mikrofon</Naziv_robe>
         <Jedinica_mere>komad</Jedinica_mere>
@@ -28,32 +54,6 @@
         <Stopa_PDV>18</Stopa_PDV>
         <Iznos_PDV>1800.00</Iznos_PDV>
         <Prodajna_vrednost>11680.00</Prodajna_vrednost>
-    </Stavka_fakture>
-    <Stavka_fakture>
-        <Sifra_robe>1115766485</Sifra_robe>
-        <Naziv_robe>Majica</Naziv_robe>
-        <Jedinica_mere>komad</Jedinica_mere>
-        <Kolicina>5.00</Kolicina>
-        <Jedinicna_cena>30.00</Jedinicna_cena>
-        <Rabat>10.00</Rabat>
-        <Vrednost_stavke>150.00</Vrednost_stavke>
-        <Poreska_osnovica>135.00</Poreska_osnovica>
-        <Stopa_PDV>18</Stopa_PDV>
-        <Iznos_PDV>27.00</Iznos_PDV>
-        <Prodajna_vrednost>174.00</Prodajna_vrednost>
-    </Stavka_fakture>
-    <Stavka_fakture>
-        <Sifra_robe>1115766485</Sifra_robe>
-        <Naziv_robe>Majica</Naziv_robe>
-        <Jedinica_mere>komad</Jedinica_mere>
-        <Kolicina>5.00</Kolicina>
-        <Jedinicna_cena>30.00</Jedinicna_cena>
-        <Rabat>10.00</Rabat>
-        <Vrednost_stavke>150.00</Vrednost_stavke>
-        <Poreska_osnovica>135.00</Poreska_osnovica>
-        <Stopa_PDV>18</Stopa_PDV>
-        <Iznos_PDV>27.00</Iznos_PDV>
-        <Prodajna_vrednost>174.00</Prodajna_vrednost>
     </Stavka_fakture>
     <Iznos>11233.00</Iznos>
     <Ukupan_rabat>126.00</Ukupan_rabat>

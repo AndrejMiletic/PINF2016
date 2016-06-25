@@ -1,11 +1,30 @@
 app.service('tableService', ['$http', 'appConstants', function($http, appConstants){
 	var url = '/table';
 
+	this.filter = function(table, entity){
+		var code = this.replace(table);
+		var payload = {
+			tableName: table,
+			tableCode: code,
+			fields: entity.fields
+		}
+		return $http.post(url + "/filter", payload);
+	}
 	this.getAll = function(){
 		return $http.get(url + "/getAllNames");
 	}
+	
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
+	}
+	
+	this.getAllOrders=function(){
+		return $http.get(url + "/getAllOrders");
+	}
+	
+	this.getMaxId=function(tableName){
+		var tableCode=this.replace(tableName);
+		return $http.get(url+ "/maxId/"+tableCode);
 	}
 
 	this.getTableById=function(tableName,Id){
@@ -104,10 +123,57 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
       return $http.post(url + "/deleteTableRow", row);
   }
 
+	this.isValidFilter = function(table, row){
+		var currentValue;
+		var isValid = true;
+
+		if(!row.fields) {
+			isValid = false;
+		} else
+		{
+			angular.forEach(table.fields, function(field, key) {
+				currentValue = row.fields[field.name];
+				if(field.name!=="Id") {
+					
+					if(field.type === appConstants.types.NUMBER) {
+						if(!currentValue) {
+							isValid = false;
+						} else
+						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
+							isValid = false;
+						}
+					} else
+					if(field.type === appConstants.types.DATE) {
+						if(!currentValue) {
+							isValid = false;
+						}
+					} else
+					if(field.type === appConstants.types.TEXT ) {
+						if(!currentValue) {
+							isValid = false;
+						} else {
+							currentValue = currentValue.trim();
+							if(currentValue.length === 0) {
+								isValid = false;
+							}
+						}
+					}else
+					if(field.type=='CHAR'){
+						var maxLength=field.maxLength;
+						if(maxLength!=-1){
+							if(currentValue.length!=maxLength){
+								isValid=false;
+							}
+						}
+					}
+				}
+			});
+			return isValid;
+		}
+	}
+	
 	this.isValid = function(table, row) {
 
-		console.log(table);
-		console.log(row);
 		var currentValue;
 		var isValid = true;
 

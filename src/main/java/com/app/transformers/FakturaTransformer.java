@@ -26,7 +26,7 @@ public class FakturaTransformer implements ITransformer{
 	private final String DATUM_OBRACUNA = "Datum obračuna";
 	private final String UKUPNO = "Ukupno";
 	private final String RABAT = "Rabat";
-	private final String POREZ = "Porez";
+	private final String POREZ = "Iznos poreza";
 	private final String IZNOS = "Iznos";
 	private final String TEKUCI_RACUN = "Tekući račun";
 	private final String POZIV_NA_BROJ = "Poziv na broj";
@@ -241,7 +241,7 @@ public class FakturaTransformer implements ITransformer{
 		fields.put(FieldNames.POSLOVNA_GODINA_LOOKUP, c.getPoslovnaGodina().getPgGodina2());
 		
 		fields.put(TableNames.POSLOVNI_PARTNER, c.getPoslovniPartner().getIdPartnerstva());
-		fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getIdPreduzeca());
+		fields.put(FieldNames.POSLOVNI_PARTNER_LOOKUP, c.getPoslovniPartner().getPreduzeceByIdPartnera().getNaziv());
 		
 		row.setFields(fields);
 		row.setTableName(TableNames.FAKTURA_OTPREMNICA);
@@ -300,6 +300,7 @@ public class FakturaTransformer implements ITransformer{
 		fields.add(field);
 		field = new TableFieldDTO(TEKUCI_RACUN, false, false, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(50);
+		field.setRegExp("\\d{3}\\-\\d{13}\\-\\d{2}");
 		fields.add(field);
 		field = new TableFieldDTO(POZIV_NA_BROJ, false, true, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(50);
