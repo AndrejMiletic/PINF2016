@@ -20,8 +20,15 @@ public class TableFieldDTO {
 	private boolean enumeration;
 	private ArrayList<String> enumValues;
 	
+	private String regExp;
+	
 	public TableFieldDTO() {
 		super();
+		this.calculated = false;
+		this.maxLength = -1;
+		this.enumeration = false;
+		this.enumValues = new ArrayList<String>();
+		this.regExp = "";
 	}
 	public TableFieldDTO(String name, boolean pk, boolean nullable, boolean fk, boolean lookup,	String fkTableName, DataTypes type) {
 		super();
@@ -36,6 +43,7 @@ public class TableFieldDTO {
 		this.maxLength = -1;
 		this.enumeration = false;
 		this.enumValues = new ArrayList<String>();
+		this.regExp = "";
 	}
 	public String getName() {
 		return name;
@@ -106,5 +114,11 @@ public class TableFieldDTO {
 	public void addEnumValue(String val) {
 		this.enumeration = true;
 		this.enumValues.add(val);
+	}
+	public String getRegExp() {
+		return regExp;
+	}
+	public void setRegExp(String regExp) {
+		this.regExp = regExp;
 	}
 }

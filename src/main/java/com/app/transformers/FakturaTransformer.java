@@ -300,6 +300,7 @@ public class FakturaTransformer implements ITransformer{
 		fields.add(field);
 		field = new TableFieldDTO(TEKUCI_RACUN, false, false, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(50);
+		field.setRegExp("\\d{3}\\-\\d{13}\\-\\d{2}");
 		fields.add(field);
 		field = new TableFieldDTO(POZIV_NA_BROJ, false, true, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(50);

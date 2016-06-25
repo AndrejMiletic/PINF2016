@@ -125,6 +125,7 @@ private final String DATUM_VAZENJA = "Datum važenja";
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO(FieldNames.PORESKA_STOPA_LOOKUP, false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,5}(\\.\\d{2})?");
 		fields.add(field);
 		field = new TableFieldDTO(DATUM_VAZENJA, false, false, false, false, "", DataTypes.DATE);
 		fields.add(field);

@@ -118,6 +118,7 @@ public class StavkeCenovnikaTransformer implements ITransformer {
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
 		field = new TableFieldDTO("Jedinična cena stavke", false, false, false, false, "", DataTypes.NUMBER);
+		field.setRegExp("\\d{1,14}(\\.\\d{2})?");
 		fields.add(field);
 		field = new TableFieldDTO(TableNames.CENOVNIK, false, false, true, false, TableNames.CENOVNIK, DataTypes.NUMBER);
 		fields.add(field);
