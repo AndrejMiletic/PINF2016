@@ -19,7 +19,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	$scope.open = function() {
 		$scope.popup1.opened = true;
 	}
-	
+
 	$scope.showTable = function () {
         $scope.closeForeignKeyForm();
 		$scope.currentRow = undefined;
@@ -93,18 +93,18 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
     		);
     	}
     }
-    
+
     $scope.removeTableNext = function(){
         $scope.closeForeignKeyForm();
     	$scope.filteredNextTable = undefined;
     	$scope.currentRow = undefined;
     }
-    
+
     $scope.showNextTableSelection = function(){
         $scope.closeForeignKeyForm();
     	$scope.showNextSelect = !$scope.showNextSelect;
     }
-    
+
     $scope.deleteRowNext = function(index, row, event) {
         $scope.closeForeignKeyForm();
 		event.stopPropagation();
@@ -118,7 +118,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			}
 		);
 	}
-    
+
 		$scope.deleteRow = function(index, row, event) {
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
@@ -158,7 +158,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.operation = appConstants.operations.NEXT_EDIT;
 			$scope.currentTable = angular.copy($scope.filteredNextTable);
 		}
-		
+
 		$scope.generateEditForm = function(index, row, event) {
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
@@ -177,7 +177,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.operation = appConstants.operations.NEXT_CREATE;
 			$scope.currentTable = angular.copy($scope.filteredNextTable);
 		}
-		
+
 		$scope.generateCreateForm = function() {
 	        $scope.closeForeignKeyForm();
 			$scope.currentRow = {fields:{}};
@@ -212,11 +212,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.operation = appConstants.operations.FILTER;
 			$scope.currentTable = angular.copy($scope.requestedTable);
 		}
-		
+
 		$scope.submitFilterForm = function(){
 			$scope.closeForeignKeyForm();
 			var row =  angular.copy($scope.currentRow);
-			
+
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].type=='DATE'){
 					var name=$scope.currentTable.fields[field].name;
@@ -227,7 +227,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				}
 			}
-			
+
 			if(tableService.isValidFilter($scope.currentTable, row)) {
 				tableService.filter($scope.requestedTable.tableName, row).then(
 						function(response){
@@ -241,14 +241,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				alert("Forma nije validna, tabela je neizmenjena");
 			}
 		}
-		
+
 		$scope.submitForm = function() {
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
 				$scope.currentRow.fields.Id = $scope.getMaxId();
 			}
-			
+
 			var row =  angular.copy($scope.currentRow);
 
 			for(var field in $scope.currentTable.fields){
@@ -261,7 +261,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				}
 			}
-			
+
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
@@ -334,9 +334,13 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				alert("Forma nije validna!");
 			}
 		}
-		
+
 		$scope.getMaxId=function(){
-			return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
+			if($scope.currentTable.rows.length > 0) {
+				return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
+			} else {
+				return 1;
+			}
 		}
 
 		$scope.closeForm = function() {
@@ -346,7 +350,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 		$scope.foreignKey = function(field) {
 //            $scope.documentChild = {};
-            var code=tableService.replace(field.fkTableName);    		
+            var code=tableService.replace(field.fkTableName);
 
             tableService.getTableByName(code).then(
                 function (response) {
@@ -355,7 +359,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						$scope.foreignKeyClicked=true;
 						$scope.foreignTableName=field.fkTableName;
 						$scope.foreignKeyField=field;
-		            	
+
 		            }else{
 		            	alert("Ne postoji nijedna tabela.");
 		            }
@@ -365,7 +369,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
                 }
             );
 	}
-	
+
 	$scope.openDocumentForeignKey=function(row){
 		$scope.selectedForeignKey=row.fields.Id;
 		if($scope.currentTable.tableCode!="Poslovni_partner"){
@@ -399,7 +403,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
             );
         }
 	}
-	
+
 	$scope.addForeignKey=function(){
 		if($scope.selectedForeignKey){
 			$scope.currentRow.fields[$scope.foreignKeyField.name]=$scope.selectedForeignKey;
@@ -428,9 +432,9 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}else{
 			alert("Niste izabrali tabelu.");
 		}
-		
+
 	}
-	
+
 	$scope.closeForeignKeyForm=function(){
 		$scope.foreignKeyClicked=false;
 		$scope.selectedForeignKey=null;
@@ -440,7 +444,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.downloadPDF = function(row, $event) {
 	        $scope.closeForeignKeyForm();
 			$event.stopPropagation();
-			tableService.generatePDF(row.fields.id).then(
+			tableService.generatePDF(row.fields.Id).then(
 				function(response) {
 					$scope.genericDownload("faktura.pdf");
 				}
@@ -481,7 +485,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		downloadLink.attr('download', name);
 		downloadLink[0].click();
 	}
-	
+
 		$scope.setSelectedPricelist = function(row){
 			$scope.selectedPricelistRow = row;
 			$scope.selectedPricelist = row.fields["Naziv cenovnika"];
@@ -489,12 +493,12 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.selectedDataPricelist = row;
 			$scope.openDocumentPriceList();
 		}
-		
+
 		$scope.openDocumentPriceList = function () {
-			
-			 
+
+
 			 if($scope.selectedPricelist){
-						 	 
+
 				 tableService.getDocChild($scope.requestedTable.tableName, $scope.selectedPricelistRow.fields.Id).then(
 					function (response) {
 						$scope.documentChild = response.data;
@@ -509,32 +513,32 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				);
 
-				
+
 			 }else{
 				 alert("Izaberite cenovnik iz liste!");
 			 }
-			 
+
 	    };
-		
+
 		$scope.apply = function(row){
-		
-			var isValid;		
+
+			var isValid;
 		    var number = /^[0-9.-]+$/;
-			
+
 			for (var index in $scope.documentChild.rows) {
-				 
+
 				 if($scope.documentChild.rows[index].fields == row && $scope.modelArray[index]){
-					
-					  if($scope.modelArray[index].match(number)) 
-					  {  
-						 isValid = true;  
+
+					  if($scope.modelArray[index].match(number))
+					  {
+						 isValid = true;
 					  } else{
 						 isValid = false;
 						    }
 					 if(isValid){
 						var newPrice = $scope.modelArray[index];
 						var oldPrice = $scope.documentChild.rows[index].fields["Jedinična cena stavke"];
-						
+
 						$scope.documentChild.rows[index].fields["Jedinična cena stavke"] = parseFloat(oldPrice) +parseFloat($scope.documentChild.rows[index].fields["Jedinična cena stavke"]*newPrice/100);
 						$scope.modelArray[index] = 0;
 					 }else{
@@ -542,10 +546,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						 return;
 					      }
 				 }
-				
-			}	
+
+			}
 		}
-		
+
 		$scope.copyPricelist = function(){
 			console.log($scope.priceListNaziv)
 			if (!$scope.priceListNaziv){
@@ -560,7 +564,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						parent :  $scope.selectedDataPricelist,
 						child : $scope.documentChild.rows
 					}
-					
+
 					tableService.addPricelist(pricelist).then(
 							function (response) {
 								 tableService.getTableByName("Cenovnik").then(
