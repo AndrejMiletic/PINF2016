@@ -193,7 +193,7 @@ public class GenericServiceImpl implements IGenericService {
 	public TableDTO getTableByParent(String parentTableCode, String parentId) {
 		try {
 			Long parent = null;
-			TableDTO retVal = null;
+			TableDTO retVal = new TableDTO();
 			ArrayList<Object> rowsOfDocTable = new ArrayList<Object>();
 
 			String tableName = ConversionHelper.getTableName(parentTableCode);
@@ -231,16 +231,16 @@ public class GenericServiceImpl implements IGenericService {
 	@Override
 	public TableDTO getFilteredTable(TableRowDTO filterRow) {
 		try {
-			String tableCode = filterRow.getTableCode();
-			String tableName = ConversionHelper.getTableName(tableCode);
+			
+			String tableName = filterRow.getTableName();
 			ArrayList<Object> filteredRows = new ArrayList<Object>();
 			TableDTO retVal = null;
+			boolean addToList = true;
 
 			CrudRepository repo = getTableRepo(tableName);
 			ArrayList<Object> rows = (ArrayList<Object>) repo.findAll();
 			ITransformer tr = getTransformer(tableName);
-			TableDTO dto = tr.transformToDTO(rows);
-			boolean addToList = true;
+			TableDTO dto = tr.transformToDTO(rows);			
 
 			for (TableRowDTO row : dto.getRows()) {
 				addToList = true;
@@ -300,7 +300,7 @@ public class GenericServiceImpl implements IGenericService {
 						if(filterRow.getFields().get(fieldName.getName()) != null){
 							String value = row.getFields().get(fieldName.getName()).toString();
 							String filter = filterRow.getFields().get(fieldName.getName()).toString();
-							if (value.equals(filter)) {
+							if (value.contains(filter)) {
 							} else {
 								addToList = false;
 								break;

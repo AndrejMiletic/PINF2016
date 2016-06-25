@@ -11,13 +11,12 @@ import com.app.constants.AppConstants.DataTypes;
 import com.app.constants.FieldNames;
 import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
-import com.app.model.Cenovnik;
 import com.app.model.PoslovnaGodina;
 import com.app.model.Preduzece;
 
 public class PoslovnaGodinaTransformer implements ITransformer {
 	
-	private final String GODINA = "Godina";
+	private final String GODINA = "Godina poslovanja";
 	private final String ZAKLJUČENA = "Zaključena";
 
 	@Override
