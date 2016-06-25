@@ -9,27 +9,36 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 		
 		$scope.addedInvoice=[];
 		
-//		tableService.getAllOrders().then(
+		tableService.getAllOrders().then(
+				function(response){
+					$scope.allOrderForms=response.data;
+				}
+		);
+		
+//		tableService.getTableByName("Narudzba").then(
 //				function(response){
-//					$scope.allOrderForms=response.data;
+//					$scope.allOrderForms=[];
+//					$scope.naruzdba=response.data
+//					for(var rowIndex in response.data.rows){
+//						var Id=response.data.rows[rowIndex].fields.Id;
+//				        $scope.allOrderForms.push(Id);
+//					}
 //				}
 //		);
 		
-		tableService.getTableByName("Narudzba").then(
-				function(response){
-					$scope.allOrderForms=[];
-					$scope.naruzdba=response.data
-					for(var rowIndex in response.data.rows){
-						var Id=response.data.rows[rowIndex].fields.Id;
-				        $scope.allOrderForms.push(Id);
-					}
-				}
-		);
+
+		$scope.ukupanIznos=0;
+		$scope.ukupanRabat=0;
+		$scope.cenaSaRabatom=0;
+		$scope.ukupanPDV=0;
+		$scope.ukupnoZaNaplatu=0;
+		$scope.additionalNotes="";
 	}
 	
 	init();
 
 	$scope.showOrderForm=function(){
+		$scope.additionalNotes="";
 		if($scope.selectedOrderForm){
 			$scope.showTable=true;
 			tableService.getTableByName('Narudzba').then(
@@ -89,11 +98,11 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 							preduzece= response.data;
 							fields["Tekući račun"]=preduzece.rows[0].fields["Tekući račun"];
 							fields["Poziv na broj"]=preduzece.rows[0].fields["PIB"];
+							fields["Status"]="O";
+							fields["Dodatne napomene"]="";
 							fields["Adresa isporuke"]=preduzece.rows[0].fields["Adresa"];
 							fields["Broj kamiona"]="";
 							fields["Prevoznik"]="";
-							fields["Status"]="O";
-							fields["Dodatne napomene"]="";
 							fields["Izdao robu"]="";
 							fields["Preuzeo robu"]="";
 							fields["Narudžba"]=rowFieldsFromOrderForm["Id"];
@@ -104,7 +113,6 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 							fields["Naziv partnera"]=rowFieldsFromOrderForm["Naziv partnera"];
 						}
 				);
-				console.log(fields);
 				$scope.invoice.rows=[{"fields":fields}];
 			},
 			function(response){
@@ -144,7 +152,8 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 									fields["Osnovica pdv"]=fields["Količina"] * rowFieldsFromOrderFormItems["Cena bez pdv"]-fields["Rabat"];
 									fields["Jedinična cena stavke"]=rowFieldsFromOrderFormItems["Cena bez pdv"];
 									$scope.invoiceItems.rows.push({"fields":fields});
-									var pdv="18";
+									var pdv=18;
+//									var pdv=getTax($scope.orderFormItems.rows[row].fields["Id"]);
 									$scope.ukupanIznos+=fields["Količina"] * rowFieldsFromOrderFormItems["Cena bez pdv"];
 									$scope.ukupanRabat+=(fields["Rabat"]/100 * rowFieldsFromOrderFormItems["Cena bez pdv"]) * fields["Količina"];
 									$scope.ukupanPDV+=(pdv/100 * rowFieldsFromOrderFormItems["Cena bez pdv"]) * fields["Količina"];
@@ -171,21 +180,30 @@ app.controller('invoicingController',['$scope','tableService',function($scope, t
 		);
 	}
 	
+	function getTax(id){
+		tableService.getTax("Stavke narudžbe",id).then(
+				function(response){
+					return response.data;
+				}
+		);
+	}
+	
 	$scope.addInvoice=function(additionalNotes){
 		var added=false;
 		for(var i in $scope.addedInvoice){
-			if($scope.addedInvoice[i]==$scope.invoice.rows[0].fields.narudzba){
+			if($scope.addedInvoice[i]==$scope.invoice.rows[0].fields["Narudžba"]){
 				alert("Faktura za trazenu narudzbenicu je vec kreirana.");
 				added=true;
 			}
 		}
 		if($scope.invoice && !added){
-			$scope.invoice.rows[0].fields.dodatne_napomene=additionalNotes ? additionalNotes : "";
+			$scope.invoice.rows[0].fields["Dodatne napomene"]=additionalNotes ? additionalNotes : "";
 			tableService.addTableRow($scope.invoice.tableName,$scope.invoice.rows).then(
 				function(response){
-					$scope.addedInvoice.push($scope.invoice.rows[0].fields.narudzba);
+					$scope.addedInvoice.push($scope.invoice.rows[0].fields["Narudžba"]);
 					$scope.addInvoiceItems();
 					console.log(response.data);
+					$scope.additionalNotes="";
 				},
 				function(response){
 					alert("Doslo je do greske prilikom kreiranja fakture i stavke fakture.");

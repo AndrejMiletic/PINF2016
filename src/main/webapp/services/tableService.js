@@ -14,6 +14,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/getAllNames");
 	}
 	
+	this.getTax=function(tableName,id){
+		var tableCode=this.replace(tableName);
+		return $http.get(url + "/getTax/" + tableCode + "/" + id);
+	}
+	
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
 	}

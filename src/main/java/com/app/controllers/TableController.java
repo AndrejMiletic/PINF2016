@@ -3,8 +3,6 @@ package com.app.controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -23,7 +21,6 @@ import com.app.DTO.PricelistDTO;
 import com.app.DTO.TableDTO;
 import com.app.DTO.TableRowDTO;
 import com.app.helpers.ConversionHelper;
-import com.app.model.invoice.Faktura;
 import com.app.services.IGenericService;
 
 @RestController
@@ -189,6 +186,15 @@ public class TableController {
 			return new ResponseEntity<Object>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(path = "/getTax/{tableCode}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getTax(@PathVariable String tableCode, @PathVariable Long id) {
+		double tax=crudService.getTax(tableCode, id);
+		if(tax!=-1){
+			return new ResponseEntity<Object>(tax,HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 	}
 	
 	
