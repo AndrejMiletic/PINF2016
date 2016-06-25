@@ -137,7 +137,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.deleteSubRow = function(index, row, event) {
 	        $scope.closeForeignKeyForm();
 			event.stopPropagation();
-			tableService.delete($scope.documentChild.tableName, row.fields.id).then(
+			tableService.delete($scope.documentChild.tableName, row.fields.Id).then(
 				function(response) {
 					$scope.currentRow = undefined;
 					$scope.documentChild.rows.splice(index, 1);
@@ -209,7 +209,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	        $scope.closeForeignKeyForm();
 
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				$scope.currentRow.fields.Id = $scope.currentTable.rows.length+1;
+				$scope.currentRow.fields.Id = $scope.getMaxId();
 			}
 			
 			var row =  angular.copy($scope.currentRow);
@@ -252,6 +252,8 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					);
 				} else
 				if($scope.operation === appConstants.operations.SUB_EDIT) {
+					console.log($scope.documentChild.tableName);
+					console.log(row);
 					tableService.edit($scope.documentChild.tableName, row).then(
 						function(response) {
 							$scope.documentChild.rows[$scope.currentIndex] = row;
@@ -295,6 +297,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				alert("Forma nije validna!");
 			}
 		}
+		
+		$scope.getMaxId=function(){
+			return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
+		}
 
 		$scope.closeForm = function() {
 		        $scope.closeForeignKeyForm();
@@ -302,14 +308,8 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		}
 
 		$scope.foreignKey = function(field) {
-            $scope.documentChild = {};
-           
+//            $scope.documentChild = {};
             var code=tableService.replace(field.fkTableName);    		
-//            var code;
-//    		code = field.fkTableName.replace(" ", "_")
-//    					.replace("ć", "c")
-//    					.replace("ž", "z")
-//    					.replace("š", "s");
 
             tableService.getTableByName(code).then(
                 function (response) {
@@ -397,6 +397,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	$scope.closeForeignKeyForm=function(){
 		$scope.foreignKeyClicked=false;
 		$scope.selectedForeignKey=null;
+		$scope.selectedForeignKeyName=null;
 	}
 
 		$scope.downloadPDF = function(row, $event) {
@@ -412,7 +413,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.downloadXML = function(row, $event) {
 	        $scope.closeForeignKeyForm();
 			$event.stopPropagation();
-			tableService.generateXML(row.fields.id).then(
+			tableService.generateXML(row.fields.Id).then(
 				function(response) {
 					$scope.genericDownload("faktura.xml");
 				}
