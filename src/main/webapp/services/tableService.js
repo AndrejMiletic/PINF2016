@@ -136,36 +136,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				if(field.name!=="Id") {
 
 					if(field.type === appConstants.types.NUMBER) {
-						if(!currentValue) {
-							isValid = false;
-						} else
+						
 						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
 							isValid = false;
 						}
-					} else
-					if(field.type === appConstants.types.DATE) {
-						if(!currentValue) {
-							isValid = false;
-						}
-					} else
-					if(field.type === appConstants.types.TEXT ) {
-						if(!currentValue) {
-							isValid = false;
-						} else {
-							currentValue = currentValue.trim();
-							if(currentValue.length === 0) {
-								isValid = false;
-							}
-						}
-					}else
-					if(field.type=='CHAR'){
-						var maxLength=field.maxLength;
-						if(maxLength!=-1){
-							if(currentValue.length!=maxLength){
-								isValid=false;
-							}
-						}
-					}
+					}					
 				}
 			});
 			return isValid;
