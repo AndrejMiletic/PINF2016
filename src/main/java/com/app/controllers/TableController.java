@@ -184,7 +184,7 @@ public class TableController {
 				Long id=(Long)orderTable.getRows().get(i).getFields().get("Id");
 				boolean equals=false;
 				for(int j=0;j<invoiceTable.getRows().size();j++){
-					Long orderId=(Long)invoiceTable.getRows().get(i).getFields().get("Narudžba");
+					Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
 					if(id.equals(orderId)){
 						equals=true;
 					}
@@ -192,6 +192,7 @@ public class TableController {
 				if(!equals){
 					result.add(id);
 				}
+				equals=false;
 			}
 
 			return new ResponseEntity<Object>(result, HttpStatus.OK);
@@ -202,8 +203,9 @@ public class TableController {
 	@RequestMapping(path = "/getTax/{tableCode}/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getTax(@PathVariable String tableCode, @PathVariable Long id) {
 		double tax=crudService.getTax(tableCode, id);
+		Long x = Math.round(tax);
 		if(tax!=-1){
-			return new ResponseEntity<Object>(tax,HttpStatus.OK);
+			return new ResponseEntity<Object>(x,HttpStatus.OK);
 		}
 		return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 	}
