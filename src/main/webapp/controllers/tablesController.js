@@ -245,11 +245,18 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.submitForm = function() {
 	        $scope.closeForeignKeyForm();
 
-			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				$scope.currentRow.fields.Id = $scope.getMaxId();
-			}
-
 			var row =  angular.copy($scope.currentRow);
+
+			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
+				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
+					row.fields["Osnovica pdv"]=0;
+				if($scope.currentRow.tableName=="Faktura i otpremnica"){
+					row.fields["Iznos poreza"]=0;
+					row.fields["Ukupno"]=0;
+					row.fields["Rabat"]=0;
+					row.fields["Iznos"]=0;
+				}
+			}
 
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].type=='DATE'){
@@ -266,6 +273,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
 						function(response) {
+							row.fields.Id = $scope.getMaxId();
 							$scope.requestedTable.rows.push(row);
 							$scope.currentRow = undefined;
 							if($scope.operation === appConstants.operations.CREATE) {
@@ -303,6 +311,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.SUB_CREATE) {
 					tableService.create($scope.documentChild.tableName, row).then(
 						function(response) {
+							row.fields.Id = $scope.getMaxId();
 							$scope.documentChild.rows.push(row);
 							$scope.currentRow = undefined;
 						}, function() {
@@ -323,6 +332,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					if($scope.operation === appConstants.operations.NEXT_CREATE) {
 						tableService.create($scope.filteredNextTable.tableName, row).then(
 							function(response) {
+								row.fields.Id = $scope.getMaxId();
 								$scope.filteredNextTable.rows.push(row);
 								$scope.currentRow = undefined;
 							}, function() {
@@ -330,9 +340,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							}
 						);
 					}
-			} else {
-				alert("Forma nije validna!");
 			}
+//			else {
+//				alert("Forma nije validna!");
+//			}
 		}
 
 		$scope.getMaxId=function(){

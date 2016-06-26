@@ -151,7 +151,7 @@
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
 			<div class="currentRow" ng-repeat="field in currentTable.fields"
-				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create' && operation!=='filter'">
+				ng-if="field.name!=='Id' && !field.calculated">
 				<div class="form-inline">
 					<div class="form-group" style="width: 250px; float:left; text-align: left;">
 						<label>{{field.name}}</label>

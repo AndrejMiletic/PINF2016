@@ -22,5 +22,6 @@ public interface IGenericService {
 	boolean generatePDF(Connection connection, String id);
 	TableDTO getCompaniesForKIF();
 	boolean generateXML(Long id,String filePath);
-	
+	double getTax(String tableCode, Long id);
+
 }

@@ -11,6 +11,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRProperties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
@@ -24,6 +32,7 @@ import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
 import com.app.model.FakturaOtpremnica;
 import com.app.model.PoreskaStopa;
+import com.app.model.Porez;
 import com.app.model.PoslovniPartner;
 import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
@@ -62,14 +71,6 @@ import com.app.transformers.SifraDelatnostiTransformer;
 import com.app.transformers.StavkeCenovnikaTransformer;
 import com.app.transformers.StavkeFaktureTransformer;
 import com.app.transformers.StavkeNarudzbeTransformer;
-
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
@@ -685,6 +686,48 @@ public class GenericServiceImpl implements IGenericService {
 		}		
 		
 		return true;
+	}
+
+	@Override
+	public double getTax(String tableCode, Long id) {
+		Object result = null;
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			result = repo.findOne(id);
+		} catch (Exception e) {
+			return -1;
+		}
+		if(result!=null && (result instanceof StavkeNarudzbe)){
+			StavkeNarudzbe orderItem=(StavkeNarudzbe)result;
+			Porez tax=orderItem.getKatalogRobeIUsluga().getGrupaProizvoda().getPorez();
+			double taxAmount=getTaxAmmount(tax);
+			return taxAmount;
+		}
+		return -1;
+	}
+	
+	private static double getTaxAmmount(Porez porez) {
+		BigDecimal iznosPoreza = new BigDecimal(0);
+		Date datum = new Date();
+		Set<PoreskaStopa> stope = porez.getPoreskaStopas();
+		int i = 0;
+		
+		if(stope.size() > 0) {
+			for (PoreskaStopa stopa : stope) {
+				if(i == 0) {
+					i++;
+					iznosPoreza = stopa.getIznosStope();
+					datum = stopa.getDatumVazenja();
+				} else {
+					if(stopa.getDatumVazenja().compareTo(datum) > 0) {
+						iznosPoreza = stopa.getIznosStope();
+					}
+				}
+			}
+		}
+		
+		return iznosPoreza.doubleValue();
 	}
 
 }

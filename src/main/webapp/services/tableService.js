@@ -13,6 +13,12 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getAll = function(){
 		return $http.get(url + "/getAllNames");
 	}
+	
+	this.getTax=function(tableName,id){
+		var tableCode=this.replace(tableName);
+		return $http.get(url + "/getTax/" + tableCode + "/" + id);
+	}
+	
 
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
@@ -33,6 +39,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	}
 
 	this.create = function(parent, entity) {
+		entity.fields=removeId(entity.fields,"Id");
 		var code=this.replace(parent);
 		var payload = {
 			tableName: parent,
@@ -41,6 +48,16 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return $http.post(url + "/create", payload);
 	}
+	
+	function removeId(items,item) { 
+	    var newItems = {};
+	    angular.forEach(items, function(value, key){
+	        if(key != item)
+	            newItems[key] = value; 
+	    });
+
+	    return newItems;   
+	};
 
 	this.edit = function(parent, entity) {
 		var code=this.replace(parent);
@@ -149,60 +166,107 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 
 	this.isValid = function(table, row) {
 
+		var validMessage="";
 		var currentValue;
 		var isValid = true;
 
 		if(!row.fields) {
 			isValid = false;
+			validMessage+="Forma ne sadrži polja.\n";
 		} else
 		{
+			console.log(table);
+			console.log(row);
 			angular.forEach(table.fields, function(field, key) {
 				currentValue = row.fields[field.name];
+				isValid=true;
 				if(field.name!=="Id") {
 					if(!field.nullable) {
 						if(!currentValue && !field.calculated) {
 							isValid = false;
+							validMessage+="Polje: '" + field.name +"' mora da bude uneseno.\n";
 						}
 					}
-					if(field.type === appConstants.types.NUMBER) {
+					if(field.type === appConstants.types.NUMBER && isValid) {
+//						console.log(angular.isNumber(currentValue));
+//						console.log(parseInt(currentValue))
+//						console.log(parseInt(currentValue) === NaN);
 						if(!currentValue && !field.calculated) {
-							isValid = false;
 						} else
 						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
 							isValid = false;
+							validMessage+="Polje: '" + field.name + "' mora da bude broj.\n";
 						}
 					} else
-					if(field.type === appConstants.types.DATE) {
+					if(field.type === appConstants.types.DATE && isValid) {
 						if(!currentValue) {
-							isValid = false;
 						}
 //						else
 //						if(!isDate(currentValue)) {
 //							isValid =  false;
 //						}
 					} else
-					if(field.type === appConstants.types.TEXT ) {
-						if(!currentValue) {
-							isValid = false;
-						} else {
+					if(field.type === appConstants.types.TEXT  && isValid) {
+						if(currentValue){
 							currentValue = currentValue.trim();
 							if(currentValue.length === 0) {
 								isValid = false;
-							}
-						}
-					}else
-					if(field.type=='CHAR'){
-						var maxLength=field.maxLength;
-						if(maxLength!=-1){
-							if(currentValue.length!=maxLength){
+								validMessage+="Polje: '" + field.name + "' mora da bude uneseno.\n";
+							}else
+							if(field.regExp!=""){
 								isValid=false;
+								var somthing=convertRegExp(field.regExp);
+								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
+							}						}
+					}else
+					if(field.type=='CHAR' && isValid){
+						if(currentValue) {
+							var maxLength=field.maxLength;
+							if(maxLength!=-1){
+								if(currentValue.length!=maxLength){
+									isValid=false;
+									validMessage+="Polje: '" + field.name + "' mora da sadrži tačno " + maxLength + " karaktera.\n";
+								}
 							}
 						}
 					}
 				}
 			});
 		}
+		if(validMessage.length>0){
+			alert(validMessage);
+			isValid=false;
+		}
 		return isValid;
+	}
+	
+	convertRegExp=function(regExp){
+		var open=false;
+		var digit="";
+		var number="";
+		var message="";
+		for(var c in regExp){
+			if(regExp[c]=="\\"){
+				digit="";
+			}else if(regExp[c]=="d"){
+				digit="b";
+			}else if(regExp[c]=="1" || regExp[c]=="2" || regExp[c]=="3" || regExp[c]=="4"
+					|| regExp[c]=="5" || regExp[c]=="6" || regExp[c]=="7" || regExp[c]=="8" || regExp[c]=="9"){
+				number+=regExp[c];
+			}else if(regExp[c]=="-"){
+				message+="-";
+			}else if(regExp[c]=="{"){
+				open=true;
+			}else if(regExp[c]=="}"){
+				open=false;
+				var num=parseInt(number);
+				for(var n=0;n<num;n++){
+					message+=digit;
+				}
+				number="";
+			}
+		}
+		console.log(message);
 	}
 
 	this.isKIFFormValid = function(dateFrom, dateTo, company) {
