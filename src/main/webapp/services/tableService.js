@@ -157,7 +157,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				currentValue = row.fields[field.name];
 				isValid=true;
 				if(field.name!=="Id") {
-					if(!field.nullable) {
+					if(!field.nullable && field.regExp=="") {
 						if(!currentValue && !field.calculated) {
 							isValid = false;
 							validMessage+="Polje: '" + field.name +"' mora da bude uneseno.\n";
@@ -168,6 +168,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 //						console.log(parseInt(currentValue))
 //						console.log(parseInt(currentValue) === NaN);
 						if(!currentValue && !field.calculated) {
+							if(field.regExp!=""){
+								isValid=false;
+								var somthing=convertRegExp(field.regExp);
+								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
+							}
 						} else
 						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
 							isValid = false;
@@ -188,12 +193,13 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 							if(currentValue.length === 0) {
 								isValid = false;
 								validMessage+="Polje: '" + field.name + "' mora da bude uneseno.\n";
-							}else
+							}					
+						}else
 							if(field.regExp!=""){
 								isValid=false;
 								var somthing=convertRegExp(field.regExp);
 								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
-							}						}
+							}	
 					}else
 					if(field.type=='CHAR' && isValid){
 						if(currentValue) {
@@ -216,10 +222,26 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return isValid;
 	}
 	
+	getMax=function(regExp){
+		var number="";
+		for(var c in regExp){
+			if(regExp[c]=="1" || regExp[c]=="1" || regExp[c]=="2" || regExp[c]=="3" || regExp[c]=="4"
+				|| regExp[c]=="5" || regExp[c]=="6" || regExp[c]=="7" || regExp[c]=="8" || regExp[c]=="9"){
+				number+=regExp[c];
+			}
+		}
+		if(number.length>0)
+			return parseInt(number);
+		else
+			return 0;
+	}
+	
 	convertRegExp=function(regExp){
 		var open=false;
 		var digit="";
 		var number="";
+		var numberTo="";
+		var to=false;
 		var message="";
 		for(var c in regExp){
 			if(regExp[c]=="\\"){
@@ -228,19 +250,34 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				digit="b";
 			}else if(regExp[c]=="1" || regExp[c]=="2" || regExp[c]=="3" || regExp[c]=="4"
 					|| regExp[c]=="5" || regExp[c]=="6" || regExp[c]=="7" || regExp[c]=="8" || regExp[c]=="9"){
-				number+=regExp[c];
+				if(!to)
+					number+=regExp[c];
+				else
+					numberTo+=regExp[c];
 			}else if(regExp[c]=="-"){
 				message+="-";
 			}else if(regExp[c]=="{"){
 				open=true;
 			}else if(regExp[c]=="}"){
 				open=false;
-				var num=parseInt(number);
-				for(var n=0;n<num;n++){
-					message+=digit;
+				if(!to){
+					var num=parseInt(number);
+					for(var n=0;n<num;n++){
+						message+=digit;
+					}
+				}else{
+					message+="("+number+"-"+numberTo+")b";
 				}
+				to=false;
+				numberTo="";
 				number="";
-			}
+			}else if(regExp[c]==",")
+				to=true;
+			else if(regExp[c]=="("){
+				number=0;
+				to=true;
+			}else if(regExp[c]==".")
+				message+=".";
 		}
 		console.log(message);
 	}

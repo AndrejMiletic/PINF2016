@@ -268,6 +268,25 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				}
 			}
+			
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].calculated || $scope.currentTable.fields[field].nullable){
+					var name=$scope.currentTable.fields[field].name;
+					var exists=false;
+					if(name!="Id"){
+						for(var r in $scope.currentRow.fields){
+							var currField=$scope.currentRow.fields[r];
+							if(currField==name){
+								exists=true;
+							}
+						}
+						if(!exists){
+							$scope.currentRow.fields[name]="";
+						}
+					}
+				}
+			}
+
 
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {
