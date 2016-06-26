@@ -140,6 +140,30 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
       return $http.post(url + "/deleteTableRow", row);
   }
 
+	this.isValidFilter = function(table, row){
+		var currentValue;
+		var isValid = true;
+
+		if(!row.fields) {
+			isValid = false;
+		} else
+		{
+			angular.forEach(table.fields, function(field, key) {
+				currentValue = row.fields[field.name];
+				if(field.name!=="Id") {
+
+					if(field.type === appConstants.types.NUMBER) {
+						
+						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
+							isValid = false;
+						}
+					}					
+				}
+			});
+			return isValid;
+		}
+	}
+
 	this.isValid = function(table, row) {
 
 		var validMessage="";
