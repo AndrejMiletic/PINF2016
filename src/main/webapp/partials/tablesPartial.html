@@ -168,11 +168,8 @@
 						<button onclick="document.getElementById('idZoom').style.display='block'" ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
 							<span class="glyphicon glyphicon-option-horizontal"></span>
 						</button>
-						<select ng-model="currentRow.fields[field.name]"
-								ng-if="field.type=='BOOLEAN'" class="form-control" style="width:210px;">
-								<option>true</option>
-								<option>false</option>
-						</select>
+						<input ng-if="field.type=='BOOLEAN'" class="checkbox"
+							type="checkbox" value="Bike" ng-model="currentRow.fields[field.name]"/>
 						<select ng-model="currentRow.fields[field.name]"
 								ng-if="field.enumeration" class="form-control" style="width:210px;">
 								<option ng-repeat="enumValue in field.enumValues"

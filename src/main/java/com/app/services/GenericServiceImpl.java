@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -728,6 +729,48 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		
 		return iznosPoreza.doubleValue();
+	}
+
+	@Override
+	public HashMap<String, Double> getCalculatedData(Long id) {
+		TableDTO orderItemsTable=getAll("Stavke_narudzbe");
+		double ukupanIznos=0;
+		double ukupanRabat=0;
+		double ukupanPDV=0;
+		double kolicina=0;
+		double cenaBezPDVa=0;
+		double rabat=6;
+		double pdv=0;
+		if(orderItemsTable!=null){
+			if(orderItemsTable.getRows().size()>0){
+				for(int i=0;i<orderItemsTable.getRows().size();i++){
+					Long orderId=(Long)orderItemsTable.getRows().get(i).getFields().get("Narudžba");
+					HashMap<String, Object> fields=orderItemsTable.getRows().get(i).getFields();
+					if(orderId.equals(id)){
+						kolicina=(Integer)fields.get("Količina stavke");
+						cenaBezPDVa=((BigDecimal)fields.get("Cena bez pdv")).doubleValue();
+						pdv=getTax("Stavke_narudzbe",(Long)fields.get("Id"));
+						if(pdv==-1)
+							pdv=0;
+						ukupanIznos+=kolicina * cenaBezPDVa;
+						ukupanRabat+=rabat/100 * cenaBezPDVa * kolicina;
+						ukupanPDV+=pdv/100 * cenaBezPDVa * kolicina;
+					}
+				}
+			}
+			DecimalFormat df = new DecimalFormat("#.##");      
+			ukupanIznos=Double.valueOf(df.format(ukupanIznos));      
+			ukupanRabat=Double.valueOf(df.format(ukupanRabat));      
+			ukupanPDV=Double.valueOf(df.format(ukupanPDV));
+		}
+
+		HashMap<String, Double> result=new HashMap<>();
+		result.put("Iznos", ukupanIznos);
+		result.put("Rabat", ukupanRabat);
+		result.put("PDV", ukupanPDV);
+		
+		return result;
+		
 	}
 
 }

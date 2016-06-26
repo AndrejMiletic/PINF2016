@@ -1,8 +1,11 @@
 package com.app.controllers;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -200,14 +203,15 @@ public class TableController {
 		return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
 	}
 	
-	@RequestMapping(path = "/getTax/{tableCode}/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getTax(@PathVariable String tableCode, @PathVariable Long id) {
+	public double getTax(String tableCode,Long id) {
 		double tax=crudService.getTax(tableCode, id);
 		Long x = Math.round(tax);
-		if(tax!=-1){
-			return new ResponseEntity<Object>(x,HttpStatus.OK);
-		}
-		return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+		return x;
+	}
+	
+	@RequestMapping(path="/getCalculatedData/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> getCalculatedData(@PathVariable Long id){
+		return new ResponseEntity<Object>(crudService.getCalculatedData(id),HttpStatus.OK);
 	}
 	
 	

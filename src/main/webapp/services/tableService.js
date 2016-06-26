@@ -19,6 +19,9 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/getTax/" + tableCode + "/" + id);
 	}
 	
+	this.getCalculatedData=function(id){
+		return $http.get(url + "/getCalculatedData/" + id);
+	}
 
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
@@ -181,7 +184,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				currentValue = row.fields[field.name];
 				isValid=true;
 				if(field.name!=="Id") {
-					if(!field.nullable && field.regExp=="") {
+					if(!field.nullable && field.regExp=="" && field.type!="BOOLEAN") {
 						if(!currentValue && !field.calculated) {
 							isValid = false;
 							validMessage+="Polje: '" + field.name +"' mora da bude uneseno.\n";
