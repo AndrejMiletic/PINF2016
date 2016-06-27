@@ -21,7 +21,8 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 
 	this.getCalculatedData=function(id,data,itemId){
 		return $http.get(url + "/getCalculatedData/" + id + "/" + itemId + "/"+ data);
-
+	}
+	
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
 	}
