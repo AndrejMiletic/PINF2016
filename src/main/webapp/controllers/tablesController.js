@@ -168,6 +168,41 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.formText = "Uredi";
 			$scope.operation = appConstants.operations.EDIT;
 			$scope.currentTable = angular.copy($scope.requestedTable);
+			setDate();
+		}
+		
+		function setDate(){
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].type=='DATE'){
+					var name=$scope.currentTable.fields[field].name;
+					var dateField=$scope.currentRow.fields[name];
+					var day="";
+					var month="";
+					var year="";
+					var isMonth=false;
+					var isYear=false;
+					for(var c in dateField){
+						if(dateField[c]=="."){
+							if(!isMonth && !isYear){
+								isMonth=true;
+							}else if(isMonth){
+								isMonth=false;
+								isYear=true;
+							}
+						}else{
+							if(isMonth){
+								month+=dateField[c];
+							}else if(isYear){
+								year+=dateField[c];
+							}else{
+								day+=dateField[c];
+							}
+						}
+					}
+					var date=new Date(parseInt(year), parseInt(month)-1, parseInt(day), 0, 0, 0, 0);
+					$scope.currentRow.fields[name]=date;
+				}
+			}
 		}
 
 		$scope.generateCreateFormNext = function() {
@@ -195,6 +230,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.formText = "Uredi stavku";
 			$scope.operation = appConstants.operations.SUB_EDIT;
 			$scope.currentTable = angular.copy($scope.documentChild);
+			setDate();
 		}
 
 		$scope.generateCreateSubForm = function() {
@@ -263,8 +299,10 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					var name=$scope.currentTable.fields[field].name;
 					var dateField=$scope.currentRow.fields[name];
 					if(dateField!=null){
-						var date=dateField.toLocaleDateString("sr-rs");
-						row.fields[name]=date;
+						if(dateField!=""){
+							var date=dateField.toLocaleDateString("sr-rs");
+							row.fields[name]=date;
+						}
 					}
 				}
 			}

@@ -191,9 +191,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 						}
 					}
 					if(field.type === appConstants.types.NUMBER && isValid) {
-//						console.log(angular.isNumber(currentValue));
-//						console.log(parseInt(currentValue))
-//						console.log(parseInt(currentValue) === NaN);
 						if(!currentValue && !field.calculated) {
 							if(field.regExp!=""){
 								isValid=false;
@@ -201,7 +198,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
 							}
 						} else
-						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
+						if(isNaN(currentValue)) {
 							isValid = false;
 							validMessage+="Polje: '" + field.name + "' mora da bude broj.\n";
 						}
@@ -209,10 +206,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 					if(field.type === appConstants.types.DATE && isValid) {
 						if(!currentValue) {
 						}
-//						else
-//						if(!isDate(currentValue)) {
-//							isValid =  false;
-//						}
 					} else
 					if(field.type === appConstants.types.TEXT  && isValid) {
 						if(currentValue){
