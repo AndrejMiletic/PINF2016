@@ -10,6 +10,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return $http.post(url + "/filter", payload);
 	}
+
 	this.getAll = function(){
 		return $http.get(url + "/getAllNames");
 	}
@@ -21,6 +22,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 
 	this.getCalculatedData=function(id,data,itemId){
 		return $http.get(url + "/getCalculatedData/" + id + "/" + itemId + "/"+ data);
+	}
 
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
@@ -44,7 +46,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		 var newItems = {};
 		    angular.forEach(entity.fields, function(value, key){
 		        if(key != "Id")
-		            newItems[key] = value; 
+		            newItems[key] = value;
 		    });
 
 		var code=this.replace(parent);
@@ -107,17 +109,17 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return tableCode;
 	}
 
-    this.getDocChild = function(parentName, parentId){
-        return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
-    }
+  this.getDocChild = function(parentName, parentId){
+      return $http.get(url + "/getDocChild/" + parentName + "/" + parentId);
+  }
 
-  	this.getByNameFiltered = function(parentTable, childTable, parentId){
+	this.getByNameFiltered = function(parentTable, childTable, parentId){
 
-  		var childTableCode= this.replace(childTable);
-  		var parentTableCode= this.replace(parentTable);
+		var childTableCode= this.replace(childTable);
+		var parentTableCode= this.replace(parentTable);
 
-  		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
-  	}
+		return $http.get(url + "/filterNextTable/" + childTableCode + "/" + parentTableCode + "/" + parentId);
+	}
 
 	this.generatePDF = function(id) {
 		return $http.get(url + "/generatePDF/" + id);
@@ -140,9 +142,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.addPricelist = function(pricelist){
       return $http.post(url + "/addPricelist", pricelist);
   }
+
 	this.addTableRow = function(row){
       return $http.post(url + "/addTableRow", row);
   }
+
 	this.deleteTableRow = function(row){
       return $http.post(url + "/deleteTableRow", row);
   }
