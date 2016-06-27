@@ -162,7 +162,7 @@ public class PreduzeceTransformer implements ITransformer {
 		
 		field = new TableFieldDTO(FieldNames.PRIMARY_KEY, true, false, false, false, "", DataTypes.NUMBER);
 		fields.add(field);
-		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, true, false, false, "", DataTypes.TEXT);
+		field = new TableFieldDTO(FieldNames.PREDUZECE_LOOKUP, false, false, false, false, "", DataTypes.TEXT);
 		field.setMaxLength(100);
 		fields.add(field);
 		field = new TableFieldDTO("PIB", false, false, false, false, "", DataTypes.CHAR);

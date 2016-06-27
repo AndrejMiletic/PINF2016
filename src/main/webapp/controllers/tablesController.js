@@ -440,7 +440,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.downloadPDF = function(row, $event) {
 	        $scope.closeForeignKeyForm();
 			$event.stopPropagation();
-			tableService.generatePDF(row.fields.id).then(
+			tableService.generatePDF(row.fields.Id).then(
 				function(response) {
 					$scope.genericDownload("faktura.pdf");
 				}
