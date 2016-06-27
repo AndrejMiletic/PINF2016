@@ -42,3 +42,9 @@ div, h{
 .buttons{
 	margin-bottom: 20px;
 }
+
+.checkbox{
+	height:20pt;
+	width:20pt;
+}
+

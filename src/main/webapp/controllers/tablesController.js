@@ -168,6 +168,41 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.formText = "Uredi";
 			$scope.operation = appConstants.operations.EDIT;
 			$scope.currentTable = angular.copy($scope.requestedTable);
+			setDate();
+		}
+		
+		function setDate(){
+			for(var field in $scope.currentTable.fields){
+				if($scope.currentTable.fields[field].type=='DATE'){
+					var name=$scope.currentTable.fields[field].name;
+					var dateField=$scope.currentRow.fields[name];
+					var day="";
+					var month="";
+					var year="";
+					var isMonth=false;
+					var isYear=false;
+					for(var c in dateField){
+						if(dateField[c]=="."){
+							if(!isMonth && !isYear){
+								isMonth=true;
+							}else if(isMonth){
+								isMonth=false;
+								isYear=true;
+							}
+						}else{
+							if(isMonth){
+								month+=dateField[c];
+							}else if(isYear){
+								year+=dateField[c];
+							}else{
+								day+=dateField[c];
+							}
+						}
+					}
+					var date=new Date(parseInt(year), parseInt(month)-1, parseInt(day), 0, 0, 0, 0);
+					$scope.currentRow.fields[name]=date;
+				}
+			}
 		}
 
 		$scope.generateCreateFormNext = function() {
@@ -195,6 +230,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.formText = "Uredi stavku";
 			$scope.operation = appConstants.operations.SUB_EDIT;
 			$scope.currentTable = angular.copy($scope.documentChild);
+			setDate();
 		}
 
 		$scope.generateCreateSubForm = function() {
@@ -250,12 +286,12 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
 				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
 					row.fields["Osnovica pdv"]=0;
-				if($scope.currentRow.tableName=="Faktura i otpremnica"){
-					row.fields["Iznos poreza"]=0;
-					row.fields["Ukupno"]=0;
-					row.fields["Rabat"]=0;
-					row.fields["Iznos"]=0;
-				}
+//				if($scope.currentRow.tableName=="Faktura i otpremnica"){
+//					row.fields["Iznos poreza"]=0;
+//					row.fields["Ukupno"]=0;
+//					row.fields["Rabat"]=0;
+//					row.fields["Iznos"]=0;
+//				}
 			}
 
 			for(var field in $scope.currentTable.fields){
@@ -263,17 +299,20 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					var name=$scope.currentTable.fields[field].name;
 					var dateField=$scope.currentRow.fields[name];
 					if(dateField!=null){
-						var date=dateField.toLocaleDateString("sr-rs");
-						row.fields[name]=date;
+						if(dateField!=""){
+							var date=dateField.toLocaleDateString("sr-rs");
+							row.fields[name]=date;
+						}
 					}
 				}
 			}
 			
 			for(var field in $scope.currentTable.fields){
-				if($scope.currentTable.fields[field].calculated || $scope.currentTable.fields[field].nullable){
+				if($scope.currentTable.fields[field].calculated || $scope.currentTable.fields[field].nullable || $scope.currentTable.fields[field].type=="BOOLEAN"){
 					var name=$scope.currentTable.fields[field].name;
+					var type=$scope.currentTable.fields[field].type;
 					var exists=false;
-					if(name!="Id"){
+					if(name!="Id" && type!="BOOLEAN"){
 						for(var r in $scope.currentRow.fields){
 							var currField=$scope.currentRow.fields[r];
 							if(currField==name){
@@ -284,9 +323,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							$scope.currentRow.fields[name]="";
 						}
 					}
+					if(type=="BOOLEAN"){
+						console.log(name)
+						$scope.currentRow.fields[name]=false;
+						if(!row.fields[name])
+							row.fields[name]=false;
+					}
 				}
 			}
-
 
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {

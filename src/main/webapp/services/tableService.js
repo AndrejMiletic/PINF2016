@@ -19,6 +19,9 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/getTax/" + tableCode + "/" + id);
 	}
 	
+	this.getCalculatedData=function(id){
+		return $http.get(url + "/getCalculatedData/" + id);
+	}
 
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
@@ -181,16 +184,13 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				currentValue = row.fields[field.name];
 				isValid=true;
 				if(field.name!=="Id") {
-					if(!field.nullable && field.regExp=="") {
+					if(!field.nullable && field.regExp=="" && field.type!="BOOLEAN") {
 						if(!currentValue && !field.calculated) {
 							isValid = false;
 							validMessage+="Polje: '" + field.name +"' mora da bude uneseno.\n";
 						}
 					}
 					if(field.type === appConstants.types.NUMBER && isValid) {
-//						console.log(angular.isNumber(currentValue));
-//						console.log(parseInt(currentValue))
-//						console.log(parseInt(currentValue) === NaN);
 						if(!currentValue && !field.calculated) {
 							if(field.regExp!=""){
 								isValid=false;
@@ -198,7 +198,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
 							}
 						} else
-						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
+						if(isNaN(currentValue)) {
 							isValid = false;
 							validMessage+="Polje: '" + field.name + "' mora da bude broj.\n";
 						}
@@ -206,10 +206,6 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 					if(field.type === appConstants.types.DATE && isValid) {
 						if(!currentValue) {
 						}
-//						else
-//						if(!isDate(currentValue)) {
-//							isValid =  false;
-//						}
 					} else
 					if(field.type === appConstants.types.TEXT  && isValid) {
 						if(currentValue){
