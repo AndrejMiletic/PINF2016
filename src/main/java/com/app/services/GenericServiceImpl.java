@@ -732,14 +732,14 @@ public class GenericServiceImpl implements IGenericService {
 	}
 
 	@Override
-	public HashMap<String, Double> getCalculatedData(Long id) {
+	public HashMap<String, Double> getCalculatedData(Long id,Long itemId,double r) {
 		TableDTO orderItemsTable=getAll("Stavke_narudzbe");
 		double ukupanIznos=0;
 		double ukupanRabat=0;
 		double ukupanPDV=0;
 		double kolicina=0;
 		double cenaBezPDVa=0;
-		double rabat=6;
+		double rabat=0;
 		double pdv=0;
 		if(orderItemsTable!=null){
 			if(orderItemsTable.getRows().size()>0){
@@ -747,6 +747,12 @@ public class GenericServiceImpl implements IGenericService {
 					Long orderId=(Long)orderItemsTable.getRows().get(i).getFields().get("Narudžba");
 					HashMap<String, Object> fields=orderItemsTable.getRows().get(i).getFields();
 					if(orderId.equals(id)){
+						if(itemId!=123456789){
+							if(orderItemsTable.getRows().get(i).getFields().get("Id").equals(itemId)){
+								rabat=r;
+							}else
+								rabat=0;
+						}
 						kolicina=(Integer)fields.get("Količina stavke");
 						cenaBezPDVa=((BigDecimal)fields.get("Cena bez pdv")).doubleValue();
 						pdv=getTax("Stavke_narudzbe",(Long)fields.get("Id"));

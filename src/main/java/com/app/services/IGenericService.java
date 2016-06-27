@@ -23,5 +23,5 @@ public interface IGenericService {
 	TableDTO getCompaniesForKIF();
 	boolean generateXML(Long id,String filePath);
 	double getTax(String tableCode, Long id);
-	HashMap<String, Double> getCalculatedData(Long id);
+	HashMap<String, Double> getCalculatedData(Long id,Long itemId,double rabat);
 }

@@ -19,8 +19,8 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		return $http.get(url + "/getTax/" + tableCode + "/" + id);
 	}
 	
-	this.getCalculatedData=function(id){
-		return $http.get(url + "/getCalculatedData/" + id);
+	this.getCalculatedData=function(id,data,itemId){
+		return $http.get(url + "/getCalculatedData/" + id + "/" + itemId + "/"+ data);
 	}
 
 	this.getTableByName = function(tableCode) {
@@ -42,12 +42,17 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	}
 
 	this.create = function(parent, entity) {
-		entity.fields=removeId(entity.fields,"Id");
+		 var newItems = {};
+		    angular.forEach(entity.fields, function(value, key){
+		        if(key != "Id")
+		            newItems[key] = value; 
+		    });
+
 		var code=this.replace(parent);
 		var payload = {
 			tableName: parent,
 			tableCode: code,
-			fields: entity.fields
+			fields: newItems
 		}
 		return $http.post(url + "/create", payload);
 	}
@@ -178,12 +183,10 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 			validMessage+="Forma ne sadrži polja.\n";
 		} else
 		{
-			console.log(table);
-			console.log(row);
 			angular.forEach(table.fields, function(field, key) {
 				currentValue = row.fields[field.name];
 				isValid=true;
-				if(field.name!=="Id") {
+				if(field.name!=="Id" && !field.calculated) {
 					if(!field.nullable && field.regExp=="" && field.type!="BOOLEAN") {
 						if(!currentValue && !field.calculated) {
 							isValid = false;
