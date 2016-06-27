@@ -164,12 +164,11 @@ public class TableController {
 		
 		TableDTO requestedTable = crudService.getAll(tableCode);
 		
-		if(requestedTable != null) {
-			Long id=(Long)requestedTable.getRows().get(requestedTable.getRows().size()-1).getFields().get("Id")+1;
-			return new ResponseEntity<Object>(id, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}		
+		Long id=new Long("1");
+		if(requestedTable != null && requestedTable.getRows().size()>0) {
+			id=(Long)requestedTable.getRows().get(requestedTable.getRows().size()-1).getFields().get("Id")+1;
+		}
+		return new ResponseEntity<Object>(id,HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/getAllOrders", method = RequestMethod.GET)
@@ -179,16 +178,18 @@ public class TableController {
 		ArrayList<Long> result=new ArrayList<>();
 		TableDTO invoiceTable= crudService.getAll(invoiceCode);
 		TableDTO orderTable= crudService.getAll(orderCode);
-		if (invoiceTable != null && orderTable!=null){
+		if (orderTable!=null){
 			for(int i=0;i<orderTable.getRows().size();i++){
 				Long id=(Long)orderTable.getRows().get(i).getFields().get("Id");
 				boolean equals=false;
-				for(int j=0;j<invoiceTable.getRows().size();j++){
-					if(invoiceTable.getRows().get(j).getFields().get("Narudžba")!="") {
-						Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
-					
-						if(id.equals(orderId)){
-							equals=true;
+				if(invoiceTable!=null){
+					for(int j=0;j<invoiceTable.getRows().size();j++){
+						if(invoiceTable.getRows().get(j).getFields().get("Narudžba")!="") {
+							Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
+						
+							if(id.equals(orderId)){
+								equals=true;
+							}
 						}
 					}
 				}
@@ -209,9 +210,9 @@ public class TableController {
 		return x;
 	}
 	
-	@RequestMapping(path="/getCalculatedData/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Object> getCalculatedData(@PathVariable Long id){
-		return new ResponseEntity<Object>(crudService.getCalculatedData(id),HttpStatus.OK);
+	@RequestMapping(path="/getCalculatedData/{id}/{itemId}/{rabat}", method=RequestMethod.GET)
+	public ResponseEntity<Object> getCalculatedData(@PathVariable Long id,@PathVariable Long itemId,@PathVariable double rabat){
+		return new ResponseEntity<Object>(crudService.getCalculatedData(id,itemId,rabat),HttpStatus.OK);
 	}
 	
 	

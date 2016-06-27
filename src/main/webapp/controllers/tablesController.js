@@ -281,18 +281,19 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		$scope.submitForm = function() {
 	        $scope.closeForeignKeyForm();
 
-			var row =  angular.copy($scope.currentRow);
 
-			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
-					row.fields["Osnovica pdv"]=0;
+			var row =  angular.copy($scope.currentRow);
+			
+//			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
+//				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
+//					row.fields["Osnovica pdv"]=0;
 //				if($scope.currentRow.tableName=="Faktura i otpremnica"){
 //					row.fields["Iznos poreza"]=0;
 //					row.fields["Ukupno"]=0;
 //					row.fields["Rabat"]=0;
 //					row.fields["Iznos"]=0;
 //				}
-			}
+//			}
 
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].type=='DATE'){
@@ -307,8 +308,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				}
 			}
 			
+
 			for(var field in $scope.currentTable.fields){
-				if($scope.currentTable.fields[field].calculated || $scope.currentTable.fields[field].nullable || $scope.currentTable.fields[field].type=="BOOLEAN"){
+				if($scope.currentTable.fields[field].calculated 
+						|| $scope.currentTable.fields[field].nullable || 
+						$scope.currentTable.fields[field].type=="BOOLEAN"){
 					var name=$scope.currentTable.fields[field].name;
 					var type=$scope.currentTable.fields[field].type;
 					var exists=false;
@@ -321,29 +325,35 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						}
 						if(!exists){
 							$scope.currentRow.fields[name]="";
+							if(!row.fields[name])	
+								row.fields[name]="";
 						}
 					}
 					if(type=="BOOLEAN"){
-						console.log(name)
 						$scope.currentRow.fields[name]=false;
 						if(!row.fields[name])
 							row.fields[name]=false;
 					}
 				}
 			}
+			
 
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
 						function(response) {
-							row.fields.Id = $scope.getMaxId();
-							$scope.requestedTable.rows.push(row);
-							$scope.currentRow = undefined;
-							if($scope.operation === appConstants.operations.CREATE) {
-								//$scope.showTable();
-							}else if($scope.operation === appConstants.operations.SUB_CREATE) {
-								//$scope.openDocument();
-							}
+							tableService.getMaxId($scope.currentTable.tableName).then(
+									function(response){
+										row.fields.Id=response.data-1;
+										$scope.requestedTable.rows.push(row);
+										$scope.currentRow = undefined;
+										if($scope.operation === appConstants.operations.CREATE) {
+											//$scope.showTable();
+										}else if($scope.operation === appConstants.operations.SUB_CREATE) {
+											//$scope.openDocument();
+										}
+									}
+							);
 						}, function() {
 							alert("Neuspešno dodavanje reda u tabelu.");
 						}
@@ -374,9 +384,13 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.SUB_CREATE) {
 					tableService.create($scope.documentChild.tableName, row).then(
 						function(response) {
-							row.fields.Id = $scope.getMaxId();
-							$scope.documentChild.rows.push(row);
-							$scope.currentRow = undefined;
+							tableService.getMaxId($scope.currentTable.tableName).then(
+									function(response){
+										row.fields.Id=response.data;
+										$scope.documentChild.rows.push(row);
+										$scope.currentRow = undefined;
+									}
+							);
 						}, function() {
 							alert("Neuspešno dodavanje stavke.");
 						}
@@ -395,9 +409,13 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					if($scope.operation === appConstants.operations.NEXT_CREATE) {
 						tableService.create($scope.filteredNextTable.tableName, row).then(
 							function(response) {
-								row.fields.Id = $scope.getMaxId();
-								$scope.filteredNextTable.rows.push(row);
-								$scope.currentRow = undefined;
+								tableService.getMaxId($scope.currentTable.tableName).then(
+										function(response){
+											row.fields.Id=response.data;
+											$scope.filteredNextTable.rows.push(row);
+											$scope.currentRow = undefined;
+										}
+								);
 							}, function() {
 								alert("Neuspešno dodavanje stavke.");
 							}
@@ -409,12 +427,12 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 //			}
 		}
 
-		$scope.getMaxId=function(){
-			if($scope.currentTable.rows.length > 0) {
-				return ($scope.currentTable.rows[$scope.currentTable.rows.length-1].fields.Id)+1;
-			} else {
-				return 1;
-			}
+		function getMaxId(){
+			tableService.getMaxId($scope.currentTable.tableName).then(
+					function(response){
+						return response.data;
+					}
+			);
 		}
 
 		$scope.closeForm = function() {

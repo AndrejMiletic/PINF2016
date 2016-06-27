@@ -35,7 +35,13 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="row in invoiceItems.rows">
-				<td ng-repeat="data in row.fields">{{data}}</td>
+				<td ng-repeat="(dataIndex,data) in row.fields">
+					<div ng-if="dataIndex=='Rabat'">
+						<input type="text" ng-model="row.fields[dataIndex]"/>
+						<button ng-click="apply(data,row.fields['Id'])">Potvrda</button>
+					</div>
+					<label ng-if="dataIndex!='Rabat'">{{data}}</label>
+				</td>
 			</tr>
 		</tbody>
 	</table>
