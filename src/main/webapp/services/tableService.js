@@ -13,15 +13,14 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 	this.getAll = function(){
 		return $http.get(url + "/getAllNames");
 	}
-	
+
 	this.getTax=function(tableName,id){
 		var tableCode=this.replace(tableName);
 		return $http.get(url + "/getTax/" + tableCode + "/" + id);
 	}
-	
+
 	this.getCalculatedData=function(id,data,itemId){
 		return $http.get(url + "/getCalculatedData/" + id + "/" + itemId + "/"+ data);
-	}
 
 	this.getTableByName = function(tableCode) {
 		return $http.get(url + "/getAll/" + tableCode);
@@ -56,15 +55,15 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return $http.post(url + "/create", payload);
 	}
-	
-	function removeId(items,item) { 
+
+	function removeId(items,item) {
 	    var newItems = {};
 	    angular.forEach(items, function(value, key){
 	        if(key != item)
-	            newItems[key] = value; 
+	            newItems[key] = value;
 	    });
 
-	    return newItems;   
+	    return newItems;
 	};
 
 	this.edit = function(parent, entity) {
@@ -161,11 +160,11 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 				if(field.name!=="Id") {
 
 					if(field.type === appConstants.types.NUMBER) {
-						
+
 						if(!angular.isNumber(currentValue) && parseInt(currentValue) === NaN) {
 							isValid = false;
 						}
-					}					
+					}
 				}
 			});
 			return isValid;
@@ -216,13 +215,13 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 							if(currentValue.length === 0) {
 								isValid = false;
 								validMessage+="Polje: '" + field.name + "' mora da bude uneseno.\n";
-							}					
+							}
 						}else
 							if(field.regExp!=""){
 								isValid=false;
 								var somthing=convertRegExp(field.regExp);
 								validMessage+="Polje: '" + field.name + "' mora da bude u formatu : " + field.regExp + ".\n";
-							}	
+							}
 					}else
 					if(field.type=='CHAR' && isValid){
 						if(currentValue) {
@@ -244,7 +243,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		}
 		return isValid;
 	}
-	
+
 	getMax=function(regExp){
 		var number="";
 		for(var c in regExp){
@@ -258,7 +257,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 		else
 			return 0;
 	}
-	
+
 	convertRegExp=function(regExp){
 		var open=false;
 		var digit="";
