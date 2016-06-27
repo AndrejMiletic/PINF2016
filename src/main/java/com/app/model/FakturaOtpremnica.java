@@ -129,7 +129,7 @@ public class FakturaOtpremnica implements java.io.Serializable {
 		this.poslovnaGodina = poslovnaGodina;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_PARTNERSTVA", nullable = false)
 	public PoslovniPartner getPoslovniPartner() {
 		return this.poslovniPartner;
@@ -304,7 +304,7 @@ public class FakturaOtpremnica implements java.io.Serializable {
 		this.robuIRacunPreuzeo = robuIRacunPreuzeo;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fakturaOtpremnica")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "fakturaOtpremnica")
 	public Set<StavkeFaktureOtpremnice> getStavkeFaktureOtpremnices() {
 		return this.stavkeFaktureOtpremnices;
 	}

@@ -58,7 +58,7 @@ public class PoslovniPartner implements java.io.Serializable {
 		this.idPartnerstva = idPartnerstva;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_PREDUZECA", nullable = false)
 	public Preduzece getPreduzeceByIdPreduzeca() {
 		return this.preduzeceByIdPreduzeca;
@@ -68,7 +68,7 @@ public class PoslovniPartner implements java.io.Serializable {
 		this.preduzeceByIdPreduzeca = preduzeceByIdPreduzeca;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_PARTNERA", nullable = false)
 	public Preduzece getPreduzeceByIdPartnera() {
 		return this.preduzeceByIdPartnera;
@@ -87,7 +87,7 @@ public class PoslovniPartner implements java.io.Serializable {
 		this.vrsta = vrsta;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poslovniPartner")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "poslovniPartner")
 	public Set<Narudzba> getNarudzbas() {
 		return this.narudzbas;
 	}
@@ -96,7 +96,7 @@ public class PoslovniPartner implements java.io.Serializable {
 		this.narudzbas = narudzbas;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poslovniPartner")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "poslovniPartner")
 	public Set<FakturaOtpremnica> getFakturaOtpremnicas() {
 		return this.fakturaOtpremnicas;
 	}

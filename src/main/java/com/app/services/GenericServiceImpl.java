@@ -649,13 +649,12 @@ public class GenericServiceImpl implements IGenericService {
 	public boolean generatePDF(Connection connection, String id) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		
-		ArrayList<Preduzece> companies = new ArrayList<Preduzece>();
-		companies.addAll(preduzeceRepo.getCompaniesForKIF());
 		Long idFakture = Long.parseLong(id);
 		FakturaOtpremnica faktura = fakturaRepo.findOne(idFakture);
 		PoslovniPartner pp = faktura.getPoslovniPartner();
 		Preduzece p = pp.getPreduzeceByIdPartnera();
 		
+		params.put("id_fakture", id);
 		params.put("naziv", p.getNaziv());
 		params.put("adresa", p.getAdresa());
 		params.put("pib", p.getPib());

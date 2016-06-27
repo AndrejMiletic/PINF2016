@@ -81,7 +81,7 @@ public class Preduzece implements java.io.Serializable {
 		this.idPreduzeca = idPreduzeca;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_SIFRE_DELATNOSTI", nullable = false)
 	public SifraDelatnosti getSifraDelatnosti() {
 		return this.sifraDelatnosti;
@@ -163,7 +163,7 @@ public class Preduzece implements java.io.Serializable {
 		this.tekuciRacun = tekuciRacun;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "preduzece")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "preduzece")
 	public Set<GrupaProizvoda> getGrupaProizvodas() {
 		return this.grupaProizvodas;
 	}
@@ -172,7 +172,7 @@ public class Preduzece implements java.io.Serializable {
 		this.grupaProizvodas = grupaProizvodas;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "preduzece")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "preduzece")
 	public Set<Cenovnik> getCenovniks() {
 		return this.cenovniks;
 	}
@@ -181,7 +181,7 @@ public class Preduzece implements java.io.Serializable {
 		this.cenovniks = cenovniks;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "preduzece")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "preduzece")
 	public Set<PoslovnaGodina> getPoslovnaGodinas() {
 		return this.poslovnaGodinas;
 	}
@@ -190,7 +190,7 @@ public class Preduzece implements java.io.Serializable {
 		this.poslovnaGodinas = poslovnaGodinas;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "preduzeceByIdPreduzeca")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "preduzeceByIdPreduzeca")
 	public Set<PoslovniPartner> getPoslovniPartnersForIdPreduzeca() {
 		return this.poslovniPartnersForIdPreduzeca;
 	}
@@ -199,7 +199,7 @@ public class Preduzece implements java.io.Serializable {
 		this.poslovniPartnersForIdPreduzeca = poslovniPartnersForIdPreduzeca;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "preduzeceByIdPartnera")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "preduzeceByIdPartnera")
 	public Set<PoslovniPartner> getPoslovniPartnersForIdPartnera() {
 		return this.poslovniPartnersForIdPartnera;
 	}
