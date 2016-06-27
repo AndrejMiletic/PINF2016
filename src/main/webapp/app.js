@@ -6,10 +6,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 						controller: 'tablesController',
 						templateUrl: 'partials/tablesPartial.html',
 			})
-			.when('/copyPricelist', {
-						controller: 'copyPricelistController',
-						templateUrl: 'partials/copyPricelistPartial.html',
-					})
 			.when('/invoicing', {
 						controller: 'invoicingController',
 						templateUrl: 'partials/invoicingPartial.html',

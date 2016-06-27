@@ -184,9 +184,12 @@ public class TableController {
 				Long id=(Long)orderTable.getRows().get(i).getFields().get("Id");
 				boolean equals=false;
 				for(int j=0;j<invoiceTable.getRows().size();j++){
-					Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
-					if(id.equals(orderId)){
-						equals=true;
+					if(invoiceTable.getRows().get(j).getFields().get("Narudžba")!="") {
+						Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
+					
+						if(id.equals(orderId)){
+							equals=true;
+						}
 					}
 				}
 				if(!equals){
