@@ -170,7 +170,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$scope.currentTable = angular.copy($scope.requestedTable);
 			setDate();
 		}
-		
+
 		function setDate(){
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].type=='DATE'){
@@ -283,7 +283,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 
 			var row =  angular.copy($scope.currentRow);
-			
+
 //			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
 //				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
 //					row.fields["Osnovica pdv"]=0;
@@ -307,11 +307,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				}
 			}
-			
+
 
 			for(var field in $scope.currentTable.fields){
-				if($scope.currentTable.fields[field].calculated 
-						|| $scope.currentTable.fields[field].nullable || 
+				if($scope.currentTable.fields[field].calculated
+						|| $scope.currentTable.fields[field].nullable ||
 						$scope.currentTable.fields[field].type=="BOOLEAN"){
 					var name=$scope.currentTable.fields[field].name;
 					var type=$scope.currentTable.fields[field].type;
@@ -325,7 +325,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 						}
 						if(!exists){
 							$scope.currentRow.fields[name]="";
-							if(!row.fields[name])	
+							if(!row.fields[name])
 								row.fields[name]="";
 						}
 					}
@@ -336,7 +336,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					}
 				}
 			}
-			
+
 
 			if(tableService.isValid($scope.currentTable, row)) {
 				if($scope.operation === appConstants.operations.CREATE) {
@@ -538,7 +538,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			$event.stopPropagation();
 			tableService.generatePDF(row.fields.Id).then(
 				function(response) {
-					$scope.genericDownload("faktura.pdf");
+					$scope.genericDownload("Faktura.pdf");
 				}
 			);
 		}

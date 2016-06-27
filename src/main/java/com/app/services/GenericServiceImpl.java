@@ -457,7 +457,7 @@ public class GenericServiceImpl implements IGenericService {
 		
 		//ako postoji rabat, osnovica je kad se od vrednosti oduzme rabat
 		if(invoiceItem.getRabat() != null && invoiceItem.getRabat().intValue() > 0) {
-			double osnovicaPDV = vrednost * (1 - invoiceItem.getRabat().intValue()/100);
+			double osnovicaPDV = vrednost * (1 - invoiceItem.getRabat().doubleValue()/100);
 			invoiceItem.setOsnovicaPdv(new BigDecimal(osnovicaPDV));
 		} else {	//ako nema rabat, PDV se racuna na cistu vrednost
 			invoiceItem.setOsnovicaPdv(new BigDecimal(vrednost));

@@ -197,7 +197,7 @@ app.service('tableService', ['$http', 'appConstants', function($http, appConstan
 						}
 					}
 					if(field.type === appConstants.types.NUMBER && isValid) {
-						if(!currentValue && !field.calculated) {
+						if(currentValue !== 0 && !currentValue && !field.calculated) {
 							if(field.regExp!=""){
 								isValid=false;
 								var somthing=convertRegExp(field.regExp);
