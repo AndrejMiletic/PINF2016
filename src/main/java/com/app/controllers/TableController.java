@@ -1,8 +1,11 @@
 package com.app.controllers;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -184,20 +187,36 @@ public class TableController {
 				Long id=(Long)orderTable.getRows().get(i).getFields().get("Id");
 				boolean equals=false;
 				for(int j=0;j<invoiceTable.getRows().size();j++){
-					Long orderId=(Long)invoiceTable.getRows().get(i).getFields().get("Narudžba");
-					if(id.equals(orderId)){
-						equals=true;
+					if(invoiceTable.getRows().get(j).getFields().get("Narudžba")!="") {
+						Long orderId=(Long)invoiceTable.getRows().get(j).getFields().get("Narudžba");
+					
+						if(id.equals(orderId)){
+							equals=true;
+						}
 					}
 				}
 				if(!equals){
 					result.add(id);
 				}
+				equals=false;
 			}
 
 			return new ResponseEntity<Object>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<Object>(result, HttpStatus.NOT_FOUND);
 	}
+	
+	public double getTax(String tableCode,Long id) {
+		double tax=crudService.getTax(tableCode, id);
+		Long x = Math.round(tax);
+		return x;
+	}
+	
+	@RequestMapping(path="/getCalculatedData/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Object> getCalculatedData(@PathVariable Long id){
+		return new ResponseEntity<Object>(crudService.getCalculatedData(id),HttpStatus.OK);
+	}
+	
 	
 //------------------------------------------------------------------------------------------------------------------
 	

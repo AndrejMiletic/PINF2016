@@ -10,9 +10,9 @@ app.service('appConstants', function(){
   };
 
 	this.types = {
-		TEXT: "text",
-		DATE: "date",
-		NUMBER: "number",
-		BOOLEAN: "boolean"
+		TEXT: "TEXT",
+		DATE: "DATE",
+		NUMBER: "NUMBER",
+		BOOLEAN: "BOOLEAN"
 	};
 });

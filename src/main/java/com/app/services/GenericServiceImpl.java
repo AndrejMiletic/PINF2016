@@ -4,12 +4,21 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -24,6 +33,7 @@ import com.app.constants.TableNames;
 import com.app.helpers.ConversionHelper;
 import com.app.model.FakturaOtpremnica;
 import com.app.model.PoreskaStopa;
+import com.app.model.Porez;
 import com.app.model.PoslovniPartner;
 import com.app.model.Preduzece;
 import com.app.model.StavkeFaktureOtpremnice;
@@ -62,14 +72,6 @@ import com.app.transformers.SifraDelatnostiTransformer;
 import com.app.transformers.StavkeCenovnikaTransformer;
 import com.app.transformers.StavkeFaktureTransformer;
 import com.app.transformers.StavkeNarudzbeTransformer;
-
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
@@ -685,6 +687,90 @@ public class GenericServiceImpl implements IGenericService {
 		}		
 		
 		return true;
+	}
+
+	@Override
+	public double getTax(String tableCode, Long id) {
+		Object result = null;
+		try {
+			String tableName = ConversionHelper.getTableName(tableCode);
+			CrudRepository repo = getTableRepo(tableName);
+			result = repo.findOne(id);
+		} catch (Exception e) {
+			return -1;
+		}
+		if(result!=null && (result instanceof StavkeNarudzbe)){
+			StavkeNarudzbe orderItem=(StavkeNarudzbe)result;
+			Porez tax=orderItem.getKatalogRobeIUsluga().getGrupaProizvoda().getPorez();
+			double taxAmount=getTaxAmmount(tax);
+			return taxAmount;
+		}
+		return -1;
+	}
+	
+	private static double getTaxAmmount(Porez porez) {
+		BigDecimal iznosPoreza = new BigDecimal(0);
+		Date datum = new Date();
+		Set<PoreskaStopa> stope = porez.getPoreskaStopas();
+		int i = 0;
+		
+		if(stope.size() > 0) {
+			for (PoreskaStopa stopa : stope) {
+				if(i == 0) {
+					i++;
+					iznosPoreza = stopa.getIznosStope();
+					datum = stopa.getDatumVazenja();
+				} else {
+					if(stopa.getDatumVazenja().compareTo(datum) > 0) {
+						iznosPoreza = stopa.getIznosStope();
+					}
+				}
+			}
+		}
+		
+		return iznosPoreza.doubleValue();
+	}
+
+	@Override
+	public HashMap<String, Double> getCalculatedData(Long id) {
+		TableDTO orderItemsTable=getAll("Stavke_narudzbe");
+		double ukupanIznos=0;
+		double ukupanRabat=0;
+		double ukupanPDV=0;
+		double kolicina=0;
+		double cenaBezPDVa=0;
+		double rabat=6;
+		double pdv=0;
+		if(orderItemsTable!=null){
+			if(orderItemsTable.getRows().size()>0){
+				for(int i=0;i<orderItemsTable.getRows().size();i++){
+					Long orderId=(Long)orderItemsTable.getRows().get(i).getFields().get("Narudžba");
+					HashMap<String, Object> fields=orderItemsTable.getRows().get(i).getFields();
+					if(orderId.equals(id)){
+						kolicina=(Integer)fields.get("Količina stavke");
+						cenaBezPDVa=((BigDecimal)fields.get("Cena bez pdv")).doubleValue();
+						pdv=getTax("Stavke_narudzbe",(Long)fields.get("Id"));
+						if(pdv==-1)
+							pdv=0;
+						ukupanIznos+=kolicina * cenaBezPDVa;
+						ukupanRabat+=rabat/100 * cenaBezPDVa * kolicina;
+						ukupanPDV+=pdv/100 * cenaBezPDVa * kolicina;
+					}
+				}
+			}
+			DecimalFormat df = new DecimalFormat("#.##");      
+			ukupanIznos=Double.valueOf(df.format(ukupanIznos));      
+			ukupanRabat=Double.valueOf(df.format(ukupanRabat));      
+			ukupanPDV=Double.valueOf(df.format(ukupanPDV));
+		}
+
+		HashMap<String, Double> result=new HashMap<>();
+		result.put("Iznos", ukupanIznos);
+		result.put("Rabat", ukupanRabat);
+		result.put("PDV", ukupanPDV);
+		
+		return result;
+		
 	}
 
 }

@@ -151,7 +151,7 @@
 		<div ng-if="currentRow">
 			<h2> {{formText}} </h2><br/>
 			<div class="currentRow" ng-repeat="field in currentTable.fields"
-				ng-if="field.name!=='Id' && !field.calculated || operation!=='create' && operation!=='sub_create' && operation!=='next_create' && operation!=='filter'">
+				ng-if="field.name!=='Id' && !field.calculated">
 				<div class="form-inline">
 					<div class="form-group" style="width: 250px; float:left; text-align: left;">
 						<label>{{field.name}}</label>
@@ -162,19 +162,18 @@
 						<input ng-if="field.type != 'DATE' && field.type!='BOOLEAN' && !field.enumeration"
 							type = "text" ng-readonly="field.fk || field.lookup"
 							ng-model="currentRow.fields[field.name]" class="form-control"
-							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"/>
+							placeholder="{{field.type==='date' && 'mm/dd/yyyy ili mm-dd-yyyy' || ''}}"
+							ng-pattern="field.regExp"/>
 						<date-picker ng-if="field.type == 'DATE'" ng-model="currentRow.fields[field.name]"></date-picker>
 						<button onclick="document.getElementById('idZoom').style.display='block'" ng-click="foreignKey(field)" class="btn btn-info" ng-if="field.fk">
 							<span class="glyphicon glyphicon-option-horizontal"></span>
 						</button>
-						<select ng-model="currentRow.fields[field.name]"
-								ng-if="field.type=='BOOLEAN'" class="form-control" style="width:210px;">
-								<option>true</option>
-								<option>false</option>
-						</select>
+						<input ng-if="field.type=='BOOLEAN'" class="checkbox"
+							type="checkbox" value="Bike" ng-model="currentRow.fields[field.name]"/>
 						<select ng-model="currentRow.fields[field.name]"
 								ng-if="field.enumeration" class="form-control" style="width:210px;">
-								<option ng-repeat="enumValue in field.enumValues">{{enumValue}}</option>
+								<option ng-repeat="enumValue in field.enumValues"
+								if(appConstants.operations.NEXT_EDIT || appConstants.operations.EDIT){selected}>{{enumValue}}</option>
 						</select>
 					</div>
 				</div>
