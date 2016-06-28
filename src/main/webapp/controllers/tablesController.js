@@ -55,6 +55,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
     $scope.openDocument = function (id) {
         $scope.closeForeignKeyForm();
+        $scope.currentParentId = id;
        /* var childName=$scope.requestedTable.children[0];
         var childCode=tableService.replace(childName);*/
 //        if ($scope.requestedTable.documentChildName){
@@ -387,7 +388,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							tableService.getMaxId($scope.currentTable.tableName).then(
 									function(response){
 										row.fields.Id=response.data;
-										if (row.fields[$scope.requestedTable.tableName] == $scope.requestedTable.rows[$scope.currentIndex].fields["Id"]){
+										if (row.fields[$scope.requestedTable.tableName] == $scope.currentParentId){
 											$scope.documentChild.rows.push(row);
 										}
 										$scope.currentRow = undefined;
