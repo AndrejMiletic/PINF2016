@@ -124,6 +124,7 @@ public class GenericServiceImpl implements IGenericService {
 				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, (StavkeFaktureOtpremnice)s);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
