@@ -387,7 +387,9 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							tableService.getMaxId($scope.currentTable.tableName).then(
 									function(response){
 										row.fields.Id=response.data;
-										$scope.documentChild.rows.push(row);
+										if (row.fields[$scope.requestedTable.tableName] == $scope.requestedTable.rows[$scope.currentIndex].fields["Id"]){
+											$scope.documentChild.rows.push(row);
+										}
 										$scope.currentRow = undefined;
 									}
 							);
