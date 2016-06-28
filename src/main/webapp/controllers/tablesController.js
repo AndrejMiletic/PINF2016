@@ -309,6 +309,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				}
 			}
 
+			var valid = tableService.isValid($scope.currentTable, row);
+
+			if(!valid) {
+				return;
+			}
 
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].calculated
@@ -339,7 +344,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			}
 
 
-			if(tableService.isValid($scope.currentTable, row)) {
+			if(valid) {
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
 						function(response) {
