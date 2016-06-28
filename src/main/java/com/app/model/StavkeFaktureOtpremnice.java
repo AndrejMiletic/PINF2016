@@ -61,7 +61,7 @@ public class StavkeFaktureOtpremnice implements java.io.Serializable {
 		this.idStavkeFakture = idStavkeFakture;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_FAKTURE_OTPREMNICE", nullable = false)
 	public FakturaOtpremnica getFakturaOtpremnica() {
 		return this.fakturaOtpremnica;
@@ -71,7 +71,7 @@ public class StavkeFaktureOtpremnice implements java.io.Serializable {
 		this.fakturaOtpremnica = fakturaOtpremnica;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_ARTIKLA", nullable = false)
 	public KatalogRobeIUsluga getKatalogRobeIUsluga() {
 		return this.katalogRobeIUsluga;

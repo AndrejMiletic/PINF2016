@@ -239,7 +239,7 @@ public class GenericServiceImpl implements IGenericService {
 		try {
 			
 			String tableName = filterRow.getTableName();
-			ArrayList<Object> filteredRows = new ArrayList<Object>();
+			ArrayList<TableRowDTO> filteredRows = new ArrayList<TableRowDTO>();
 			TableDTO retVal = null;
 			boolean addToList = true;
 
@@ -289,7 +289,7 @@ public class GenericServiceImpl implements IGenericService {
 							try {
 								value1 = format.parse(row.getFields().get(fieldName.getName()).toString());
 								filter1 = format.parse(filterRow.getFields().get(fieldName.getName()).toString());
-								if (value1.equals(filter1)) {
+								if (value1.compareTo(filter1) == 0) {
 								} else {
 									addToList = false;
 									break;
@@ -315,14 +315,16 @@ public class GenericServiceImpl implements IGenericService {
 					}					
 				}
 				if(addToList){
-					HashMap<String, Object> fks = getFKs(row);
-					Object entity = tr.transformFromDTO(row, fks);
-					filteredRows.add(entity);
+					//HashMap<String, Object> fks = getFKs(row);
+					//Object entity = tr.transformFromDTO(row, fks);
+					filteredRows.add(row);
 				}
 			}
 
 			if (filteredRows.size() != 0) {
-				retVal = tr.transformToDTO(filteredRows);
+				//retVal = tr.transformToDTO(filteredRows);
+				retVal = dto;
+				retVal.setRows(filteredRows);
 				return retVal;
 			} else {
 				return null;

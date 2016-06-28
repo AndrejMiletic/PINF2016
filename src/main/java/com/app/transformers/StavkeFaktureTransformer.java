@@ -61,7 +61,7 @@ public class StavkeFaktureTransformer implements ITransformer {
 		c.setKatalogRobeIUsluga((KatalogRobeIUsluga)fks.get(TableNames.KATALOG_ROBE_I_USLUGA));
 		kolicina = new BigDecimal(rows.get("Količina").toString());
 		c.setKolicina(kolicina);
-		if(rows.containsKey("Rabat")) {
+		if(rows.containsKey("Rabat") && rows.get("Rabat")!="") {
 			rabat = new BigDecimal(rows.get("Rabat").toString());
 			c.setRabat(rabat);
 		}		

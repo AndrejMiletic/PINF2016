@@ -119,180 +119,141 @@ WHERE
 		<band height="139">
 			<staticText>
 				<reportElement x="0" y="0" width="119" height="14"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Naziv izdavaoca računa:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="14" width="136" height="14"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Serif"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Adresa izdavaoca računa:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="28" width="136" height="14"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Serif"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[PIB izdavaoca računa:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="42" width="153" height="14"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Serif"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Matični br. izdavaoca računa:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="56" width="100" height="14"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Serif"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Tekući račun:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="0" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Naziv kupca:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="14" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Adresa kupca:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="28" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[PIB kupca:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="42" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Matični broj kupca:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="56" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Tekući račun:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="316" y="85" width="100" height="26"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="16"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Datum izd. fakture:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="85" width="178" height="26"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="16"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Račun - otpremnica broj:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="441" y="85" width="100" height="26"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="18"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_datum}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_datum}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="196" y="85" width="104" height="26"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="16"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_broj}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_broj}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="438" y="14" width="117" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{adresa}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{adresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="438" y="28" width="117" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{pib}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{pib}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="437" y="42" width="118" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{maticni_broj}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{maticni_broj}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="437" y="56" width="118" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{tekuci_racun}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tekuci_racun}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="438" y="0" width="117" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{naziv}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{naziv}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="152" y="0" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{naziv}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="152" y="14" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{adresa}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{adresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="152" y="28" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{pib}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pib}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="152" y="42" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{maticni_broj}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{maticni_broj}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="152" y="56" width="100" height="14"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{tekuci_racun}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tekuci_racun}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -303,73 +264,64 @@ WHERE
 			</rectangle>
 			<staticText>
 				<reportElement x="0" y="0" width="24" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[R.br]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="24" y="0" width="81" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Naziv]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="105" y="0" width="48" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Jed.mere]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="152" y="0" width="44" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Kolicina]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="196" y="0" width="59" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Jed. cena]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="255" y="0" width="45" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Rabat]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="300" y="0" width="84" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Poreska osn.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="382" y="0" width="73" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Iznos pdv]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="455" y="0" width="100" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
-					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Ukupna naknada]]></text>
 			</staticText>
@@ -382,66 +334,48 @@ WHERE
 			</rectangle>
 			<textField>
 				<reportElement x="24" y="0" width="81" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{katalog_robe_i_usluga_NAZIV_ARTIKLA}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{katalog_robe_i_usluga_NAZIV_ARTIKLA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="105" y="0" width="48" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{jedinice_mere_NAZIV_JEDINICE_MERE}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{jedinice_mere_NAZIV_JEDINICE_MERE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="153" y="0" width="43" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{stavke_fakture_otpremnice_KOLICINA}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_KOLICINA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="196" y="0" width="59" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{stavke_fakture_otpremnice_JEDINICNA_CENA_STAVKE_FAKTURE}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_JEDINICNA_CENA_STAVKE_FAKTURE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="255" y="0" width="45" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{stavke_fakture_otpremnice_RABAT}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_RABAT}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="300" y="0" width="84" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{stavke_fakture_otpremnice_OSNOVICA_PDV}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_OSNOVICA_PDV}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
 				<reportElement x="384" y="0" width="71" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{iznos_pdv}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="24" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{iznos_pdv}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00;-###0.00">
 				<reportElement x="455" y="0" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ukupno}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ukupno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="0" width="21" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[  $V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -449,115 +383,83 @@ WHERE
 		<band height="161">
 			<staticText>
 				<reportElement x="326" y="135" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Robu primio:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="113" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Broj kamiona:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="133" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Robu izdao:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="93" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Adresa isporuke:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="384" y="0" width="57" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[IZNOS:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="384" y="60" width="69" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[ZA UPLATU:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="384" y="20" width="57" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[RABAT:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="384" y="40" width="57" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[PDV:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="455" y="20" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_rabat}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_rabat}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="455" y="40" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_porez}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="455" y="0" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_iznos}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_porez}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="455" y="60" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fa_ukupno}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_iznos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_ukupno}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="119" y="93" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{f_ADRESA_ISPORUKE}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_ADRESA_ISPORUKE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="119" y="115" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{f_BROJ_KAMIONA}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_BROJ_KAMIONA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="119" y="135" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{f_ROBU_I_RACUN_IZDAO}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_ROBU_I_RACUN_IZDAO}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="426" y="135" width="100" height="20"/>
-				<textElement>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{f_ROBU_I_RACUN_PREUZEO}]]></textFieldExpression>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_ROBU_I_RACUN_PREUZEO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
