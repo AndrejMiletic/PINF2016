@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Faktura" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="18"/>
 	<parameter name="adresa" class="java.lang.String"/>
 	<parameter name="pib" class="java.lang.String"/>
 	<parameter name="maticni_broj" class="java.lang.String"/>
@@ -10,21 +10,24 @@
 	<parameter name="naziv" class="java.lang.String"/>
 	<parameter name="id_fakture" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT
-     poreska_stopa.iznos_stope*stavke_fakture_otpremnice.osnovica_pdv/100 AS iznos_pdv,
-     stavke_fakture_otpremnice.osnovica_pdv+0.01*poreska_stopa.iznos_stope*stavke_fakture_otpremnice.osnovica_pdv-stavke_fakture_otpremnice.rabat AS ukupno,
-     pr.`adresa` AS adresa,
-     pr.`naziv` AS naziv,
-     pr.`pib` AS pib,
-     pr.`tekuci_racun` AS tekuci_racun,
-     pr.`maticni_broj` AS maticni_broj,
+		<![CDATA[SELECT DISTINCT
      f.`fa_broj` AS fa_broj,
      f.`fa_datum` AS fa_datum,
      f.`fa_rabat` AS fa_rabat,
      f.`fa_porez` AS fa_porez,
      f.`fa_iznos` AS fa_iznos,
      f.`fa_ukupno` AS fa_ukupno,
-     stavke_fakture_otpremnice.`ID_STAVKE_FAKTURE` AS stavke_fakture_otpremnice_ID_STAVKE_FAKTURE,
+     f.`ADRESA_ISPORUKE` AS f_ADRESA_ISPORUKE,
+     f.`BROJ_KAMIONA` AS f_BROJ_KAMIONA,
+     f.`ROBU_I_RACUN_IZDAO` AS f_ROBU_I_RACUN_IZDAO,
+     f.`ROBU_I_RACUN_PREUZEO` AS f_ROBU_I_RACUN_PREUZEO,
+  pr.`adresa` AS adresa,
+     pr.`naziv` AS naziv,
+     pr.`pib` AS pib,
+     pr.`tekuci_racun` AS tekuci_racun,
+     pr.`maticni_broj` AS maticni_broj,
+
+  stavke_fakture_otpremnice.`ID_STAVKE_FAKTURE` AS stavke_fakture_otpremnice_ID_STAVKE_FAKTURE,
      stavke_fakture_otpremnice.`ID_ARTIKLA` AS stavke_fakture_otpremnice_ID_ARTIKLA,
      stavke_fakture_otpremnice.`ID_FAKTURE_OTPREMNICE` AS stavke_fakture_otpremnice_ID_FAKTURE_OTPREMNICE,
      stavke_fakture_otpremnice.`KOLICINA` AS stavke_fakture_otpremnice_KOLICINA,
@@ -33,48 +36,29 @@
      stavke_fakture_otpremnice.`JEDINICNA_CENA_STAVKE_FAKTURE` AS stavke_fakture_otpremnice_JEDINICNA_CENA_STAVKE_FAKTURE,
      katalog_robe_i_usluga.`NAZIV_ARTIKLA` AS katalog_robe_i_usluga_NAZIV_ARTIKLA,
      jedinice_mere.`NAZIV_JEDINICE_MERE` AS jedinice_mere_NAZIV_JEDINICE_MERE,
-     grupa_proizvoda.`ID_GRUPE` AS grupa_proizvoda_ID_GRUPE,
-     grupa_proizvoda.`ID_POREZA` AS grupa_proizvoda_ID_POREZA,
-     porez.`ID_POREZA` AS porez_ID_POREZA,
-     porez.`POS_VAZI` AS porez_POS_VAZI,
-     poreska_stopa.`ID_STOPE` AS poreska_stopa_ID_STOPE,
-     poreska_stopa.`IZNOS_STOPE` AS poreska_stopa_IZNOS_STOPE,
      f.`ADRESA_ISPORUKE` AS f_ADRESA_ISPORUKE,
      f.`BROJ_KAMIONA` AS f_BROJ_KAMIONA,
      f.`ROBU_I_RACUN_IZDAO` AS f_ROBU_I_RACUN_IZDAO,
-     f.`ROBU_I_RACUN_PREUZEO` AS f_ROBU_I_RACUN_PREUZEO
+     f.`ROBU_I_RACUN_PREUZEO` AS f_ROBU_I_RACUN_PREUZEO,
+     poreska_stopa.`IZNOS_STOPE` AS iznos_stope,
+     stavke_fakture_otpremnice.`OSNOVICA_PDV` * iznos_stope/100 + stavke_fakture_otpremnice.`OSNOVICA_PDV` AS ukupna_cena
+
 FROM
      `faktura_otpremnica` f LEFT OUTER JOIN `poslovni_partner` p ON f.`id_partnerstva` = p.`id_partnerstva`
-     INNER JOIN `stavke_fakture_otpremnice` stavke_fakture_otpremnice ON f.`ID_FAKTURE_OTPREMNICE` = stavke_fakture_otpremnice.`ID_FAKTURE_OTPREMNICE`
-     INNER JOIN `katalog_robe_i_usluga` katalog_robe_i_usluga ON stavke_fakture_otpremnice.`ID_ARTIKLA` = katalog_robe_i_usluga.`ID_ARTIKLA`
-     INNER JOIN `grupa_proizvoda` grupa_proizvoda ON katalog_robe_i_usluga.`ID_GRUPE` = grupa_proizvoda.`ID_GRUPE`
-     INNER JOIN `jedinice_mere` jedinice_mere ON katalog_robe_i_usluga.`ID_JEDINICE_MERE` = jedinice_mere.`ID_JEDINICE_MERE`
-     INNER JOIN `preduzece` pr ON grupa_proizvoda.`ID_PREDUZECA` = pr.`ID_PREDUZECA`
-     INNER JOIN `porez` porez ON grupa_proizvoda.`ID_POREZA` = porez.`ID_POREZA`
-     INNER JOIN `poreska_stopa` poreska_stopa ON porez.`ID_POREZA` = poreska_stopa.`ID_POREZA`
-     AND pr.`ID_PREDUZECA` = p.`ID_PREDUZECA`
+     LEFT OUTER JOIN preduzece pr ON pr.`ID_PREDUZECA` = p.`ID_PREDUZECA`
+     LEFT OUTER JOIN  `stavke_fakture_otpremnice` stavke_fakture_otpremnice ON f.`ID_FAKTURE_OTPREMNICE` = stavke_fakture_otpremnice.`ID_FAKTURE_OTPREMNICE`
+     LEFT OUTER JOIN `katalog_robe_i_usluga` katalog_robe_i_usluga  ON stavke_fakture_otpremnice.`ID_ARTIKLA` = katalog_robe_i_usluga.`ID_ARTIKLA`
+      LEFT OUTER JOIN  `grupa_proizvoda` grupa_proizvoda ON katalog_robe_i_usluga.`ID_GRUPE` = grupa_proizvoda.`ID_GRUPE`
+     LEFT OUTER JOIN `jedinice_mere` jedinice_mere ON katalog_robe_i_usluga.`ID_JEDINICE_MERE` = jedinice_mere.`ID_JEDINICE_MERE`
+       INNER JOIN `porez` porez ON grupa_proizvoda.`ID_POREZA` = porez.`ID_POREZA`
+      INNER JOIN  `poreska_stopa` poreska_stopa ON porez.`ID_POREZA` = poreska_stopa.`ID_POREZA`
+
 WHERE
      f.ID_FAKTURE_OTPREMNICE = $P{id_fakture} and
      stavke_fakture_otpremnice.ID_FAKTURE_OTPREMNICE = $P{id_fakture} and
-     poreska_stopa.DATUM_VAZENJA = ( SELECT (max(ps.datum_vazenja)) FROM `poreska_stopa` ps WHERE ps.ID_POREZA = porez.ID_POREZA )]]>
+     poreska_stopa.ID_STOPE = ( SELECT ps.ID_STOPE FROM `poreska_stopa` ps WHERE ps.ID_POREZA = porez.ID_POREZA and
+     ps.DATUM_VAZENJA = (select max(ps1.DATUM_VAZENJA) from poreska_stopa ps1 where ps1.ID_POREZA = porez.ID_POREZA))]]>
 	</queryString>
-	<field name="iznos_pdv" class="java.math.BigDecimal"/>
-	<field name="ukupno" class="java.math.BigDecimal"/>
-	<field name="adresa" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="naziv" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="pib" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="tekuci_racun" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="maticni_broj" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="fa_broj" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -93,6 +77,25 @@ WHERE
 	<field name="fa_ukupno" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="f_ADRESA_ISPORUKE" class="java.lang.String"/>
+	<field name="f_BROJ_KAMIONA" class="java.lang.String"/>
+	<field name="f_ROBU_I_RACUN_IZDAO" class="java.lang.String"/>
+	<field name="f_ROBU_I_RACUN_PREUZEO" class="java.lang.String"/>
+	<field name="adresa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="naziv" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pib" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tekuci_racun" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maticni_broj" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="stavke_fakture_otpremnice_ID_STAVKE_FAKTURE" class="java.lang.Long"/>
 	<field name="stavke_fakture_otpremnice_ID_ARTIKLA" class="java.lang.Long"/>
 	<field name="stavke_fakture_otpremnice_ID_FAKTURE_OTPREMNICE" class="java.lang.Long"/>
@@ -102,16 +105,10 @@ WHERE
 	<field name="stavke_fakture_otpremnice_JEDINICNA_CENA_STAVKE_FAKTURE" class="java.math.BigDecimal"/>
 	<field name="katalog_robe_i_usluga_NAZIV_ARTIKLA" class="java.lang.String"/>
 	<field name="jedinice_mere_NAZIV_JEDINICE_MERE" class="java.lang.String"/>
-	<field name="grupa_proizvoda_ID_GRUPE" class="java.lang.Long"/>
-	<field name="grupa_proizvoda_ID_POREZA" class="java.lang.Long"/>
-	<field name="porez_ID_POREZA" class="java.lang.Long"/>
-	<field name="porez_POS_VAZI" class="java.lang.Boolean"/>
-	<field name="poreska_stopa_ID_STOPE" class="java.lang.Long"/>
-	<field name="poreska_stopa_IZNOS_STOPE" class="java.math.BigDecimal"/>
-	<field name="f_ADRESA_ISPORUKE" class="java.lang.String"/>
-	<field name="f_BROJ_KAMIONA" class="java.lang.String"/>
-	<field name="f_ROBU_I_RACUN_IZDAO" class="java.lang.String"/>
-	<field name="f_ROBU_I_RACUN_PREUZEO" class="java.lang.String"/>
+	<field name="iznos_stope" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ukupna_cena" class="java.math.BigDecimal"/>
 	<background>
 		<band/>
 	</background>
@@ -178,7 +175,7 @@ WHERE
 				<text><![CDATA[Tekući račun:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="316" y="85" width="100" height="26"/>
+				<reportElement x="316" y="85" width="139" height="26"/>
 				<textElement lineSpacing="Single">
 					<font size="16"/>
 				</textElement>
@@ -192,7 +189,7 @@ WHERE
 				<text><![CDATA[Račun - otpremnica broj:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="441" y="85" width="100" height="26"/>
+				<reportElement x="455" y="85" width="86" height="26"/>
 				<textElement lineSpacing="Single">
 					<font size="18"/>
 				</textElement>
@@ -263,67 +260,67 @@ WHERE
 				<reportElement x="0" y="0" width="555" height="20"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="24" height="20"/>
+				<reportElement x="0" y="0" width="39" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[R.br]]></text>
+				<text><![CDATA[  R.br]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="24" y="0" width="81" height="20"/>
+				<reportElement x="42" y="0" width="86" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Naziv]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="0" width="48" height="20"/>
+				<reportElement x="128" y="0" width="68" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jed.mere]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="152" y="0" width="44" height="20"/>
+				<reportElement x="196" y="0" width="39" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kolicina]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="196" y="0" width="59" height="20"/>
+				<reportElement x="235" y="0" width="65" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jed. cena]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="255" y="0" width="45" height="20"/>
+				<reportElement x="300" y="0" width="53" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Rabat]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="84" height="20"/>
-				<textElement lineSpacing="Single">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Poreska osn.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="0" width="73" height="20"/>
-				<textElement lineSpacing="Single">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Iznos pdv]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="455" y="0" width="100" height="20"/>
 				<textElement lineSpacing="Single">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Ukupna naknada]]></text>
+				<text><![CDATA[Ukupno sa pdv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="0" width="73" height="20"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Osnovica pdv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="426" y="0" width="29" height="20"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PDV]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -333,49 +330,49 @@ WHERE
 				<reportElement x="0" y="0" width="555" height="20"/>
 			</rectangle>
 			<textField>
-				<reportElement x="24" y="0" width="81" height="20"/>
+				<reportElement x="42" y="0" width="86" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{katalog_robe_i_usluga_NAZIV_ARTIKLA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="105" y="0" width="48" height="20"/>
+				<reportElement x="128" y="0" width="68" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{jedinice_mere_NAZIV_JEDINICE_MERE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="153" y="0" width="43" height="20"/>
+				<reportElement x="196" y="0" width="39" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_KOLICINA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="196" y="0" width="59" height="20"/>
+				<reportElement x="235" y="0" width="65" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_JEDINICNA_CENA_STAVKE_FAKTURE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="0" width="45" height="20"/>
+				<reportElement x="300" y="0" width="53" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_RABAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="84" height="20"/>
-				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{stavke_fakture_otpremnice_OSNOVICA_PDV}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.00">
-				<reportElement x="384" y="0" width="71" height="20"/>
-				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{iznos_pdv}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.00;-###0.00">
-				<reportElement x="455" y="0" width="100" height="20"/>
-				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{ukupno}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="3" y="0" width="21" height="20"/>
+				<reportElement x="0" y="0" width="39" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[  $V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="353" y="0" width="73" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{stavke_fakture_otpremnice_OSNOVICA_PDV}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ukupna_cena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="424" y="0" width="31" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iznos_stope}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -437,11 +434,6 @@ WHERE
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_iznos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="0" width="100" height="20"/>
-				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{fa_ukupno}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="119" y="93" width="100" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_ADRESA_ISPORUKE}]]></textFieldExpression>
@@ -460,6 +452,11 @@ WHERE
 				<reportElement x="426" y="135" width="100" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{f_ROBU_I_RACUN_PREUZEO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{fa_ukupno}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
