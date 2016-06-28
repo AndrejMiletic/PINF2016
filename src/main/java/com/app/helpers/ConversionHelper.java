@@ -13,6 +13,10 @@ public class ConversionHelper {
 	public static Date convertToDate(String date) {
 		Date result;
 		
+		if(date.equals("")) {
+			return null;
+		}
+		
 		DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		try {
 			result = format.parse(date);

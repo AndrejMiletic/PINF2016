@@ -55,6 +55,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
     $scope.openDocument = function (id) {
         $scope.closeForeignKeyForm();
+        $scope.currentParentId = id;
        /* var childName=$scope.requestedTable.children[0];
         var childCode=tableService.replace(childName);*/
 //        if ($scope.requestedTable.documentChildName){
@@ -284,16 +285,18 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 
 			var row =  angular.copy($scope.currentRow);
 
-//			if($scope.operation === appConstants.operations.CREATE || $scope.operation === appConstants.operations.SUB_CREATE || $scope.operation === appConstants.operations.NEXT_CREATE){
-//				if($scope.currentRow.tableName=="Stavke fakture i otpremnice")
-//					row.fields["Osnovica pdv"]=0;
-//				if($scope.currentRow.tableName=="Faktura i otpremnica"){
-//					row.fields["Iznos poreza"]=0;
-//					row.fields["Ukupno"]=0;
-//					row.fields["Rabat"]=0;
-//					row.fields["Iznos"]=0;
-//				}
-//			}
+			if($scope.operation === appConstants.operations.EDIT || $scope.operation === appConstants.operations.SUB_EDIT || $scope.operation === appConstants.operations.NEXT_EDIT){
+				if($scope.currentRow.tableName=="Faktura i otpremnica"){
+					for(var r in $scope.requestedTable.rows){
+						if($scope.requestedTable.rows[r].fields["Id"]==$scope.currentRow.fields["Id"]){
+							row.fields["Iznos poreza"]=$scope.requestedTable.rows[r].fields["Iznos poreza"];
+							row.fields["Ukupno"]=$scope.requestedTable.rows[r].fields["Ukupno"];
+							row.fields["Rabat"]=$scope.requestedTable.rows[r].fields["Rabat"];
+							row.fields["Iznos"]=$scope.requestedTable.rows[r].fields["Iznos"];
+						}
+					}
+				}
+			}
 
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].type=='DATE'){
@@ -302,12 +305,21 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					if(dateField!=null){
 						if(dateField!=""){
 							var date=dateField.toLocaleDateString("sr-rs");
-							row.fields[name]=date;
+							if(date!="Invalid Date"){
+								row.fields[name]=date;
+							}else{
+								row.fields[name]=null;
+							}
 						}
 					}
 				}
 			}
 
+			var valid = tableService.isValid($scope.currentTable, row);
+
+			if(!valid) {
+				return;
+			}
 
 			for(var field in $scope.currentTable.fields){
 				if($scope.currentTable.fields[field].calculated
@@ -324,9 +336,15 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							}
 						}
 						if(!exists){
-							$scope.currentRow.fields[name]="";
-							if(!row.fields[name])
-								row.fields[name]="";
+							if(type=="DATE"){
+								$scope.currentRow.fields[name]=null;
+								if(!row.fields[name])
+									row.fields[name]=null;
+							}else{
+								$scope.currentRow.fields[name]="";
+								if(!row.fields[name])
+									row.fields[name]="";
+							}
 						}
 					}
 					if(type=="BOOLEAN"){
@@ -338,7 +356,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 			}
 
 
-			if(tableService.isValid($scope.currentTable, row)) {
+			if(valid) {
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
 						function(response) {
@@ -387,7 +405,9 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 							tableService.getMaxId($scope.currentTable.tableName).then(
 									function(response){
 										row.fields.Id=response.data;
-										$scope.documentChild.rows.push(row);
+										if (row.fields[$scope.requestedTable.tableName] == $scope.currentParentId){
+											$scope.documentChild.rows.push(row);
+										}
 										$scope.currentRow = undefined;
 									}
 							);

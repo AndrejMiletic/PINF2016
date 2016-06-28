@@ -87,8 +87,8 @@ public class FakturaTransformer implements ITransformer{
 		
 		if(rows.get(DATUM_OBRACUNA) != null) {
 			datum = ConversionHelper.convertToDate(rows.get(DATUM_OBRACUNA).toString());
-			faktura.setFaDatumValute(datum);
-		}		
+			faktura.setDatumObracuna(datum);
+		}
 		
 		faktura.setFaTekracun(rows.get(TEKUCI_RACUN).toString());
 		
