@@ -93,10 +93,10 @@ public class GenericServiceImpl implements IGenericService {
 			} else if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
 				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
 			}
-			repo.save(entity);
+			StavkeFaktureOtpremnice s = (StavkeFaktureOtpremnice) repo.save(entity);
 			
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
-				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true);
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, s);
 			}
 		} catch (Exception e) {
 			return false;
@@ -118,10 +118,10 @@ public class GenericServiceImpl implements IGenericService {
 				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
 			}
 			
-			repo.save(entity);
+			StavkeFaktureOtpremnice s = (StavkeFaktureOtpremnice) repo.save(entity);
 			
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
-				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true);
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, s);
 			}
 		} catch (Exception e) {
 			return false;
@@ -138,7 +138,7 @@ public class GenericServiceImpl implements IGenericService {
 			
 
 			if(tableName.equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
-				faktura = calculateInvoiceValue(id, false);
+				faktura = calculateInvoiceValue(id, false, null);
 			}
 			
 			repo.delete(id);
@@ -464,7 +464,7 @@ public class GenericServiceImpl implements IGenericService {
 		}
 	}
 	
-	private FakturaOtpremnica calculateInvoiceValue(Long id, boolean shouldUpdate) throws Exception {
+	private FakturaOtpremnica calculateInvoiceValue(Long id, boolean shouldUpdate, StavkeFaktureOtpremnice item) throws Exception {
 		FakturaOtpremnica faktura;
 		double ukupno = 0, iznos = 0, rabat = 0, porez = 0, jedCenaStavke, rabatStavke, kolicina, porezStavke;
 		faktura = fakturaRepo.findOne(id);
@@ -479,7 +479,11 @@ public class GenericServiceImpl implements IGenericService {
 		}
 		
 		if(faktura != null) {
-			for (StavkeFaktureOtpremnice stavka : faktura.getStavkeFaktureOtpremnices()) {
+			Set<StavkeFaktureOtpremnice> allItems = faktura.getStavkeFaktureOtpremnices();
+			if(item != null) {
+				allItems.add(item);
+			}
+			for (StavkeFaktureOtpremnice stavka : allItems) {
 				//ako je brisanje, preskoci stavku koja treba da se brise - ako je brisanje i ako se ID poklapa
 				if(!(!shouldUpdate && stavka.getIdStavkeFakture().equals(id))) {
 					jedCenaStavke = stavka.getJedinicnaCenaStavkeFakture().doubleValue();
