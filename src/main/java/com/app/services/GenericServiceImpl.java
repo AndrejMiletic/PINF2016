@@ -93,10 +93,10 @@ public class GenericServiceImpl implements IGenericService {
 			} else if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
 				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
 			}
-			StavkeFaktureOtpremnice s = (StavkeFaktureOtpremnice) repo.save(entity);
+			Object s = (Object) repo.save(entity);
 			
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
-				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, s);
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, (StavkeFaktureOtpremnice)s);
 			}
 		} catch (Exception e) {
 			return false;
@@ -118,10 +118,10 @@ public class GenericServiceImpl implements IGenericService {
 				calculateInvoiceItemValue((StavkeFaktureOtpremnice)entity);
 			}
 			
-			StavkeFaktureOtpremnice s = (StavkeFaktureOtpremnice) repo.save(entity);
+			Object s = (Object) repo.save(entity);
 			
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
-				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, s);
+				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, (StavkeFaktureOtpremnice)s);
 			}
 		} catch (Exception e) {
 			return false;
