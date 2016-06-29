@@ -1,20 +1,20 @@
 app.controller('invoicingController',['$scope','tableService','$timeout',function($scope, tableService,$timeout){
-	
+
 	function init(){
 		var today = new Date();
 		var dd = today.getDate();
 		var mm = today.getMonth()+1;
 		var yyyy = today.getFullYear();
 		$scope.currentDate=dd+"."+mm+"."+yyyy+".";
-		
+
 		$scope.addedInvoice=[];
-		
+
 		tableService.getAllOrders().then(
 				function(response){
 					$scope.allOrderForms=response.data;
 				}
 		);
-		
+
 //		tableService.getTableByName("Narudzba").then(
 //				function(response){
 //					$scope.allOrderForms=[];
@@ -35,7 +35,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 		$scope.ukupnoZaNaplatu=0;
 		$scope.additionalNotes="";
 	}
-	
+
 	init();
 
 	$scope.showOrderForm=function(){
@@ -63,7 +63,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 		}else
 			alert("Niste odabrali narudzbenicu.");
 	}
-	
+
 	$scope.createInvoice=function(){
 		var tableName="Faktura i otpremnica";
 		tableService.getTableByName('Faktura_i_otpremnica').then(
@@ -134,7 +134,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 			}
 		);
 	}
-	
+
 	function addElements(fields,rowFieldsFromOrderForm){
 		fields["Tekući račun"]="";
 		fields["Poziv na broj"]="";
@@ -153,7 +153,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 		fields["Naziv partnera"]=rowFieldsFromOrderForm["Naziv partnera"];
 		return fields;
 	}
-	
+
 	$scope.createInvoiceItems=function(){
 		var tableName="Stavke fakture i otpremnice";
 		tableService.getTableByName('Stavke_fakture_i_otpremnice').then(
@@ -163,7 +163,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 				$scope.cenaSaRabatom=0;
 				$scope.ukupanPDV=0;
 				$scope.ukupnoZaNaplatu=0;
-				
+
 				$scope.invoiceItems= response.data;
 				var rowFieldsFromOrderFormItems={};
 				$scope.invoiceItems.rows=[];
@@ -202,7 +202,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 			}
 		);
 	}
-	
+
 	$scope.apply=function(data,rowId){
 		var orderItem=123456789;
 		if(data==""){
@@ -216,7 +216,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 		orderItem=$scope.itemsIdMap[rowId];
 		$scope.calculate(data,orderItem);
 	}
-	
+
 	$scope.calculate=function(data,id){
 		tableService.getCalculatedData($scope.selectedOrderForm,data,id).then(
 				function(response){
@@ -236,7 +236,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 					$scope.ukupanIznos=(calculatedData["Iznos"]).toFixed(2);
 					$scope.cenaSaRabatom=($scope.cenaSaRabatom).toFixed(2);
 					$scope.ukupnoZaNaplatu=($scope.ukupnoZaNaplatu).toFixed(2);
-					
+
 					$scope.invoice.rows[0].fields["Ukupno"]=$scope.ukupnoZaNaplatu;
 					$scope.invoice.rows[0].fields["Rabat"]=$scope.ukupanRabat;
 					$scope.invoice.rows[0].fields["Porez"]=$scope.ukupanPDV;
@@ -244,7 +244,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 				}
 		);
 	}
-	
+
 	$scope.addInvoice=function(additionalNotes){
 		var added=false;
 		for(var i in $scope.addedInvoice){
@@ -262,7 +262,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 				function(response){
 					$scope.additionalNotes="";
 					if($scope.invoiceItems.rows.length>0)
-						$scope.addInvoiceItems();
+						$scope.addInvoiceItems(response.data.rows[0].fields['Id']);
 					$scope.addedInvoice.push($scope.invoice.rows[0].fields["Narudžba"]);
 				},
 				function(response){
@@ -271,21 +271,24 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 			);
 		}
 	}
-	
-	function removeItems(items) { 
+
+	function removeItems(items) {
 	    var newItems = {};
 	    angular.forEach(items, function(value, key){
 	        if(key != "Ukupno" && key!="Iznos" && key!="Porez" && key!="Rabat")
-	            newItems[key] = value; 
+	            newItems[key] = value;
 	    });
 
-	    return newItems;   
+	    return newItems;
 	};
-	
-	$scope.addInvoiceItems=function(){
+
+	$scope.addInvoiceItems=function(id){
+		console.log("Id je: " + id);
 		if($scope.invoiceItems.rows.length>0){
 			var counter=0;
 			for(var i=0;i<$scope.invoiceItems.rows.length;i++){
+				$scope.invoiceItems.rows[i].fields['Faktura i otpremnica']=id;
+				console.log($scope.invoiceItems.rows[i]);
 				$scope.invoiceItems.rows[i].tableName="Stavke fakture i otpremnice";
 				$scope.invoiceItems.rows[i].tableCode="Stavke_fakture_i_otpremnice";
 				tableService.create($scope.invoiceItems.tableName,$scope.invoiceItems.rows[i]).then(

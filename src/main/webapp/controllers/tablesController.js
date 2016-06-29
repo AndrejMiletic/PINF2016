@@ -360,18 +360,14 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.CREATE) {
 					tableService.create($scope.requestedTable.tableName, row).then(
 						function(response) {
-							tableService.getMaxId($scope.currentTable.tableName).then(
-									function(response){
-										row.fields.Id=response.data-1;
-										$scope.requestedTable.rows.push(row);
-										$scope.currentRow = undefined;
-										if($scope.operation === appConstants.operations.CREATE) {
-											//$scope.showTable();
-										}else if($scope.operation === appConstants.operations.SUB_CREATE) {
-											//$scope.openDocument();
-										}
-									}
-							);
+							row = response.data.rows[0];
+							$scope.requestedTable.rows.push(row);
+							$scope.currentRow = undefined;
+							if($scope.operation === appConstants.operations.CREATE) {
+								//$scope.showTable();
+							}else if($scope.operation === appConstants.operations.SUB_CREATE) {
+								//$scope.openDocument();
+							}
 						}, function() {
 							alert("Neuspešno dodavanje reda u tabelu.");
 						}
@@ -380,6 +376,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.EDIT) {
 					tableService.edit($scope.requestedTable.tableName, row).then(
 						function(response) {
+							row = response.data.rows[0];
 							$scope.requestedTable.rows[$scope.currentIndex] = row;
 							$scope.currentRow = undefined;
 						}, function() {
@@ -388,10 +385,9 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					);
 				} else
 				if($scope.operation === appConstants.operations.SUB_EDIT) {
-					console.log($scope.documentChild.tableName);
-					console.log(row);
 					tableService.edit($scope.documentChild.tableName, row).then(
 						function(response) {
+							row = response.data.rows[0];
 							$scope.documentChild.rows[$scope.currentIndex] = row;
 							$scope.currentRow = undefined;
 						}, function() {
@@ -402,15 +398,11 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 				if($scope.operation === appConstants.operations.SUB_CREATE) {
 					tableService.create($scope.documentChild.tableName, row).then(
 						function(response) {
-							tableService.getMaxId($scope.currentTable.tableName).then(
-									function(response){
-										row.fields.Id=response.data;
-										if (row.fields[$scope.requestedTable.tableName] == $scope.currentParentId){
-											$scope.documentChild.rows.push(row);
-										}
-										$scope.currentRow = undefined;
-									}
-							);
+							row = response.data.rows[0];
+							if (row.fields[$scope.requestedTable.tableName] == $scope.currentParentId){
+								$scope.documentChild.rows.push(row);
+							}
+							$scope.currentRow = undefined;
 						}, function() {
 							alert("Neuspešno dodavanje stavke.");
 						}
@@ -419,6 +411,7 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					if($scope.operation === appConstants.operations.NEXT_EDIT) {
 						tableService.edit($scope.filteredNextTable.tableName, row).then(
 							function(response) {
+								row = response.data.rows[0];
 								$scope.filteredNextTable.rows[$scope.currentIndex] = row;
 								$scope.currentRow = undefined;
 							}, function() {
@@ -429,19 +422,15 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 					if($scope.operation === appConstants.operations.NEXT_CREATE) {
 						tableService.create($scope.filteredNextTable.tableName, row).then(
 							function(response) {
-								tableService.getMaxId($scope.currentTable.tableName).then(
-										function(response){
-											row.fields.Id=response.data;
-											$scope.filteredNextTable.rows.push(row);
-											$scope.currentRow = undefined;
-										}
-								);
+								row = response.data.rows[0];
+								$scope.filteredNextTable.rows.push(row);
+								$scope.currentRow = undefined;
 							}, function() {
 								alert("Neuspešno dodavanje stavke.");
 							}
 						);
 					}
-			}
+				}
 //			else {
 //				alert("Forma nije validna!");
 //			}

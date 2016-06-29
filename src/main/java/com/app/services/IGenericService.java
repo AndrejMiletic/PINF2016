@@ -9,8 +9,8 @@ import com.app.DTO.TableRowDTO;
 
 public interface IGenericService {
 	
-	boolean create(TableRowDTO row);
-	boolean update(TableRowDTO row);
+	TableDTO create(TableRowDTO row);
+	TableDTO update(TableRowDTO row);
 	boolean delete(Long id, String tableCode);
 	TableDTO getById(Long id, String tableCode);
 	TableDTO getAll(String tableCode);

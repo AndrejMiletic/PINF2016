@@ -36,8 +36,9 @@ public class TableController {
 		
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Object> add(@RequestBody TableRowDTO row) {
-		if(crudService.create(row)) {
-			return new ResponseEntity<>(HttpStatus.CREATED);
+		TableDTO result = crudService.create(row);
+		if(result != null) {
+			return new ResponseEntity<Object>(result, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
@@ -45,8 +46,9 @@ public class TableController {
 	
 	@RequestMapping(path = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<Object> update(@RequestBody TableRowDTO row) {
-		if(crudService.update(row)) {
-			return new ResponseEntity<>(HttpStatus.OK);
+		TableDTO result = crudService.update(row);
+		if(result != null) {
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

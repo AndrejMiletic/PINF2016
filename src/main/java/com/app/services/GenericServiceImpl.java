@@ -81,7 +81,8 @@ public class GenericServiceImpl implements IGenericService {
 	private XML_Repository xmlRepo;
 	
 	@Override
-	public boolean create(TableRowDTO row) {
+	public TableDTO create(TableRowDTO row) {
+		TableDTO result = null;
 		try {
 			CrudRepository repo = getTableRepo(row.getTableName());
 			ITransformer transformer = getTransformer(row.getTableName());
@@ -98,14 +99,16 @@ public class GenericServiceImpl implements IGenericService {
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
 				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, (StavkeFaktureOtpremnice)s);
 			}
+			result = transformer.transformToDTO(s);
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
-		return true;
+		return result;
 	}
 
 	@Override
-	public boolean update(TableRowDTO row) { 
+	public TableDTO update(TableRowDTO row) { 
+		TableDTO result = null;
 		try {
 			CrudRepository repo = getTableRepo(row.getTableName());
 			ITransformer transformer = getTransformer(row.getTableName());
@@ -123,11 +126,12 @@ public class GenericServiceImpl implements IGenericService {
 			if(row.getTableName().equals(TableNames.STAVKE_FAKTURE_OTPREMNICE)) {
 				calculateInvoiceValue(((StavkeFaktureOtpremnice)entity).getFakturaOtpremnica().getIdFaktureOtpremnice(), true, (StavkeFaktureOtpremnice)s);
 			}
+			result = transformer.transformToDTO(s);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		return true;
+		return result;
 	}
 
 	@Override
