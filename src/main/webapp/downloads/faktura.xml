@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Faktura Broj="150000">
+    <Datum_izdavanja>2016-04-24</Datum_izdavanja>
+    <Datum_valute>2016-04-24</Datum_valute>
+    <Podaci_o_izdavaocu>
+        <Naziv>Preduzeće3</Naziv>
+        <Adresa>Gundulićeva 22</Adresa>
+        <Tekuci_racun>823-193-25</Tekuci_racun>
+        <Maticni_broj>12344678</Maticni_broj>
+        <PIB>125557689</PIB>
+    </Podaci_o_izdavaocu>
+    <Podaci_o_kupcu>
+        <Naziv>Preduzeće5</Naziv>
+        <Adresa>Gundulićeva 24</Adresa>
+        <Tekuci_racun>825-193-25</Tekuci_racun>
+        <Maticni_broj>67675578</Maticni_broj>
+        <PIB>124556778</PIB>
+    </Podaci_o_kupcu>
+    <Stavka_fakture>
+        <Sifra_robe>1189766547</Sifra_robe>
+        <Naziv_robe>Čarape</Naziv_robe>
+        <Jedinica_mere>komad</Jedinica_mere>
+        <Kolicina>12.00</Kolicina>
+        <Jedinicna_cena>1200.00</Jedinicna_cena>
+        <Rabat>10.00</Rabat>
+        <Vrednost_stavke>14400.00</Vrednost_stavke>
+        <Poreska_osnovica>12960.00</Poreska_osnovica>
+        <Stopa_PDV>21</Stopa_PDV>
+        <Iznos_PDV>3024.00</Iznos_PDV>
+        <Prodajna_vrednost>17304.00</Prodajna_vrednost>
+    </Stavka_fakture>
+    <Iznos>15681.60</Iznos>
+    <Ukupan_rabat>120.00</Ukupan_rabat>
+    <Ukupna_poreska_osnova>12960.00</Ukupna_poreska_osnova>
+    <Ukupan_PDV>3024.00</Ukupan_PDV>
+    <Ukupno_za_uplatu>14400.00</Ukupno_za_uplatu>
+    <Dodatne_napomene>Dodatna napomena 6</Dodatne_napomene>
+    <Racun_i_robu_izdao>000123</Racun_i_robu_izdao>
+    <Racun_i_robu_primio>000102</Racun_i_robu_primio>
+    <Podaci_o_prevozniku>
+        <Naziv_prevoznika>Prevoznik6</Naziv_prevoznika>
+        <Broj_kamiona>6</Broj_kamiona>
+    </Podaci_o_prevozniku>
+</Faktura>
