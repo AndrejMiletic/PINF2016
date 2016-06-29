@@ -95,24 +95,30 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 				fields["Iznos"]=$scope.ukupanIznos;
 				var preduzece={};
 				if(rowFieldsFromOrderForm["Poslovni partner"]){
-					tableService.getTableById('Preduzeće', rowFieldsFromOrderForm["Poslovni partner"]).then(
+					tableService.getTableById('Poslovni partner', rowFieldsFromOrderForm["Poslovni partner"]).then(
 							function(response) {
-								preduzece= response.data;
-								fields["Tekući račun"]=preduzece.rows[0].fields["Tekući račun"];
-								fields["Poziv na broj"]=preduzece.rows[0].fields["PIB"];
-								fields["Status"]="O";
-								fields["Dodatne napomene"]="";
-								fields["Adresa isporuke"]=preduzece.rows[0].fields["Adresa"];
-								fields["Broj kamiona"]="";
-								fields["Prevoznik"]="";
-								fields["Izdao robu"]="";
-								fields["Preuzeo robu"]="";
-								fields["Narudžba"]=rowFieldsFromOrderForm["Id"];
-								fields["Broj narudžbe"]=rowFieldsFromOrderForm["Broj narudžbe"];
-								fields["Poslovna godina"]=rowFieldsFromOrderForm["Poslovna godina"];
-								fields["Godina poslovanja"]=rowFieldsFromOrderForm["Godina poslovanja"];
-								fields["Poslovni partner"]=rowFieldsFromOrderForm["Poslovni partner"];
-								fields["Naziv partnera"]=rowFieldsFromOrderForm["Naziv partnera"];
+								if(response.data.rows.length>0){
+									tableService.getTableById('Preduzeće',response.data.rows[0].fields['Partner']).then(
+										function(response){
+											preduzece= response.data;
+											fields["Tekući račun"]=preduzece.rows[0].fields["Tekući račun"];
+											fields["Poziv na broj"]=preduzece.rows[0].fields["PIB"];
+											fields["Status"]="O";
+											fields["Dodatne napomene"]="";
+											fields["Adresa isporuke"]=preduzece.rows[0].fields["Adresa"];
+											fields["Broj kamiona"]="";
+											fields["Prevoznik"]="";
+											fields["Izdao robu"]="";
+											fields["Preuzeo robu"]="";
+											fields["Narudžba"]=rowFieldsFromOrderForm["Id"];
+											fields["Broj narudžbe"]=rowFieldsFromOrderForm["Broj narudžbe"];
+											fields["Poslovna godina"]=rowFieldsFromOrderForm["Poslovna godina"];
+											fields["Godina poslovanja"]=rowFieldsFromOrderForm["Godina poslovanja"];
+											fields["Poslovni partner"]=rowFieldsFromOrderForm["Poslovni partner"];
+											fields["Naziv partnera"]=rowFieldsFromOrderForm["Naziv partnera"];
+										}
+									);
+								}
 							},
 							function (response) {
 								addElements(fields,rowFieldsFromOrderForm);
