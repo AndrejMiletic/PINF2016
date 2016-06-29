@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Faktura" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="18"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="adresa" class="java.lang.String"/>
 	<parameter name="pib" class="java.lang.String"/>
 	<parameter name="maticni_broj" class="java.lang.String"/>
@@ -364,7 +364,7 @@ WHERE
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{stavke_fakture_otpremnice_OSNOVICA_PDV}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0.00">
 				<reportElement x="455" y="0" width="100" height="20"/>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ukupna_cena}]]></textFieldExpression>

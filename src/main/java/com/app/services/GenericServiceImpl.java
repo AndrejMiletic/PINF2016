@@ -212,16 +212,20 @@ public class GenericServiceImpl implements IGenericService {
 			CrudRepository repo1 = getTableRepo(child);
 			ArrayList<Object> rows = (ArrayList<Object>) repo1.findAll();
 			ITransformer tr1 = getTransformer(child);
-			TableDTO dto1 = tr1.transformToDTO(rows);
-
-			for (TableRowDTO row : dto1.getRows()) {
-				if (row.getFields().containsKey(tableName)
-						&& row.getFields().get(tableName).toString().equals(parentId)) {
-					HashMap<String, Object> fks = getFKs(row);
-					Object entity = tr1.transformFromDTO(row, fks);
-					rowsOfDocTable.add(entity);
+			
+			if(rows.size() != 0){			
+				TableDTO dto1 = tr1.transformToDTO(rows);
+				for (TableRowDTO row : dto1.getRows()) {
+					if (row.getFields().containsKey(tableName)
+							&& row.getFields().get(tableName).toString().equals(parentId)) {
+						HashMap<String, Object> fks = getFKs(row);
+						Object entity = tr1.transformFromDTO(row, fks);
+						rowsOfDocTable.add(entity);
+					}
 				}
-			}
+			}else{
+				retVal = tr1.getMetaData();
+			}		
 			
 			if(rowsOfDocTable.size() != 0){
 				 retVal = tr1.transformToDTO(rowsOfDocTable);
