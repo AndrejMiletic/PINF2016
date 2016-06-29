@@ -40,6 +40,12 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 
 	$scope.showOrderForm=function(){
 		$scope.additionalNotes="";
+
+		$scope.ukupanIznos=0;
+		$scope.ukupanRabat=0;
+		$scope.cenaSaRabatom=0;
+		$scope.ukupanPDV=0;
+		$scope.ukupnoZaNaplatu=0;
 		if($scope.selectedOrderForm){
 			$scope.showTable=true;
 			tableService.getTableByName('Narudzba').then(
@@ -84,6 +90,11 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 							fields["Id"]=response.data;
 						}
 				);
+				$scope.ukupanIznos=0;
+				$scope.ukupanRabat=0;
+				$scope.cenaSaRabatom=0;
+				$scope.ukupanPDV=0;
+				$scope.ukupnoZaNaplatu=0;
 				fields["Broj fakture/otpremnice"]=rowFieldsFromOrderForm["Broj narudžbe"];
 				fields["Tip"]="R";
 				fields["Datum fakture"]=rowFieldsFromOrderForm["Datum naručivanja"];
@@ -193,7 +204,7 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 								}
 								counter++;
 							}
-							$scope.calculate(0,123456789);
+							$scope.apply("",123456789);
 						}
 				);
 			},
@@ -213,7 +224,8 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 				}
 			}
 		}
-		orderItem=$scope.itemsIdMap[rowId];
+		if(rowId!=orderItem)
+			orderItem=$scope.itemsIdMap[rowId];
 		$scope.calculate(data,orderItem);
 	}
 
@@ -263,9 +275,16 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 					$scope.additionalNotes="";
 					if($scope.invoiceItems.rows.length>0)
 						$scope.addInvoiceItems(response.data.rows[0].fields['Id']);
-					else
+					else{
+						$scope.showTable=false;
 						alert("Uspesno kreirana faktura.");
+					}
 					$scope.addedInvoice.push($scope.invoice.rows[0].fields["Narudžba"]);
+
+					$scope.ukupanIznos=0;
+					$scope.ukupanPDV=0;
+					$scope.ukupanRabat=0;
+					$scope.ukupnoZaNaplatu=0;
 				},
 				function(response){
 					alert("Doslo je do greske prilikom kreiranja fakture i stavke fakture.");
@@ -288,6 +307,8 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 		if($scope.invoiceItems.rows.length>0){
 			var counter=0;
 			for(var i=0;i<$scope.invoiceItems.rows.length;i++){
+				var noviRabat=Number($scope.invoiceItems.rows[i].fields['Rabat']);
+				$scope.invoiceItems.rows[i].fields['Rabat']=noviRabat;
 				$scope.invoiceItems.rows[i].fields['Faktura i otpremnica']=id;
 				$scope.invoiceItems.rows[i].tableName="Stavke fakture i otpremnice";
 				$scope.invoiceItems.rows[i].tableCode="Stavke_fakture_i_otpremnice";
@@ -295,7 +316,9 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 					function(response){
 						counter=counter+1;
 						if(counter==$scope.invoiceItems.rows.length){
+							$scope.showTable=false;
 							alert("Uspesno kreirana faktura i stavke fakture.");
+							$scope.rabatMap={};
 						}
 					},
 					function(response){
