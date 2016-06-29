@@ -263,6 +263,8 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 					$scope.additionalNotes="";
 					if($scope.invoiceItems.rows.length>0)
 						$scope.addInvoiceItems(response.data.rows[0].fields['Id']);
+					else
+						alert("Uspesno kreirana faktura.");
 					$scope.addedInvoice.push($scope.invoice.rows[0].fields["Narudžba"]);
 				},
 				function(response){
@@ -283,12 +285,10 @@ app.controller('invoicingController',['$scope','tableService','$timeout',functio
 	};
 
 	$scope.addInvoiceItems=function(id){
-		console.log("Id je: " + id);
 		if($scope.invoiceItems.rows.length>0){
 			var counter=0;
 			for(var i=0;i<$scope.invoiceItems.rows.length;i++){
 				$scope.invoiceItems.rows[i].fields['Faktura i otpremnica']=id;
-				console.log($scope.invoiceItems.rows[i]);
 				$scope.invoiceItems.rows[i].tableName="Stavke fakture i otpremnice";
 				$scope.invoiceItems.rows[i].tableCode="Stavke_fakture_i_otpremnice";
 				tableService.create($scope.invoiceItems.tableName,$scope.invoiceItems.rows[i]).then(

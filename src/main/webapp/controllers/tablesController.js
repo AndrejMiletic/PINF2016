@@ -5,7 +5,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 		tableService.getAll().then(
 			function (response) {
 				$scope.allTableNames = response.data;
-				console.log(response)
 			},
 			function (response) {
 				alert("Greska");
@@ -44,7 +43,6 @@ app.controller('tablesController', ['$scope', '$window', 'tableService', 'appCon
 	                    	$scope.fieldNames.push(value);
 	                    })
                 	}
-                    console.log($scope.requestedTable);
                 },
                 function (response) {
                     alert("Neuspesno dobavljanje tabele");
